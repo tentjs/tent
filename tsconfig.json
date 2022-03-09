@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "esnext",
+    "target": "es2020",
+    "lib": ["esnext", "dom"],
+    "allowJs": true
+  }
+}
