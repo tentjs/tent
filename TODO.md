@@ -1,5 +1,6 @@
 # To-do
 
+- Add eslint & Prettier
 - Make a better algorithm for equality.
 - Is there a better way for doing the template replacing in component()?
 - Find a way to add types for `$set` usage.
