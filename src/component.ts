@@ -3,7 +3,7 @@ import {Praxy} from "./Praxy";
 
 const MyComponent = {
   name: 'myComponent',
-  template: `
+  template: /* html */`
     <div>Hello {{entity}} My name is {{name}}.</div>
     <div>And I do love the {{easy}} of Praxy.</div>
     <input name="test-input" />

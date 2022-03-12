@@ -2,7 +2,7 @@ import {App} from "./App";
 
 const MyComponent2 = {
   name: 'myComponent2',
-  template: `
+  template: /* html */`
     <div>My other love is books, and this is my favorite: {{book}}</div>
     <input name="test-input2" />
   `,
