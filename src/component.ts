@@ -1,5 +1,4 @@
 import {App} from "./App";
-import {Praxy} from "./Praxy";
 
 const MyComponent = {
   name: 'myComponent',
@@ -10,6 +9,8 @@ const MyComponent = {
   `,
   data: {
     entity: 'World!',
+    easy: 'simplicity',
+    name: 'Sebastian'
   },
 };
 

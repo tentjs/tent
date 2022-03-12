@@ -5,8 +5,7 @@ type OnEvents = 'click' | 'input' | 'change' | 'select';
 type OnFire = (context: {self: Praxy; target: HTMLInputElement}) => void | Promise<void>;
 
 type AppContext = {
-  data: Data; 
-  components?: Components;
+  data?: Data; 
 };
 
 type IListener = {
@@ -29,10 +28,8 @@ export class Praxy {
   private listeners: Listeners = {};
   private components: Components = {};
 
-  constructor(context: AppContext) {
-    const {data, components} = context;
-
-    this.data = data;
+  constructor(context?: AppContext) {
+    this.data = context?.data ?? {};
 
     this.proxy = new Proxy(this.data, {
       set: (data, _key, value) => {
