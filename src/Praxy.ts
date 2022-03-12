@@ -1,26 +1,13 @@
-type Data = Record<string, unknown>;
-type Listeners = Record<string, (context: IListener) => void>;
-type Components = Record<string, Component>;
-type OnEvents = 'click' | 'input' | 'change' | 'select';
-type OnFire = (context: {self: Praxy; target: HTMLInputElement}) => void | Promise<void>;
-
-type AppContext = {
-  data?: Data; 
-};
-
-type IListener = {
-  self: Praxy;
-  data: Data;
-  key: string;
-  value: unknown;
-};
-
-type Component = {
-  name: string;
-  data: Data;
-  template: string;
-  target?: string;
-};
+import {
+  Data,
+  Listeners,
+  Components,
+  AppContext,
+  IListener,
+  OnEvents,
+  OnFire,
+  Component
+} from "./types";
 
 export class Praxy {
   private data: Data;
