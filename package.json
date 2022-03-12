@@ -2,20 +2,23 @@
   "name": "praxy",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack --watch"
+    "watch": "parcel watch ./src/index.ts --port 4321",
+    "build": "parcel build",
+    "serve": "parcel serve index.html --port 1234"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-loader": "^8.0.18",
-    "typescript": "^4.2.3",
-    "webpack": "^5.28.0",
-    "webpack-cli": "^4.5.0",
+    "@parcel/packager-ts": "^2.3.2",
+    "@parcel/transformer-typescript-types": "^2.3.2",
     "browserslist": "^4.20.0",
-    "path-parse": "^1.0.7"
+    "parcel": "^2.3.2",
+    "typescript": "^4.6.2"
   },
   "dependencies": {}
 }
