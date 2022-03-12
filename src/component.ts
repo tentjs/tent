@@ -16,6 +16,6 @@ const MyComponent = {
 
 App
   .component(MyComponent)
-  .on('input', '[name="test-input"]', async ({self, target}) => {
+  .on('input', '[name="test-input"]', ({self, target}) => {
     self.set('entity', target.value);
   });
