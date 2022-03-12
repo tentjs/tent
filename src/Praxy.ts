@@ -158,7 +158,7 @@ export class Praxy {
   }
 
   public component(cmpt: Component): Praxy {
-    if (this.components[cmpt.name] != null) {
+    if (this.componentExists(cmpt.name)) {
       throw new Error(`Component "${cmpt.name}" already exists`);
     }
 
@@ -199,6 +199,10 @@ export class Praxy {
     el.insertAdjacentHTML('beforeend', template);
 
     return this;
+  }
+
+  public componentExists(name: string): boolean {
+    return this.components[name] != null;
   }
 
   private getElements(target: string): NodeList | null {
