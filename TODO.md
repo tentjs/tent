@@ -1,6 +1,7 @@
 # To-do
 
 - Add eslint & Prettier
+- Move example stuff out of ./src and rename ./src to ./lib
 - Make an interface or abstract class for Praxy?
   - Instead of using the class it self in types
 - Make a better algorithm for equality.
