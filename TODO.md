@@ -1,7 +1,6 @@
 # To-do
 
 - Add eslint & Prettier
-- Move example stuff out of ./src and rename ./src to ./lib
 - Make an interface or abstract class for Praxy?
   - Instead of using the class it self in types
 
@@ -13,5 +12,7 @@
 - Clean up the extraction from components data in the constructor.
 
 # DONE
+
 - Tie Praxy together with DOM elements.
+- Move example stuff out of ./src and rename ./src to ./lib
 
