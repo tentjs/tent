@@ -181,7 +181,15 @@ export class Praxy {
     }
 
     const regex = /{{[A-Z]+}}/gi;
-    const matches = cmpt.template.match(regex).map((x) => x.replace('{{', '').replace('}}', ''));
+    const regexMatches = cmpt.template.match(regex);
+
+    if (regexMatches == null || regexMatches.length === 0) {
+      el.insertAdjacentHTML('beforeend', cmpt.template);
+
+      return this;
+    }
+
+    const matches = regexMatches.map((x) => x.replace('{{', '').replace('}}', ''));
     const exists = matches.every((x) => this.data[x] != null);
 
     if (!exists) {
