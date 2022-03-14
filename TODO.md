@@ -15,4 +15,4 @@
 
 - Tie Praxy together with DOM elements.
 - Move example stuff out of ./src and rename ./src to ./lib
-
+- Add .nvmrc
