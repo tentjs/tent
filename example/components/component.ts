@@ -2,7 +2,7 @@ import {App} from '../App';
 
 const MyComponent = {
   name: 'myComponent',
-  template: /* html */`
+  template: /* html */ `
     <div>Hello {{entity}} My name is {{name}}.</div>
     <div id="injected-component-target"></div>
     <div>And I do love the {{easy}} of Praxy.</div>
@@ -11,27 +11,29 @@ const MyComponent = {
   data: {
     entity: 'World!',
     easy: 'simplicity',
-    name: 'Sebastian'
+    name: 'Sebastian',
   },
 };
 
 const MyInjectedComponent = {
   name: 'myInjectedComponent',
   target: '#injected-component-target',
-  template: /* html */`
+  template: /* html */ `
     <div>I was {{injection}}</div>
   `,
   data: {
-    injection: 'injected!'
+    injection: 'injected!',
   },
 };
 
-App
-  .component(MyComponent)
-  .on('input', '[name="test-input"]', ({self, target}) => {
+App.component(MyComponent).on(
+  'input',
+  '[name="test-input"]',
+  ({self, target}) => {
     self.set('entity', target.value);
 
     if (!self.componentExists(MyInjectedComponent.name)) {
       self.component(MyInjectedComponent);
     }
-  });
+  }
+);

@@ -4,7 +4,8 @@
   "description": "",
   "source": "./index.html",
   "scripts": {
-    "dev": "parcel serve"
+    "dev": "parcel serve",
+    "lint:fix": "eslint --ext ts . --fix"
   },
   "author": "",
   "license": "ISC",
