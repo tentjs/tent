@@ -6,8 +6,8 @@ import {
   IListener,
   OnEvents,
   OnFire,
-  Component
-} from "./types";
+  Component,
+} from './types';
 
 export class Praxy {
   private data: Data;
@@ -55,7 +55,7 @@ export class Praxy {
    * Listen for data changes
    * @param key
    * @param listener
-   * 
+   *
    * @example
    * App.listen('name', ({value}) => {
    *   console.log('Value of "name" changed to: ', value);
@@ -82,11 +82,7 @@ export class Praxy {
    *   self.set('name', target.value);
    * });
    */
-  public on(
-    event: OnEvents,
-    target: string,
-    fire: OnFire,
-  ): Praxy {
+  public on(event: OnEvents, target: string, fire: OnFire): Praxy {
     const events = ['click', 'input', 'change', 'select'];
     const el = document.querySelector(target);
 
@@ -100,11 +96,13 @@ export class Praxy {
       throw new Error(`${event} is not a valid event`);
     }
 
-    el.addEventListener(event, async ({target}) =>
-      await fire({
-        self: this,
-        target: target as HTMLInputElement,
-      })
+    el.addEventListener(
+      event,
+      async ({target}) =>
+        await fire({
+          self: this,
+          target: target as HTMLInputElement,
+        })
     );
 
     return this;
@@ -114,7 +112,7 @@ export class Praxy {
    * Bind a value to multiple targets
    * @param targets DOM selector or key in data
    * @param value
-   * 
+   *
    * @example
    * App.bind(['name', '[name="input-1"]'], 'some value');
    */
@@ -134,7 +132,7 @@ export class Praxy {
    * Update DOM elements' value by target
    * @param target
    * @param value
-   * 
+   *
    * @example
    * App.update('[name="test"]', 'some value');
    */
@@ -189,7 +187,9 @@ export class Praxy {
       return this;
     }
 
-    const matches = regexMatches.map((x) => x.replace('{{', '').replace('}}', ''));
+    const matches = regexMatches.map((x) =>
+      x.replace('{{', '').replace('}}', '')
+    );
     const exists = matches.every((x) => this.data[x] != null);
 
     if (!exists) {
@@ -223,4 +223,3 @@ export class Praxy {
     return els;
   }
 }
-

@@ -1,6 +1,5 @@
 # To-do
 
-- Add eslint & Prettier
 - Make an interface or abstract class for Praxy?
   - Instead of using the class it self in types
 
@@ -16,3 +15,4 @@
 - Tie Praxy together with DOM elements.
 - Move example stuff out of ./src and rename ./src to ./lib
 - Add .nvmrc
+- Add eslint & Prettier
