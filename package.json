@@ -7,9 +7,8 @@
   "module": "dist/module.js",
   "types": "dist/types.d.ts",
   "scripts": {
-    "watch": "parcel watch ./lib/index.ts --port 4321",
     "build": "parcel build",
-    "serve": "parcel serve index.html --port 1234"
+    "watch": "parcel watch"
   },
   "author": "Sebastian L. K. Sørensen",
   "license": "ISC",
