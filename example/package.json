@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "source": "./index.html",
-  "scripts": {},
+  "scripts": {
+    "dev": "parcel serve"
+  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
