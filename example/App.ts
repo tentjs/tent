@@ -1,3 +1,3 @@
-import {Praxy} from 'praxy';
+import {Praxy} from '@sebkolind/praxy';
 
 export const App = new Praxy();
