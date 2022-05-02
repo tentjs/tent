@@ -1,5 +1,5 @@
 {
-  "name": "praxy",
+  "name": "@sebkolind/praxy",
   "version": "0.0.1",
   "description": "",
   "source": "lib/index.ts",
@@ -11,6 +11,10 @@
     "dev": "parcel watch",
     "lint": "eslint --ext ts lib",
     "lint:fix": "eslint --ext ts lib --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebkolind/praxy.git"
   },
   "author": "Sebastian L. K. Sørensen",
   "license": "ISC",
