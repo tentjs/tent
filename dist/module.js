@@ -64,17 +64,19 @@ class $9bc963cf7f37fc63$export$b2a4668b848075f7 {
             'change',
             'select'
         ];
-        const el = document.querySelector(target1);
-        if (el == null || fire == null) {
+        const els = document.querySelectorAll(target1);
+        if (els == null || els.length === 0 || fire == null) {
             console.error(`Praxy->on: No possible matches for ${target1}`);
             return this;
         }
         if (!events.includes(event)) throw new Error(`${event} is not a valid event`);
-        el.addEventListener(event, async ({ target: target  })=>await fire({
-                self: this,
-                target: target
-            })
-        );
+        els.forEach((el)=>{
+            el.addEventListener(event, async ({ target: target  })=>await fire({
+                    self: this,
+                    target: target
+                })
+            );
+        });
         return this;
     }
     /**
