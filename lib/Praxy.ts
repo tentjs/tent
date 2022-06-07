@@ -63,9 +63,7 @@ export class Praxy {
    */
   public listen(key: string, listener: (context: IListener) => void): void {
     if (this.listeners[key] != null) {
-      throw new Error(
-        `You are not allowed to override a listener. Tried to set listener for "${key}".`
-      );
+      return;
     }
 
     this.set(key, this.get(key), listener);
