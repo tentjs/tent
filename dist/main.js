@@ -60,7 +60,7 @@ class $98079f913a3af338$export$b2a4668b848075f7 {
    *   console.log('Value of "name" changed to: ', value);
    * });
    */ listen(key, listener) {
-        if (this.listeners[key] != null) throw new Error(`You are not allowed to override a listener. Tried to set listener for "${key}".`);
+        if (this.listeners[key] != null) return;
         this.set(key, this.get(key), listener);
     }
     /**
