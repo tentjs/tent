@@ -82,9 +82,9 @@ export class Praxy {
    */
   public on(event: OnEvents, target: string, fire: OnFire): Praxy {
     const events = ['click', 'input', 'change', 'select'];
-    const el = document.querySelector(target);
+    const els = document.querySelectorAll(target);
 
-    if (el == null || fire == null) {
+    if (els == null || els.length === 0 || fire == null) {
       console.error(`Praxy->on: No possible matches for ${target}`);
 
       return this;
@@ -94,14 +94,16 @@ export class Praxy {
       throw new Error(`${event} is not a valid event`);
     }
 
-    el.addEventListener(
-      event,
-      async ({target}) =>
-        await fire({
-          self: this,
-          target: target as HTMLInputElement,
-        })
-    );
+    els.forEach((el) => {
+      el.addEventListener(
+        event,
+        async ({target}) =>
+          await fire({
+            self: this,
+            target: target as HTMLInputElement,
+          })
+      );
+    });
 
     return this;
   }
