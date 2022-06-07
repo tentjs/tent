@@ -8,6 +8,7 @@
 - Is there a better way for doing the template replacing in component()?
 - Find a way to add types for `set` usage.
   - So that you can see what data you have access to.
+- Add option for saving data in session/local storage.
 
 # DONE
 
