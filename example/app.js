@@ -1,7 +1,7 @@
 const App = new Praxy();
 
-// The function would be imported from a separate package
-// For the sake of this example, the function is defined in ./extensions.js
+// The function would be imported from a separate package,
+// but for the sake of this example, the function is defined in ./extensions.js
 // and included in ./index.html as a script tag
 App.registerExtension(
   'generateSelectOptions',
@@ -43,24 +43,15 @@ App
   .component(MyInjectedComponent)
 
 App
-  .on(
-    'input',
-    '[name="test-input"]',
-    ({self, target}) => {
+  .on('input', '[name="test-input"]', ({self, target}) => {
       self.set('entity', target.value);
     }
   )
-  .on(
-    'change',
-    '[name="select"]',
-    ({self, target}) => {
+  .on('change', '[name="select"]', ({self, target}) => {
       self.set('selected', target.value);
     }
   )
-  .on(
-    'change',
-    '[name="select2"]',
-    ({self, target}) => {
+  .on('change', '[name="select2"]', ({self, target}) => {
       self.set('selected2', target.value);
     }
   )
