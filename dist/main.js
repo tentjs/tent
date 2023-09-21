@@ -22,12 +22,9 @@ var $98079f913a3af338$exports = {};
 $parcel$export($98079f913a3af338$exports, "Praxy", () => $98079f913a3af338$export$b2a4668b848075f7);
 class $98079f913a3af338$export$b2a4668b848075f7 {
     constructor(context){
-        this.listeners = {
-        };
-        this.components = {
-        };
-        this.data = context?.data ?? {
-        };
+        this.listeners = {};
+        this.components = {};
+        this.data = context?.data ?? {};
         this.proxy = new Proxy(this.data, {
             set: (data, _key, value)=>{
                 const key = String(_key);
@@ -73,25 +70,24 @@ class $98079f913a3af338$export$b2a4668b848075f7 {
    * .on('input', '[name="test-input"]', ({self, target}) => {
    *   self.set('name', target.value);
    * });
-   */ on(event, target1, fire) {
+   */ on(event, target, fire) {
         const events = [
-            'click',
-            'input',
-            'change',
-            'select'
+            "click",
+            "input",
+            "change",
+            "select"
         ];
-        const els = document.querySelectorAll(target1);
+        const els = document.querySelectorAll(target);
         if (els == null || els.length === 0 || fire == null) {
-            console.error(`Praxy->on: No possible matches for ${target1}`);
+            console.error(`Praxy->on: No possible matches for ${target}`);
             return this;
         }
         if (!events.includes(event)) throw new Error(`${event} is not a valid event`);
         els.forEach((el)=>{
-            el.addEventListener(event, async ({ target: target  })=>await fire({
+            el.addEventListener(event, async ({ target: target })=>await fire({
                     self: this,
                     target: target
-                })
-            );
+                }));
         });
         return this;
     }
@@ -120,7 +116,7 @@ class $98079f913a3af338$export$b2a4668b848075f7 {
         if (els == null) return;
         els.forEach((el)=>{
             switch(el.nodeName){
-                case 'INPUT':
+                case "INPUT":
                     el.value = `${value}`;
                     break;
                 default:
@@ -135,24 +131,22 @@ class $98079f913a3af338$export$b2a4668b848075f7 {
             if (this.data[key] != null) throw new Error(`You are not allowed to override data for property \`${key}\` with "${this.components[key].data[key]}" in ${this.components[key].name}.`);
             this.data[key] = this.components[cmpt.name].data[key];
         }
-        const el = document.querySelector(cmpt.target ?? '#app');
+        const el = document.querySelector(cmpt.target ?? "#app");
         if (el == null) throw new Error(`Your target parent ${cmpt.target} does not exist`);
         const regex = /{{[A-Z]+}}/gi;
         const regexMatches = cmpt.template.match(regex);
         if (regexMatches == null || regexMatches.length === 0) {
-            el.insertAdjacentHTML('beforeend', cmpt.template);
+            el.insertAdjacentHTML("beforeend", cmpt.template);
             return this;
         }
-        const matches = regexMatches.map((x)=>x.replace('{{', '').replace('}}', '')
-        );
-        const exists = matches.every((x)=>this.data[x] != null
-        );
-        if (!exists) throw new Error('Some of your interpolation keys does not exist');
+        const matches = regexMatches.map((x)=>x.replace("{{", "").replace("}}", ""));
+        const exists = matches.every((x)=>this.data[x] != null);
+        if (!exists) throw new Error("Some of your interpolation keys does not exist");
         let template;
         matches.forEach((x)=>{
             template = (template ?? cmpt.template).replaceAll(`{{${x}}}`, `<span a-text="${x}">${this.get(x)}</span>`);
         });
-        el.insertAdjacentHTML('beforeend', template);
+        el.insertAdjacentHTML("beforeend", template);
         return this;
     }
     componentExists(name) {
