@@ -1,6 +1,6 @@
 {
   "name": "@sebkolind/praxy",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "source": "lib/index.ts",
   "main": "dist/main.js",
