@@ -1,5 +1,19 @@
 const App = new Praxy();
 
+App.registerExtension(
+  'generateSelectOptions',
+  function({self}, {target, items, map}) {
+    target.forEach((t) => {
+      items.forEach((product) => {
+        const option = document.createElement('option');
+        option.value = product[map.value];
+        option.textContent = product[map.text];
+        t.appendChild(option);
+      });
+    });
+  }
+)
+
 const MyComponent = {
   name: 'myComponent',
   template: `
@@ -37,22 +51,16 @@ App
   );
 
 App
-  .on('change', '[name="select"]', ({target}) => {
-    console.log(target.value, 'selected!');
-  })
   .fetch(
     'https://dummyjson.com/products',
     {},
     '[name="select"]',
     async ({self, target, res}) => {
       const {products} = await res.json();
-      target.forEach((t) => {
-        products.forEach((product) => {
-          const option = document.createElement('option');
-          option.value = product.id;
-          option.textContent = product.title;
-          t.appendChild(option);
-        });
+      self.extensions.generateSelectOptions({
+        target,
+        items: products,
+        map: {value: 'id', text: 'title'}
       });
     }
   );
