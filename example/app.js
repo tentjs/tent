@@ -1,17 +1,11 @@
 const App = new Praxy();
 
+// The function would be imported from a separate package
+// For the sake of this example, the function is defined in ./extensions.js
+// and included in ./index.html as a script tag
 App.registerExtension(
   'generateSelectOptions',
-  function({self}, {target, items, map}) {
-    target.forEach((t) => {
-      items.forEach((item) => {
-        const option = document.createElement('option');
-        option.value = item[map.value];
-        option.textContent = item[map.text];
-        t.appendChild(option);
-      });
-    });
-  }
+  generateSelectOptions,
 )
 
 const MyComponent = {
