@@ -22,12 +22,14 @@ const MyComponent = {
     <div>And I do love the {{easy}} of Praxy.</div>
     <input name="test-input" />
     <div>This is the selected value: {{selected}}</div>
+    <div>This is the selected value of select2: {{selected2}}</div>
   `,
   data: {
     entity: 'World!',
     easy: 'simplicity',
     name: 'Sebastian',
     selected: '',
+    selected2: '',
   },
 };
 
@@ -61,10 +63,17 @@ App
       self.set('selected', target.value);
     }
   )
+  .on(
+    'change',
+    '[name="select2"]',
+    ({self, target}) => {
+      self.set('selected2', target.value);
+    }
+  )
   .fetch(
     'https://dummyjson.com/products',
     {},
-    '[name="select"]',
+    '[name="select"], [name="select2"]',
     async ({self, target, res}) => {
       const {products} = await res.json();
       self.extensions.generateSelectOptions({
