@@ -13,6 +13,6 @@
     "parcel": "^2.3.2"
   },
   "dependencies": {
-    "@sebkolind/praxy": "^0.0.7"
+    "@sebkolind/praxy": "^0.0.9"
   }
 }
