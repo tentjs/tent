@@ -23,7 +23,7 @@ const MyComponent = {
   },
 };
 
-App.component(MyComponent, function(data) {
+App.component(MyComponent, function (data) {
   this.on('click', 'button', () => {
     data.entity = 'Universe!';
     data.easy = 'complexity';
