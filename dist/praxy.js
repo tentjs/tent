@@ -142,10 +142,10 @@
       this[globalName] = mainExports;
     }
   }
-})({"8rTF6":[function(require,module,exports) {
+})({"gcgLT":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
-var HMR_PORT = null;
+var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 module.bundle.HMR_BUNDLE_ID = "926e398ce79cc564";
@@ -574,6 +574,9 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"5AUyA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Praxy", ()=>Praxy);
 class Praxy {
     listeners = {};
     components = {};
@@ -613,6 +616,7 @@ class Praxy {
         this.components[cmpt.name] = cmpt;
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
+        if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
         const root = tmp.content.childNodes[0].cloneNode();
         const data = new Proxy(this.components[cmpt.name].data, {
             set: (data, key, value)=>{
@@ -658,9 +662,7 @@ class Praxy {
         if (node.nodeName === "#text" || node.nodeName === "#comment") return;
         Array.from(node.children).forEach((child)=>{
             this.map(child, uuids, data, map);
-            // Child nodes that contain reactive data
-            const hasReactives = Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("key");
-            if (hasReactives) {
+            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("key")) {
                 const uuid = child.getAttribute("key") ?? this.generateUUID(uuids);
                 if (!uuids.includes(uuid)) uuids.push(uuid);
                 if (!child.hasAttribute("key")) child.setAttribute("key", uuid);
@@ -711,6 +713,36 @@ class Praxy {
     }
 }
 
-},{}]},["8rTF6","5AUyA"], "5AUyA", "parcelRequire94c2")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}]},["gcgLT","5AUyA"], "5AUyA", "parcelRequire94c2")
 
 //# sourceMappingURL=praxy.js.map

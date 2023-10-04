@@ -1,12 +1,18 @@
+import {Praxy} from '../dist/praxy';
+
 const App = new Praxy();
 
 const MyComponent = {
   name: 'myComponent',
-  template: html`<div>
-    <div>Hello <span>test</span> {{entity}}</div>
-    <div>Testing something simple {{easy}}</div>
-    <button>Click me</button>
-  </div>`,
+  template: html`
+    <div>
+      <div>Hello <span>test</span> {{entity}}</div>
+      <p>My name is <span>{{name}}</span></p>
+      <div>Testing something simple {{easy}}</div>
+      <input type="text" />
+      <button>Click me</button>
+    </div>
+  `,
   data: {
     entity: 'World!',
     easy: 'simplicity',
@@ -22,9 +28,9 @@ App.component(MyComponent, function(data) {
     data.entity = 'Universe!';
     data.easy = 'complexity';
   });
-  // this.on('input', 'input', ({target}) => {
-  //   data.name = target.value;
-  // });
+  this.on('input', 'input', ({target}) => {
+    data.name = target.value;
+  });
 });
 
 function html(...values) {
