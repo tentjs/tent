@@ -596,16 +596,6 @@ class Praxy {
             }
         });
     }
-    on(event, target, fire) {
-        const els = document.querySelectorAll(target);
-        if (!els?.length || fire == null) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
-        els.forEach((el)=>{
-            el.addEventListener(event, async ({ target })=>await fire({
-                    self: this,
-                    target: target
-                }));
-        });
-    }
     component(cmpt, mounted) {
         if (this.components[cmpt.name] != null) throw new Error(`Component "${cmpt.name}" already exists`);
         const uuids = [];
@@ -694,6 +684,16 @@ class Praxy {
         const uuid = Math.random().toString(36).substring(5);
         while(uuids.includes(uuid))return this.generateUUID(uuids);
         return uuid;
+    }
+    on(event, target, fire) {
+        const els = document.querySelectorAll(target);
+        if (!els?.length || fire == null) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
+        els.forEach((el)=>{
+            el.addEventListener(event, async ({ target })=>await fire({
+                    self: this,
+                    target: target
+                }));
+        });
     }
     async fetch(url, options, target, cb) {
         const els = document.querySelectorAll(target);
