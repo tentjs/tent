@@ -579,39 +579,24 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Praxy", ()=>Praxy);
 parcelHelpers.export(exports, "html", ()=>html);
 class Praxy {
-    listeners = {};
-    components = {};
-    extensions = {};
     #events = [];
-    constructor(context){
-        this.data = context?.data ?? {};
-        this.proxy = new Proxy(this.data, {
-            set: (data, _key, value)=>{
-                const key = String(_key);
-                if (this.listeners[key] != null && data[key] != value) this.listeners[key]({
-                    data,
-                    key,
-                    value,
-                    self: this
-                });
-                Reflect.set(data, key, value);
-            }
-        });
-    }
+    components = {};
+    constructor(){}
     component(cmpt, mounted) {
-        if (this.components[cmpt.name] != null) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
+        const cmptName = cmpt.name ?? this.generateUUID(Object.keys(this.components));
+        if (this.components[cmptName] != null) throw new Error(`Praxy->component: "${cmptName}" already exists`);
         const uuids = [];
         const map = {};
         const fors = {};
-        const target = cmpt.target ?? "#app";
-        const el = document.querySelector(target);
-        if (el == null) throw new Error(`Praxy->component: Your mount point "${target}" doesn't exist`);
-        this.components[cmpt.name] = cmpt;
+        const target = cmpt.target;
+        const el = target ? document.querySelector(target) : document.body;
+        if (el == null) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
+        this.components[cmptName] = cmpt;
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
-        if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
+        if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmptName}" must have a single root element.`);
         const root = tmp.content.childNodes[0].cloneNode();
-        const data = new Proxy(this.components[cmpt.name].data, {
+        const data = new Proxy(this.components[cmptName].data, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
                 this.renderFor(root, data, uuids, fors, map);
@@ -625,11 +610,15 @@ class Praxy {
         });
         this.renderFor(tmp.content, data, uuids, fors, map);
         this.map(tmp.content, uuids, data, map);
-        root.setAttribute("k", cmpt.name);
+        root.setAttribute("k", cmptName);
         root.append(tmp.cloneNode(true));
         el.append(root);
         this.render(root, map);
-        if (mounted) mounted.call(this, data);
+        if (mounted) mounted({
+            data,
+            on: this.on.bind(this),
+            closest: this.closest.bind(this)
+        });
     }
     render(root, map) {
         const tmp = root.querySelector("template");
@@ -667,11 +656,10 @@ class Praxy {
             const f = fors[uuid];
             const children = Array.from(parent.children);
             const clone = f ? f.clone : parent.children[0].cloneNode(true);
-            const firstRender = children.every((c)=>!c.hasAttribute("i"));
+            const firstRender = f == null;
             if (firstRender) fors[uuid] = {
                 clone,
-                parent,
-                children: []
+                parent
             };
             const attr = parent.getAttribute("px-for");
             const [_, value] = attr.split(" in ");
@@ -696,17 +684,14 @@ class Praxy {
                 }
             });
             // sync data
-            // TODO: The user could have added a new item to the array with a position
-            // that's not at the end. This will cause the new item to be added to the end.
-            // This is a limitation of the current implementation.
+            // TODO: The user could have re-ordered the array.
+            // The current implementation always adds new items to the end.
             arr.forEach((_, i)=>{
                 const index = children[i]?.getAttribute("i");
                 if (index == null) {
                     const c = clone.cloneNode(true);
-                    this.#events.forEach((e)=>{
-                        // TODO: Maybe we should remove the event listener when the node is removed?
-                        // TODO: Maybe give the item currently in the loop back to the user?
-                        this.on(e.event, e.target, e.fire, c, true, arr[i]);
+                    this.#events.forEach(({ event, target, fire })=>{
+                        this.on(event, target, fire, c, true);
                     });
                     c.setAttribute("i", i);
                     parent.append(c);
@@ -721,10 +706,9 @@ class Praxy {
             if (child.attributes && child.hasAttribute("px-for")) return;
             if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
                 const uuid = child.getAttribute("k") ?? this.generateUUID(uuids);
-                if (!uuids.includes(uuid)) uuids.push(uuid);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const parent = child.parentNode;
-                const isFor = parent.hasAttribute("px-for") || child.hasAttribute("i") || this.findClosestParentWithAttribute(child, "i");
+                const isFor = parent.hasAttribute("px-for") || child.hasAttribute("i") || this.closest(child, "i", null, "px-for");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
@@ -735,8 +719,8 @@ class Praxy {
                         matches.add(k[0]);
                         let v = data[k[0]];
                         if (isFor) {
-                            const index = this.findClosestParentWithAttribute(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
-                            const parent = this.findClosestParentWithAttribute(child, "px-for");
+                            const index = this.closest(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
+                            const parent = this.closest(child, "px-for");
                             const [_, values] = parent.getAttribute("px-for")?.split(" in ");
                             v = data[values][index];
                             if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
@@ -757,9 +741,11 @@ class Praxy {
             }
         });
     }
-    findClosestParentWithAttribute(el, attrName, attrValue) {
+    closest(el, attrName, attrValue, end = document.body) {
         let parentNode = el.parentNode;
         while(parentNode != null){
+            const stop = typeof end === "string" ? parentNode.hasAttribute(end) : end;
+            if (parentNode === stop) return;
             if (attrValue == null) {
                 if (parentNode.attributes && parentNode.hasAttribute(attrName)) return parentNode;
             } else if (parentNode.attributes && parentNode.getAttribute(attrName) === attrValue) return parentNode;
@@ -770,9 +756,10 @@ class Praxy {
     generateUUID(uuids) {
         const uuid = Math.random().toString(36).substring(5);
         while(uuids.includes(uuid))return this.generateUUID(uuids);
+        uuids.push(uuid);
         return uuid;
     }
-    on(event, target, fire, parent, silent = false, data) {
+    on(event, target, fire, parent, silent = false) {
         const els = (parent ?? document).querySelectorAll(target);
         if (!els?.length || fire == null) {
             if (!silent) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
@@ -785,8 +772,7 @@ class Praxy {
             });
             el.addEventListener(event, async ({ target })=>await fire({
                     self: this,
-                    target,
-                    item: data
+                    target
                 }));
         });
     }

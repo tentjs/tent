@@ -7,13 +7,12 @@ const Component = {
     <div>
       <ul px-for="item in items">
         <li>
-          <div>
-            <span>{{item}}</span>
-          </div>
+          <span>{{item}}</span>
           <button class="remove">remove</button>
         </li>
       </ul>
-      <button id="add">Click me!</button>
+      <button id="add">Add item</button>
+      <button id="reset">Reset list</button>
     </div>
   `,
   data: {
@@ -22,12 +21,17 @@ const Component = {
   },
 };
 
-App.component(Component, function (data) {
-  this.on('click', 'button#add', () => {
-    data.items = [...data.items, 'four'];
+App.component(Component, ({data, on, closest}) => {
+  const initialItems = [...data.items];
+
+  on('click', 'button#add', () => {
+    data.items = [...data.items, `four #${data.items.length + 1}`];
   });
-  this.on('click', 'button.remove', ({item}) => {
-    // item will only be available if the event was triggered by a px-for loop.
-    data.items = data.items.filter((x) => x !== item);
+  on('click', 'button.remove', ({target}) => {
+    const i = Number(closest(target, 'i')?.getAttribute('i'));
+    data.items = data.items.filter((_, index) => index !== i);
+  });
+  on('click', 'button#reset', () => {
+    data.items = initialItems;
   });
 });
