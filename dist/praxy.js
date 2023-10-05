@@ -639,7 +639,7 @@ class Praxy {
             const m = map[key];
             const domEl = root.querySelector(`[k="${key}"]`);
             if (!domEl) {
-                console.warn(`Praxy->render: No DOM element found for key "${key}". This may be due to a change in the template.`);
+                delete map[key];
                 return;
             }
             if (domEl.childNodes.length !== m.live.length) {
@@ -652,7 +652,10 @@ class Praxy {
             const domStr = Array.from(domEl.childNodes).map((c)=>c.nodeValue).join("");
             const liveStr = m.live.map((c)=>c.nodeValue).join("");
             if (domStr !== liveStr) m.live.forEach((node, i)=>{
-                domEl.replaceChild(node, domEl.childNodes[i]);
+                const c = domEl.childNodes[i];
+                // don't replace nodes that's already been processed
+                if (c.attributes && c.hasAttribute("k")) return;
+                domEl.replaceChild(node, c);
             });
         });
     }
@@ -666,7 +669,8 @@ class Praxy {
             const firstRender = children.every((c)=>!c.hasAttribute("i"));
             if (firstRender) fors[uuid] = {
                 clone,
-                parent
+                parent,
+                children: []
             };
             const attr = parent.getAttribute("px-for");
             const [_, value] = attr.split(" in ");
@@ -675,7 +679,6 @@ class Praxy {
                 parent.setAttribute("k", uuid);
                 for(let i = 0; i < arr.length; i++){
                     const c = clone.cloneNode(true);
-                    c.setAttribute("k", this.generateUUID(uuids));
                     c.setAttribute("i", i);
                     parent.append(c);
                 }
@@ -696,7 +699,6 @@ class Praxy {
                 const index = children[i]?.getAttribute("i");
                 if (index == null) {
                     const c = clone.cloneNode(true);
-                    c.setAttribute("k", this.generateUUID(uuids));
                     c.setAttribute("i", i);
                     parent.append(c);
                 }
@@ -713,20 +715,22 @@ class Praxy {
                 if (!uuids.includes(uuid)) uuids.push(uuid);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const parent = child.parentNode;
-                const isFor = parent.hasAttribute("px-for");
+                const isFor = parent.hasAttribute("px-for") || child.hasAttribute("i") || this.findClosestParentWithAttribute(child, "i");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
                 const live = Array.from(nodes).map((node)=>{
                     const n = node.cloneNode(true);
-                    if (node.nodeName === "#text") n.nodeValue = n.nodeValue.replace(/{{(.*?)}}/g, (match)=>{
+                    if (node.nodeName === "#text") n.nodeValue = n.nodeValue.replaceAll(/{{(.*?)}}/g, (match)=>{
                         const k = match.replace(/{{|}}/g, "").trim().split(".");
                         matches.add(k[0]);
                         let v = data[k[0]];
                         if (isFor) {
+                            const index = this.findClosestParentWithAttribute(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
+                            const parent = this.findClosestParentWithAttribute(child, "px-for");
                             const [_, values] = parent.getAttribute("px-for")?.split(" in ");
-                            const index = Array.prototype.indexOf.call(parent.children, child);
                             v = data[values][index];
+                            if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
                         }
                         if (match.includes(".")) k.forEach((key)=>{
                             if (v[key] != null) v = v[key];
@@ -743,6 +747,16 @@ class Praxy {
                 };
             }
         });
+    }
+    findClosestParentWithAttribute(el, attrName, attrValue) {
+        let parentNode = el.parentNode;
+        while(parentNode != null){
+            if (attrValue == null) {
+                if (parentNode.attributes && parentNode.hasAttribute(attrName)) return parentNode;
+            } else if (parentNode.attributes && parentNode.getAttribute(attrName) === attrValue) return parentNode;
+            parentNode = parentNode.parentNode;
+        }
+        return;
     }
     generateUUID(uuids) {
         const uuid = Math.random().toString(36).substring(5);

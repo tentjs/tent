@@ -88,14 +88,34 @@ App.component({
 });
 ```
 
+### templates
+
+Templates are regular basic HTML, with the addition that you can use properties
+from `data`. A template should consist of 1 root element.
+
+```js
+App.component({
+  template: html`
+    <div>
+      Hi! I am {{name}}.
+    </div>
+  `,
+  data: {
+    name: 'Joe',
+  },
+});
+```
+
 ### click, input, etc.
 
 ```js
 const Component = {
   template: html`
     <div>
-      <p>My name is {{name}}</p>
-      <div><input name="name" type="text" /></div>
+      <div>
+        <p>My name is {{name}}</p>
+        <input name="name" type="text" />
+      </div>
       <ul px-for="item in items">
         <li>{{item}}</li>
       </ul>
