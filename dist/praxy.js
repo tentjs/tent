@@ -776,16 +776,6 @@ class Praxy {
                 }));
         });
     }
-    async fetch(url, options, target, cb) {
-        const els = document.querySelectorAll(target);
-        if (!url) throw new Error("Praxy->fetch: You must provide a URL");
-        if (els == null) throw new Error(`Praxy->fetch: No possible matches for ${target}`);
-        cb({
-            self: this,
-            target: els,
-            res: await fetch(url, options)
-        });
-    }
 }
 function html(...strings) {
     return strings.join("");
