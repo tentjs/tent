@@ -598,13 +598,13 @@ class Praxy {
         });
     }
     component(cmpt, mounted) {
-        if (this.components[cmpt.name] != null) throw new Error(`Component "${cmpt.name}" already exists`);
+        if (this.components[cmpt.name] != null) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
         const uuids = [];
         const map = {};
         const fors = {};
         const target = cmpt.target ?? "#app";
         const el = document.querySelector(target);
-        if (el == null) throw new Error(`Your mount point "${target}" doesn't exist`);
+        if (el == null) throw new Error(`Praxy->component: Your mount point "${target}" doesn't exist`);
         this.components[cmpt.name] = cmpt;
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
