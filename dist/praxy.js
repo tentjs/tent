@@ -582,6 +582,7 @@ class Praxy {
     listeners = {};
     components = {};
     extensions = {};
+    #events = [];
     constructor(context){
         this.data = context?.data ?? {};
         this.proxy = new Proxy(this.data, {
@@ -695,10 +696,18 @@ class Praxy {
                 }
             });
             // sync data
+            // TODO: The user could have added a new item to the array with a position
+            // that's not at the end. This will cause the new item to be added to the end.
+            // This is a limitation of the current implementation.
             arr.forEach((_, i)=>{
                 const index = children[i]?.getAttribute("i");
                 if (index == null) {
                     const c = clone.cloneNode(true);
+                    this.#events.forEach((e)=>{
+                        // TODO: Maybe we should remove the event listener when the node is removed?
+                        // TODO: Maybe give the item currently in the loop back to the user?
+                        this.on(e.event, e.target, e.fire, c, true, arr[i]);
+                    });
                     c.setAttribute("i", i);
                     parent.append(c);
                 }
@@ -763,13 +772,21 @@ class Praxy {
         while(uuids.includes(uuid))return this.generateUUID(uuids);
         return uuid;
     }
-    on(event, target, fire) {
-        const els = document.querySelectorAll(target);
-        if (!els?.length || fire == null) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
+    on(event, target, fire, parent, silent = false, data) {
+        const els = (parent ?? document).querySelectorAll(target);
+        if (!els?.length || fire == null) {
+            if (!silent) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
+        }
         els.forEach((el)=>{
+            if (!this.#events.find((ev)=>ev.target === target)) this.#events.push({
+                event,
+                target,
+                fire
+            });
             el.addEventListener(event, async ({ target })=>await fire({
                     self: this,
-                    target: target
+                    target,
+                    item: data
                 }));
         });
     }

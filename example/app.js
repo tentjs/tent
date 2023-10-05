@@ -23,13 +23,11 @@ const Component = {
 };
 
 App.component(Component, function (data) {
-  // this.on('input', '[name="name"]', ({target}) => (data.name = target.value));
   this.on('click', 'button#add', () => {
     data.items = [...data.items, 'four'];
   });
-  this.on('click', 'button.remove', ({target}) => {
-    const i = target.parentNode.getAttribute('i');
-    console.log('remove', target, i);
-    data.items = data.items.filter((_, index) => index !== Number(i));
+  this.on('click', 'button.remove', ({item}) => {
+    // item will only be available if the event was triggered by a px-for loop.
+    data.items = data.items.filter((x) => x !== item);
   });
 });
