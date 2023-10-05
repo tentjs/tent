@@ -1,43 +1,27 @@
-import {Praxy} from '../dist/praxy';
+import {Praxy, html} from '../dist/praxy';
 
 const App = new Praxy();
 
-const MyComponent = {
-  name: 'myComponent',
+const Component = {
   template: html`
     <div>
-      <div>Hello <span>test</span> {{entity}}</div>
-      <p>My name is <span>{{name}}</span></p>
-      <div>Testing something simple {{easy}}</div>
-      <input type="text" />
+      <p>My name is {{name}}</p>
+      <div><input name="name" type="text" /></div>
       <ul px-for="item in items">
         <li>{{item}}</li>
       </ul>
-      <button>Click me</button>
+      <button>Click me!</button>
     </div>
   `,
   data: {
-    entity: 'World!',
-    easy: 'simplicity',
-    name: 'Sebastian',
+    name: '',
     items: ['one', 'two', 'three'],
-    nested: {
-      key: 'value',
-    },
   },
 };
 
-App.component(MyComponent, function (data) {
+App.component(Component, function (data) {
+  this.on('input', '[name="name"]', ({target}) => (data.name = target.value));
   this.on('click', 'button', () => {
-    // data.entity = 'Universe!';
-    // data.easy = 'complexity';
-    data.items = ['one'];
-  });
-  this.on('input', 'input', ({target}) => {
-    data.name = target.value;
+    data.items = [...data.items, 'four'];
   });
 });
-
-function html(...values) {
-  return values.join('');
-}

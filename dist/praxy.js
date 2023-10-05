@@ -577,6 +577,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Praxy", ()=>Praxy);
+parcelHelpers.export(exports, "html", ()=>html);
 class Praxy {
     listeners = {};
     components = {};
@@ -612,7 +613,6 @@ class Praxy {
         const data = new Proxy(this.components[cmpt.name].data, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
-                console.log("set", key, value);
                 this.renderFor(root, data, uuids, fors, map);
                 this.map(root, uuids, data, map);
                 this.render(root, map);
@@ -657,9 +657,7 @@ class Praxy {
         });
     }
     renderFor(root, data, uuids, fors, map) {
-        const els = root.querySelectorAll("[px-for]");
-        console.log("fors", fors);
-        els.forEach((el)=>{
+        root.querySelectorAll("[px-for]")?.forEach((el)=>{
             const parent = el;
             const uuid = parent.getAttribute("k") ?? this.generateUUID(uuids);
             const f = fors[uuid];
@@ -771,12 +769,9 @@ class Praxy {
             res: await fetch(url, options)
         });
     }
-    registerExtension(name, extension) {
-        if (this.extensions[name] != null) throw new Error(`Praxy->registerExtension: Extension "${name}" already exists`);
-        this.extensions[name] = extension.bind(this, {
-            self: this
-        });
-    }
+}
+function html(...strings) {
+    return strings.join("");
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
