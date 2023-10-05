@@ -600,6 +600,7 @@ class Praxy {
         if (this.components[cmpt.name] != null) throw new Error(`Component "${cmpt.name}" already exists`);
         const uuids = [];
         const map = {};
+        const fors = {};
         const target = cmpt.target ?? "#app";
         const el = document.querySelector(target);
         if (el == null) throw new Error(`Your mount point "${target}" doesn't exist`);
@@ -611,6 +612,8 @@ class Praxy {
         const data = new Proxy(this.components[cmpt.name].data, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
+                console.log("set", key, value);
+                this.renderFor(root, data, uuids, fors, map);
                 this.map(root, uuids, data, map);
                 this.render(root, map);
                 return s;
@@ -619,8 +622,9 @@ class Praxy {
                 return Reflect.get(data, key);
             }
         });
+        this.renderFor(tmp.content, data, uuids, fors, map);
         this.map(tmp.content, uuids, data, map);
-        root.setAttribute("key", cmpt.name);
+        root.setAttribute("k", cmpt.name);
         root.append(tmp.cloneNode(true));
         el.append(root);
         this.render(root, map);
@@ -633,7 +637,11 @@ class Praxy {
         });
         Object.keys(map).forEach((key)=>{
             const m = map[key];
-            const domEl = root.querySelector(`[key="${key}"]`);
+            const domEl = root.querySelector(`[k="${key}"]`);
+            if (!domEl) {
+                console.warn(`Praxy->render: No DOM element found for key "${key}". This may be due to a change in the template.`);
+                return;
+            }
             if (domEl.childNodes.length !== m.live.length) {
                 console.warn(`Praxy->render: The number of live nodes (${m.live.length}) doesn't match the number of DOM nodes (${domEl.childNodes.length}).`, "This may be due to a change in the template. DOM have been synced to match again.");
                 while(domEl.firstChild)domEl.removeChild(domEl.lastChild);
@@ -648,14 +656,66 @@ class Praxy {
             });
         });
     }
+    renderFor(root, data, uuids, fors, map) {
+        const els = root.querySelectorAll("[px-for]");
+        console.log("fors", fors);
+        els.forEach((el)=>{
+            const parent = el;
+            const uuid = parent.getAttribute("k") ?? this.generateUUID(uuids);
+            const f = fors[uuid];
+            const children = Array.from(parent.children);
+            const clone = f ? f.clone : parent.children[0].cloneNode(true);
+            const firstRender = children.every((c)=>!c.hasAttribute("i"));
+            if (firstRender) fors[uuid] = {
+                clone,
+                parent
+            };
+            const attr = parent.getAttribute("px-for");
+            const [_, value] = attr.split(" in ");
+            const arr = data[value];
+            if (firstRender) {
+                parent.setAttribute("k", uuid);
+                for(let i = 0; i < arr.length; i++){
+                    const c = clone.cloneNode(true);
+                    c.setAttribute("k", this.generateUUID(uuids));
+                    c.setAttribute("i", i);
+                    parent.append(c);
+                }
+                Array.from(parent.children).find((c)=>!c.hasAttribute("i"))?.remove();
+                return;
+            }
+            // sync nodes
+            children.forEach((c)=>{
+                const index = c.getAttribute("i");
+                const item = arr[index];
+                if (item == null) {
+                    delete map[c.getAttribute("k")];
+                    c.remove();
+                }
+            });
+            // sync data
+            arr.forEach((_, i)=>{
+                const index = children[i]?.getAttribute("i");
+                if (index == null) {
+                    const c = clone.cloneNode(true);
+                    c.setAttribute("k", this.generateUUID(uuids));
+                    c.setAttribute("i", i);
+                    parent.append(c);
+                }
+            });
+        });
+    }
     map(node, uuids, data, map) {
         if (node.nodeName === "#text" || node.nodeName === "#comment") return;
         Array.from(node.children).forEach((child)=>{
             this.map(child, uuids, data, map);
-            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("key")) {
-                const uuid = child.getAttribute("key") ?? this.generateUUID(uuids);
+            if (child.attributes && child.hasAttribute("px-for")) return;
+            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
+                const uuid = child.getAttribute("k") ?? this.generateUUID(uuids);
                 if (!uuids.includes(uuid)) uuids.push(uuid);
-                if (!child.hasAttribute("key")) child.setAttribute("key", uuid);
+                if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
+                const parent = child.parentNode;
+                const isFor = parent.hasAttribute("px-for");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
@@ -665,6 +725,11 @@ class Praxy {
                         const k = match.replace(/{{|}}/g, "").trim().split(".");
                         matches.add(k[0]);
                         let v = data[k[0]];
+                        if (isFor) {
+                            const [_, values] = parent.getAttribute("px-for")?.split(" in ");
+                            const index = Array.prototype.indexOf.call(parent.children, child);
+                            v = data[values][index];
+                        }
                         if (match.includes(".")) k.forEach((key)=>{
                             if (v[key] != null) v = v[key];
                         });
@@ -675,7 +740,8 @@ class Praxy {
                 map[uuid] = {
                     live,
                     clone,
-                    keys: matches
+                    keys: matches,
+                    parent: child.parentNode.cloneNode()
                 };
             }
         });
