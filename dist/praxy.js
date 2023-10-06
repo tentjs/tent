@@ -595,8 +595,9 @@ class Praxy {
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
         if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmptName}" must have a single root element.`);
-        const root = tmp.content.childNodes[0].cloneNode();
-        const data = new Proxy(this.components[cmptName].data, {
+        const root = tmp.content.children[0].cloneNode();
+        const sample = cmpt.inherit ? this.components[cmpt.inherit].data : cmpt.data;
+        const data = sample ? new Proxy(sample, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
                 this.renderFor(root, uuids, data, map, fors);
@@ -607,24 +608,23 @@ class Praxy {
             get: (data, key)=>{
                 return Reflect.get(data, key);
             }
-        });
-        this.renderFor(tmp.content, uuids, data, map, fors);
-        this.map(tmp.content, uuids, data, map);
+        }) : null;
+        if (data) {
+            this.renderFor(tmp.content, uuids, data, map, fors);
+            this.map(tmp.content, uuids, data, map);
+        }
         root.setAttribute("k", cmptName);
-        root.append(tmp.cloneNode(true));
+        root.append(tmp.content.cloneNode(true));
         el.append(root);
-        this.render(root, map);
+        if (data) this.render(root, map);
         if (mounted) mounted({
             data,
+            root,
             on: this.on.bind(this),
             closest: this.closest.bind(this)
         });
     }
     render(root, map) {
-        const tmp = root.querySelector("template");
-        if (root.children.length === 1 && root.children[0].nodeName === "TEMPLATE") Array.from(tmp.content.children).forEach((child)=>{
-            root.append(child);
-        });
         Object.keys(map).forEach((key)=>{
             const m = map[key];
             const domEl = root.querySelector(`[k="${key}"]`);
@@ -655,8 +655,9 @@ class Praxy {
             const uuid = parent.getAttribute("k") ?? this.generateUUID(uuids);
             const f = fors[uuid];
             const children = Array.from(parent.children);
-            const clone = f ? f.clone : parent.children[0].cloneNode(true);
+            const clone = f ? f.clone : children[0]?.cloneNode(true);
             const firstRender = f == null;
+            if (children.length === 0) return;
             if (firstRender) fors[uuid] = {
                 clone,
                 parent
@@ -708,7 +709,7 @@ class Praxy {
                 const uuid = child.getAttribute("k") ?? this.generateUUID(uuids);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const parent = child.parentNode;
-                const isFor = parent.hasAttribute("px-for") || child.hasAttribute("i") || this.closest(child, "i", null, "px-for");
+                const isFor = parent.attributes && parent.hasAttribute("px-for") || child.hasAttribute("i") || this.closest(child, "i", null, "px-for");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
@@ -744,7 +745,7 @@ class Praxy {
     closest(el, attrName, attrValue, end = document.body) {
         let parentNode = el.parentNode;
         while(parentNode != null){
-            const stop = typeof end === "string" ? parentNode.hasAttribute(end) : end;
+            const stop = typeof end === "string" ? parentNode.attributes && parentNode.hasAttribute(end) : end;
             if (parentNode === stop) return;
             if (attrValue == null) {
                 if (parentNode.attributes && parentNode.hasAttribute(attrName)) return parentNode;
