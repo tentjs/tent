@@ -583,9 +583,9 @@ class Praxy {
     components = {};
     constructor(){}
     component(cmpt, mounted) {
-        const cmptName = cmpt.name ?? this.generateUUID(Object.keys(this.components));
-        if (this.components[cmptName] != null) throw new Error(`Praxy->component: "${cmptName}" already exists`);
         const uuids = [];
+        const cmptName = cmpt.name ?? this.generateUUID(uuids);
+        if (this.components[cmptName] != null) throw new Error(`Praxy->component: "${cmptName}" already exists`);
         const map = {};
         const fors = {};
         const target = cmpt.target;
@@ -599,7 +599,7 @@ class Praxy {
         const data = new Proxy(this.components[cmptName].data, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
-                this.renderFor(root, data, uuids, fors, map);
+                this.renderFor(root, uuids, data, map, fors);
                 this.map(root, uuids, data, map);
                 this.render(root, map);
                 return s;
@@ -608,7 +608,7 @@ class Praxy {
                 return Reflect.get(data, key);
             }
         });
-        this.renderFor(tmp.content, data, uuids, fors, map);
+        this.renderFor(tmp.content, uuids, data, map, fors);
         this.map(tmp.content, uuids, data, map);
         root.setAttribute("k", cmptName);
         root.append(tmp.cloneNode(true));
@@ -649,7 +649,7 @@ class Praxy {
             });
         });
     }
-    renderFor(root, data, uuids, fors, map) {
+    renderFor(root, uuids, data, map, fors) {
         root.querySelectorAll("[px-for]")?.forEach((el)=>{
             const parent = el;
             const uuid = parent.getAttribute("k") ?? this.generateUUID(uuids);
