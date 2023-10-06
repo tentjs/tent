@@ -19,9 +19,9 @@ App.component({
 ```
 
 Praxy listens for changes in your components data, but only on the root properties of your object.
-Meaning that if have a nested object, and update a nested property your component won't react to that change.
+Meaning that if have a nested object, or arrays, and update a nested property your component won't react to that change.
 
-Instead you can update nested objects like this:
+Instead you can update nested objects, or arrays, like this:
 
 ```js
 App.component({
@@ -34,8 +34,10 @@ App.component({
     },
     items: ['one', 'two', 'three'],
   },
-}, function(data) {
+}, ({data}) => {
+  // Set the root property, and use the spread operator to add/modify your property
   data.nested = {...data.nested, property: 'You'};
+
   // When setting arrays you can't use `.push()`. Instead you can use the spread operator.
   // You can't use `.push()` because of how it works internally when mutating the array, which
   // makes it impossible for Praxy to operate on the changes.
@@ -60,16 +62,13 @@ const Component = {
   },
 }
 
-// The "mounted" function will have `data` as it's only argument, which is the data of your component.
+// The "mounted" function will have `data` as an argument, which is the data of your component.
 // You can operate directly on `data`, i.e set/modify properties.
-App.component(Component, function(data) {
+App.component(Component, ({data}) => {
   // This is where you write your components logic, and also your "mounted" hook.
   data.name = 'Torben';
 });
 ```
-
-It is __important__ that the function (the second argument to .component()) is a regular function, i.e not an arrow function.
-This is due to how `this` is bound. If you don't need access to anything on the Praxy instance, you can use an arrow function and still have access to `data`.
 
 ### for loop
 
@@ -88,10 +87,18 @@ App.component({
 });
 ```
 
+Note that you shouldn't add a `key` attribute to the looped items. It will be added internally to all relevant elements - it's called `i` (for index).
+It is used when Praxy is traversing the DOM and to determine if any re-renders should happen.
+
 ### templates
 
 Templates are regular basic HTML, with the addition that you can use properties
 from `data`. A template should consist of 1 root element.
+
+#### `k` and `i`
+
+Note that Praxy will add `i` and `k` attributes to all relevant elements in the DOM.
+They are used to traverse the DOM, and to determine if any re-renders should happen or not.
 
 ```js
 App.component({
@@ -117,9 +124,9 @@ const Component = {
         <input name="name" type="text" />
       </div>
       <ul px-for="item in items">
-        <li>{{item}}</li>
+        <li>{{item}} <button id="remove">Add an item</button></li>
       </ul>
-      <button>Click me!</button>
+      <button id="add">Add an item</button>
     </div>
   `,
   data: {
@@ -128,13 +135,20 @@ const Component = {
   },
 }
 
-App.component(Component, function(data) {
-  this.on('input', '[name="name"]',
+App.component(Component, ({data, on, closest}) => {
+  on('input', '[name="name"]',
     ({target}) => data.name = target.value
   );
-  this.on('click', 'button',
+  on('click', 'button#add',
     () => data.items = [...data.items, 'four']
   );
+  on('click', 'button.remove', ({target}) => {
+    // get the index of the item in the px-for loop
+    // `closest` is a method provided to operate on the DOM easier,
+    // it is mostly used to find `k` and `i` attributes to operate on in event handlers like this one.
+    const i = Number(closest(target, 'i')?.getAttribute('i'));
+    data.items = data.items.filter((_, index) => index !== i);
+  });
 });
 ```
 
