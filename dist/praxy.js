@@ -613,8 +613,13 @@ class Praxy {
             this.renderFor(tmp.content, uuids, data, map, fors);
             this.map(tmp.content, uuids, data, map);
         }
-        root.setAttribute("k", cmptName);
-        root.append(tmp.content.cloneNode(true));
+        if (tmp.content.children.length > 1) root.append(tmp.content.children[0].cloneNode(true));
+        else {
+            tmp.content.children[0].childNodes.forEach((node)=>{
+                root.append(node.cloneNode(true));
+            });
+            if (tmp.content.children[0].hasAttributes()) for (const attr of tmp.content.children[0].attributes)root.setAttribute(attr.name, attr.value);
+        }
         el.append(root);
         if (data) this.render(root, map);
         if (mounted) mounted({
@@ -627,7 +632,7 @@ class Praxy {
     render(root, map) {
         Object.keys(map).forEach((key)=>{
             const m = map[key];
-            const domEl = root.querySelector(`[k="${key}"]`);
+            const domEl = root.children.length === 0 || root.hasAttributes() && root.getAttribute("k") === key ? root : root.querySelector(`[k="${key}"]`);
             if (!domEl) {
                 delete map[key];
                 return;
