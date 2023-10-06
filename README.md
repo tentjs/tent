@@ -87,8 +87,7 @@ App.component({
 });
 ```
 
-Note that you shouldn't add a `key` attribute to the looped items. It will be added internally to all relevant elements - it's called `i` (for index).
-It is used when Praxy is traversing the DOM and to determine if any re-renders should happen.
+Note: You shouldn't add a `key` attribute to the looped items. It will be added internally to all relevant elements - it's called `i` (for index).
 
 ### templates
 
@@ -97,7 +96,7 @@ from `data`. A template should consist of 1 root element.
 
 #### `k` and `i`
 
-Note that Praxy will add `i` and `k` attributes to all relevant elements in the DOM.
+Note: Praxy will add `k` and `i` attributes to all relevant elements in the DOM.
 They are used to traverse the DOM, and to determine if any re-renders should happen or not.
 
 ```js
@@ -147,7 +146,9 @@ App.component(Component, ({data, on, closest}) => {
     // `closest` is a method provided to operate on the DOM easier,
     // it is mostly used to find `k` and `i` attributes to operate on in event handlers like this one.
     const i = Number(closest(target, 'i')?.getAttribute('i'));
-    data.items = data.items.filter((_, index) => index !== i);
+    if (i) {
+      data.items = data.items.filter((_, index) => index !== i);
+    }
   });
 });
 ```

@@ -3,6 +3,7 @@ import {Praxy, html} from '../dist/praxy';
 const App = new Praxy();
 
 const Component = {
+  name: 'my-component',
   template: html`
     <div>
       <ul px-for="item in items">
