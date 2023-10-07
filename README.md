@@ -26,9 +26,9 @@ const Component = {
         -->
         <ul px-for="todo in todos">
           <li>
-            {{todo}} 
+            {{todo.title}} 
             <button class="remove">Remove</button>
-            <button class="done">done</button>
+            <button class="done">Done</button>
           </li>
         </ul>
       </div>
@@ -46,8 +46,12 @@ const Component = {
   data: {
     name: 'Sebastian',
     age: 30,
-    todos: ['Walk the dog', 'Drink coffee', 'Pick up kids'],
     newTodo: '',
+    todos: [
+      {title: 'Drink coffee', done: false},
+      {title: 'Walk the dog', done: true},
+      {title: 'Go to work', done: false},
+    ],
     obj: { value: 'someValue' },
   },
 };
@@ -62,7 +66,7 @@ App.component(
       ({target}) => data.newTodo = target.value
     );
     on('click', 'button#add',
-      () => data.todos = [...data.todos, data.newTodo]
+      () => data.todos = [...data.todos, {title: data.newTodo, done: false}]
     );
     // All event listeners within a px-for loop will be given a `item`,
     // which is the current item in the loop.
@@ -71,7 +75,7 @@ App.component(
     );
     on('click', 'button.done', ({item}) => {
       const items = [...data.todos];
-      const x = items.find((x) => x === item);
+      const x = items.find((x) => x.title === item.title);
       x.done = !x.done;
       data.todos = items;
     });
