@@ -87,7 +87,7 @@ App.component({
 });
 ```
 
-Note: You shouldn't add a `key` attribute to the looped items. It will be added internally to all relevant elements - it's called `i` (for index).
+Note: You shouldn't add a `key` attribute to the looped items. It will be added automatically to all relevant elements - it's called `i` (for index). More on that later.
 
 ### templates
 
@@ -96,15 +96,14 @@ from `data`. A template should consist of 1 root element.
 
 #### `k` and `i`
 
-Note: Praxy will add `k` and `i` attributes to all relevant elements in the DOM.
+Praxy will add `k` and `i` attributes to all relevant elements in the DOM.
 They are used to traverse the DOM, and to determine if any re-renders should happen or not.
+`i` stands for `index` and is added to the looped element in a `px-for` loop, and `k` is a unique identifier.
 
 ```js
 App.component({
   template: html`
-    <div>
-      Hi! I am {{name}}.
-    </div>
+    <div>Hi! I am {{name}}.</div>
   `,
   data: {
     name: 'Joe',
@@ -134,21 +133,17 @@ const Component = {
   },
 }
 
-App.component(Component, ({data, on, closest}) => {
+App.component(Component, ({data, on}) => {
   on('input', '[name="name"]',
     ({target}) => data.name = target.value
   );
   on('click', 'button#add',
     () => data.items = [...data.items, 'four']
   );
-  on('click', 'button.remove', ({target}) => {
-    // get the index of the item in the px-for loop
-    // `closest` is a method provided to operate on the DOM easier,
-    // it is mostly used to find `k` and `i` attributes to operate on in event handlers like this one.
-    const i = Number(closest(target, 'i')?.getAttribute('i'));
-    if (i) {
-      data.items = data.items.filter((_, index) => index !== i);
-    }
+  // all event listeners within a px-for loop will be given a `item`,
+  // which is the current item in the loop.
+  on('click', 'button.remove', ({target, item}) => {
+      data.items = data.items.filter((x) => x !== item);
   });
 });
 ```
