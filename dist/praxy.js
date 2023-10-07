@@ -591,7 +591,10 @@ class Praxy {
         const target = cmpt.target;
         const el = target ? document.querySelector(target) : document.body;
         if (el == null) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
-        this.components[cmptName] = cmpt;
+        this.components[cmptName] = {
+            ...cmpt,
+            fors
+        };
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
         if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmptName}" must have a single root element.`);
@@ -776,10 +779,23 @@ class Praxy {
                 target,
                 fire
             });
-            el.addEventListener(event, async ({ target })=>await fire({
-                    self: this,
-                    target
-                }));
+            el.addEventListener(event, async ({ target })=>{
+                let item = null;
+                let cmptName = null;
+                const loop = this.closest(target, "px-for");
+                if (loop) {
+                    const k = loop.getAttribute("k");
+                    const [_, values] = loop.getAttribute("px-for")?.split(" in ");
+                    for (const [, value] of Object.entries(this.components))if (value.fors[k] != null) cmptName = value.name;
+                    const data = this.components[cmptName]?.data;
+                    const i = this.closest(target, "i")?.getAttribute("i");
+                    item = data?.[values]?.[i];
+                }
+                await fire({
+                    target,
+                    item
+                });
+            });
         });
     }
 }
