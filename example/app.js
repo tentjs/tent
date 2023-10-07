@@ -6,32 +6,44 @@ const Component = {
   name: 'my-component',
   template: html`
     <div>
-      <ul px-for="item in items">
+      <ul px-for="todo in todos">
         <li>
-          <span>{{item}}</span>
+          {{todo.title}} ({{todo.done}})
           <button class="remove">remove</button>
+          <button class="done">done</button>
         </li>
       </ul>
-      <button id="add">Add item</button>
-      <button id="reset">Reset list</button>
+      <input type="text" placeholder="New todo" />
+      <button id="add">Add todo</button>
     </div>
   `,
   data: {
     name: 'Sebastian',
-    items: ['one', 'two', 'three'],
+    newTodo: '',
+    todos: [
+      {title: 'one', done: false},
+      {title: 'two', done: true},
+      {title: 'three', done: false},
+    ],
   },
 };
 
 App.component(Component, ({data, on}) => {
-  const initialItems = [...data.items];
-
+  on('input', 'input', ({target}) => {
+    data.newTodo = target.value;
+  });
   on('click', 'button#add', () => {
-    data.items = [...data.items, `four #${data.items.length + 1}`];
+    if (data.newTodo) {
+      data.todos = [...data.todos, {title: data.newTodo, done: false}];
+    }
   });
   on('click', 'button.remove', ({item}) => {
-    data.items = data.items.filter((x) => x !== item);
+    data.todos = data.todos.filter((x) => x !== item);
   });
-  on('click', 'button#reset', () => {
-    data.items = initialItems;
+  on('click', 'button.done', ({item}) => {
+    const items = data.todos;
+    const x = items.find((x) => x.title === item.title);
+    x.done = !x.done;
+    data.todos = items;
   });
 });

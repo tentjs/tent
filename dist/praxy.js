@@ -620,7 +620,7 @@ class Praxy {
             tmp.content.children[0].childNodes.forEach((node)=>{
                 root.append(node.cloneNode(true));
             });
-            if (tmp.content.children[0].hasAttributes()) for (const attr of tmp.content.children[0].attributes)root.setAttribute(attr.name, attr.value);
+            if (tmp.content.children[0].attributes) for (const attr of tmp.content.children[0].attributes)root.setAttribute(attr.name, attr.value);
         }
         el.append(root);
         if (data) this.#render(root, map);
@@ -636,12 +636,12 @@ class Praxy {
         for(let i = 0; i < node.children.length; i++){
             const child = node.children[i];
             this.#map(child, uuids, data, map);
-            if (child.hasAttributes() && child.hasAttribute("px-for")) return;
-            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.hasAttributes() && child.hasAttribute("k")) {
+            if (child.attributes && child.hasAttribute("px-for")) return;
+            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
                 const uuid = child.getAttribute("k") ?? this.#generateUUID(uuids);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const parent = child.parentNode;
-                const isFor = parent.hasAttributes() && parent.hasAttribute("px-for") || child.hasAttribute("i") || this.#closest(child, "i", null, "px-for");
+                const isFor = parent.attributes && parent.hasAttribute("px-for") || child.hasAttribute("i") || this.#closest(child, "i", null, "px-for");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
@@ -677,7 +677,7 @@ class Praxy {
     #render(root, map) {
         Object.keys(map).forEach((key)=>{
             const m = map[key];
-            const domEl = root.children.length === 0 || root.hasAttributes() && root.getAttribute("k") === key ? root : root.querySelector(`[k="${key}"]`);
+            const domEl = root.children.length === 0 || root.attributes && root.getAttribute("k") === key ? root : root.querySelector(`[k="${key}"]`);
             if (!domEl) {
                 delete map[key];
                 return;
@@ -693,9 +693,9 @@ class Praxy {
             const liveStr = m.live.map((c)=>c.nodeValue).join("");
             if (domStr !== liveStr) m.live.forEach((node, i)=>{
                 const c = domEl.childNodes[i];
-                // don't replace nodes that's already been processed
+                // Don't replace nodes that's already been processed
                 if (c.attributes && c.hasAttribute("k")) return;
-                domEl.replaceChild(node, c);
+                if (!c.isEqualNode(node)) domEl.replaceChild(node, c);
             });
         });
     }
@@ -716,7 +716,7 @@ class Praxy {
             const arr = data[value];
             if (firstRender) {
                 parent.setAttribute("k", uuid);
-                for(let i = 0; i < arr.length; i++){
+                for(let i = 0; i < arr?.length; i++){
                     const c = clone.cloneNode(true);
                     c.setAttribute("i", i);
                     parent.append(c);
@@ -750,14 +750,14 @@ class Praxy {
         });
     }
     #closest(el, attrName, attrValue, end = document.body) {
-        let parentNode = el.parentNode;
-        while(parentNode != null){
-            const stop = typeof end === "string" ? parentNode.hasAttributes() && parentNode.hasAttribute(end) : end;
-            if (parentNode === stop) return;
+        let parent = el.parentNode;
+        while(parent != null){
+            const stop = typeof end === "string" ? parent.attributes && parent.hasAttribute(end) : end;
+            if (parent === stop) return;
             if (attrValue == null) {
-                if (parentNode.hasAttributes() && parentNode.hasAttribute(attrName)) return parentNode;
-            } else if (parentNode.hasAttributes() && parentNode.getAttribute(attrName) === attrValue) return parentNode;
-            parentNode = parentNode.parentNode;
+                if (parent.attributes && parent.hasAttribute(attrName)) return parent;
+            } else if (parent.attributes && parent.getAttribute(attrName) === attrValue) return parent;
+            parent = parent.parentNode;
         }
         return;
     }
