@@ -61,7 +61,7 @@ App.component(
       ({target}) => data.newTodo = target.value
     );
     on('click', 'button#add',
-      () => data.todos = [...data.todos, newTodo]
+      () => data.todos = [...data.todos, data.newTodo]
     );
     // All event listeners within a px-for loop will be given a `item`,
     // which is the current item in the loop.
