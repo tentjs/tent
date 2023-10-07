@@ -5,12 +5,16 @@ Build web apps with atomic components.
 ## Usage
 
 ```js
+import { Praxy, html } from 'praxy';
+
+const App = new Praxy();
+
 const Component = {
-  // This is the template of your component.
-  // You define what should be rendered in the DOM.
-  // Each value in `data` can be rendered with `{{}}`
+  // This is the template of your component. Here you define what should be rendered into the DOM.
+  //
   // Your template should have exactly 1 root element.
-  // You may notice that some elements in the DOM have `k` and `i` attributes. These are used
+  //
+  // You may notice by inspecting the DOM that some elements will have `k` and `i` attributes. These are used
   // internally by Praxy to various operations, such as determine if anything should re-render.
   template: html`
     <div>
