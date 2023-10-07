@@ -28,7 +28,11 @@ const Component = {
         Note: You shouldn't add a key attribute. It will be added automatically - it's called i (for index).
         -->
         <ul px-for="todo in todos">
-          <li>{{todo}} <button class="remove">Remove</button></li>
+          <li>
+            {{todo}} 
+            <button class="remove">Remove</button>
+            <button class="done">done</button>
+          </li>
         </ul>
       </div>
       <div>
@@ -68,6 +72,12 @@ App.component(
     on('click', 'button.remove',
       ({target, item}) => data.todos = data.todos.filter((x) => x !== item)
     );
+    on('click', 'button.done', ({item}) => {
+      const items = [...data.todos];
+      const x = items.find((x) => x === item);
+      x.done = !x.done;
+      data.todos = items;
+    });
   }
 );
 ```
