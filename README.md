@@ -2,149 +2,69 @@
 
 Build web apps with atomic components.
 
-### data
-
-```js
-App.component({
-  template: html`
-    <div>
-      <p>Hey! My name is {{name}}, and I am {{age}} years old.</p>
-    </div>
-  `,
-  data: {
-    name: 'Sebastian',
-    age: 30,
-  },
-});
-```
-
-Praxy listens for changes in your components data, but only on the root properties of your object.
-Meaning that if have a nested object, or arrays, and update a nested property your component won't react to that change.
-
-Instead you can update nested objects, or arrays, like this:
-
-```js
-App.component({
-  template: html`
-    <div>{{nested.property}}</div>
-  `,
-  data: {
-    nested: {
-      property: 'Hey!',
-    },
-    items: ['one', 'two', 'three'],
-  },
-}, ({data}) => {
-  // Set the root property, and use the spread operator to add/modify your property
-  data.nested = {...data.nested, property: 'You'};
-
-  // When setting arrays you can't use `.push()`. Instead you can use the spread operator.
-  // You can't use `.push()` because of how it works internally when mutating the array, which
-  // makes it impossible for Praxy to operate on the changes.
-  data.items = [...data.items, 'four'];
-
-  // or, you could do something like this, if you _really_ want to use `.push()`:
-  const items = [...data.items];
-  items.push('four');
-  data.items = items;
-});
-```
-
-### mounted
+## Usage
 
 ```js
 const Component = {
-  template: html`
-    <div>{{name}}</div>
-  `,
-  data: {
-    name: 'Sebastian',
-  },
-}
-
-// The "mounted" function will have `data` as an argument, which is the data of your component.
-// You can operate directly on `data`, i.e set/modify properties.
-App.component(Component, ({data}) => {
-  // This is where you write your components logic, and also your "mounted" hook.
-  data.name = 'Torben';
-});
-```
-
-### for loop
-
-```js
-App.component({
-  template: html`
-    <div>
-      <ul px-for="item in items">
-        <li>{{item}}</li>
-      </ul>
-    </div>
-  `,
-  data: {
-    items: ['one', 'two', 'three'],
-  },
-});
-```
-
-Note: You shouldn't add a `key` attribute to the looped items. It will be added automatically to all relevant elements - it's called `i` (for index). More on that later.
-
-### templates
-
-Templates are regular basic HTML, with the addition that you can use properties
-from `data`. A template should consist of 1 root element.
-
-#### `k` and `i`
-
-Praxy will add `k` and `i` attributes to all relevant elements in the DOM.
-They are used to traverse the DOM, and to determine if any re-renders should happen or not.
-`i` stands for `index` and is added to the looped element in a `px-for` loop, and `k` is a unique identifier.
-
-```js
-App.component({
-  template: html`
-    <div>Hi! I am {{name}}.</div>
-  `,
-  data: {
-    name: 'Joe',
-  },
-});
-```
-
-### click, input, etc.
-
-```js
-const Component = {
+  // This is the template of your component.
+  // You define what should be rendered in the DOM.
+  // Each value in `data` can be rendered with `{{}}`
+  // Your template should have exactly 1 root element.
+  // You may notice that some elements in the DOM have `k` and `i` attributes. These are used
+  // internally by Praxy to various operations, such as determine if anything should re-render.
   template: html`
     <div>
       <div>
-        <p>My name is {{name}}</p>
-        <input name="name" type="text" />
+        <p>My name is {{name}}.</p>
       </div>
-      <ul px-for="item in items">
-        <li>{{item}} <button id="remove">Add an item</button></li>
-      </ul>
-      <button id="add">Add an item</button>
+      <div>
+        <p>This is my to-do</p>
+        <!--
+        This is a for loop. It will loop each item in an array, and make it accessible via {{}}
+        Note: You shouldn't add a key attribute. It will be added automatically - it's called i (for index).
+        -->
+        <ul px-for="todo in todos">
+          <li>{{todo}} <button class="remove">Remove</button></li>
+        </ul>
+      </div>
+      <div>
+        <input name="newTodo" type="text" />
+        <button id="add">Add</button>
+      </div>
     </div>
   `,
+  // This is the data of your component. It will react to changes.
+  // It will however only listen for changes on the root properties of the object.
+  // Meaning that to update a nested object, or an array, you do:
+  // add to array: data.todos = [...data.todos, 'new']
+  // add to an object: data.obj = {...data.obj, another: 'cool value'}
   data: {
-    name: '',
-    items: ['one', 'two', 'three'],
+    name: 'Sebastian',
+    age: 30,
+    todos: ['Walk the dog', 'Drink coffee', 'Pick up kids'],
+    newTodo: '',
+    obj: { value: 'someValue' },
   },
-}
+};
 
-App.component(Component, ({data, on}) => {
-  on('input', '[name="name"]',
-    ({target}) => data.name = target.value
-  );
-  on('click', 'button#add',
-    () => data.items = [...data.items, 'four']
-  );
-  // all event listeners within a px-for loop will be given a `item`,
-  // which is the current item in the loop.
-  on('click', 'button.remove', ({target, item}) => {
-      data.items = data.items.filter((x) => x !== item);
-  });
-});
+App.component(
+  Component,
+  // This is the "mounted" lifecycle - if you will.
+  // Here you write the logic of your component.
+  ({data, on} => {
+    // This is how you add event listeners to elements within the component.
+    on('input', '[name="newTodo"]',
+      ({target}) => data.newTodo = target.value
+    );
+    on('click', 'button#add',
+      () => data.todos = [...data.todos, newTodo]
+    );
+    // All event listeners within a px-for loop will be given a `item`,
+    // which is the current item in the loop.
+    on('click', 'button.remove',
+      ({target, item}) => data.todos = data.todos.filter((x) => x !== item)
+    );
+  }
+);
 ```
 
