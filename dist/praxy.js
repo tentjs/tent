@@ -694,7 +694,7 @@ class Praxy {
             if (domStr !== liveStr) m.live.forEach((node, i)=>{
                 const c = domEl.childNodes[i];
                 // don't replace nodes that's already been processed
-                if (c.hasAttributes() && c.hasAttribute("k")) return;
+                if (c.attributes && c.hasAttribute("k")) return;
                 domEl.replaceChild(node, c);
             });
         });
@@ -707,7 +707,6 @@ class Praxy {
             const children = Array.from(parent.children);
             const clone = f ? f.clone : children[0]?.cloneNode(true);
             const firstRender = f == null;
-            if (children.length === 0) return;
             if (firstRender) fors[uuid] = {
                 clone,
                 parent
