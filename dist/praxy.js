@@ -632,15 +632,16 @@ class Praxy {
         });
     }
     #map(node, uuids, data, map) {
-        if (node.nodeName === "#text" || node.nodeName === "#comment") return;
-        Array.from(node.children).forEach((child)=>{
+        if (!node.children) return;
+        for(let i = 0; i < node.children.length; i++){
+            const child = node.children[i];
             this.#map(child, uuids, data, map);
-            if (child.attributes && child.hasAttribute("px-for")) return;
-            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
+            if (child.hasAttributes() && child.hasAttribute("px-for")) return;
+            if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.hasAttributes() && child.hasAttribute("k")) {
                 const uuid = child.getAttribute("k") ?? this.#generateUUID(uuids);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const parent = child.parentNode;
-                const isFor = parent.attributes && parent.hasAttribute("px-for") || child.hasAttribute("i") || this.#closest(child, "i", null, "px-for");
+                const isFor = parent.hasAttributes() && parent.hasAttribute("px-for") || child.hasAttribute("i") || this.#closest(child, "i", null, "px-for");
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 const nodes = map[uuid]?.clone.childNodes ?? child.childNodes;
@@ -671,7 +672,7 @@ class Praxy {
                     parent: child.parentNode.cloneNode()
                 };
             }
-        });
+        }
     }
     #render(root, map) {
         Object.keys(map).forEach((key)=>{
@@ -693,7 +694,7 @@ class Praxy {
             if (domStr !== liveStr) m.live.forEach((node, i)=>{
                 const c = domEl.childNodes[i];
                 // don't replace nodes that's already been processed
-                if (c.attributes && c.hasAttribute("k")) return;
+                if (c.hasAttributes() && c.hasAttribute("k")) return;
                 domEl.replaceChild(node, c);
             });
         });
@@ -752,11 +753,11 @@ class Praxy {
     #closest(el, attrName, attrValue, end = document.body) {
         let parentNode = el.parentNode;
         while(parentNode != null){
-            const stop = typeof end === "string" ? parentNode.attributes && parentNode.hasAttribute(end) : end;
+            const stop = typeof end === "string" ? parentNode.hasAttributes() && parentNode.hasAttribute(end) : end;
             if (parentNode === stop) return;
             if (attrValue == null) {
-                if (parentNode.attributes && parentNode.hasAttribute(attrName)) return parentNode;
-            } else if (parentNode.attributes && parentNode.getAttribute(attrName) === attrValue) return parentNode;
+                if (parentNode.hasAttributes() && parentNode.hasAttribute(attrName)) return parentNode;
+            } else if (parentNode.hasAttributes() && parentNode.getAttribute(attrName) === attrValue) return parentNode;
             parentNode = parentNode.parentNode;
         }
         return;
