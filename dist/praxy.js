@@ -648,20 +648,30 @@ class Praxy {
                 const live = Array.from(nodes).map((node)=>{
                     const n = node.cloneNode(true);
                     if (node.nodeName === "#text") n.nodeValue = n.nodeValue.replaceAll(/{{(.*?)}}/g, (match)=>{
-                        const k = match.replace(/{{|}}/g, "").trim().split(".");
-                        matches.add(k[0]);
-                        let v = data[k[0]];
-                        if (isFor) {
-                            const index = this.#closest(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
-                            const parent = this.#closest(child, "px-for");
-                            const [_, values] = parent.getAttribute("px-for")?.split(" in ");
-                            v = data[values][index];
-                            if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
+                        let k = match.replace(/{{|}}/g, "").trim();
+                        if (!k.includes("?") && !k.includes(":")) k = k.split(".");
+                        if (k.includes("?") && k.includes(":")) {
+                            const [lh, rh] = k.split("?");
+                            const key = lh.trim().split(".");
+                            const match = lh.trim();
+                            const [v1, v2] = rh.split(":");
+                            const v = this.#getValue(child, data, key, match, isFor);
+                            const val = v ? v1.trim() : v2.trim();
+                            if (!val.includes("'") && !val.includes('"')) {
+                                // the evaluated value is a variable
+                                const loopItem = this.#getValue(child, data, [
+                                    val
+                                ], val, isFor);
+                                const rootValue = this.#getValue(child, data, [
+                                    val
+                                ], val, false);
+                                return loopItem[val] ?? rootValue;
+                            }
+                            matches.add(key);
+                            return val.replaceAll(/['"]/g, "");
                         }
-                        if (match.includes(".")) k.forEach((key)=>{
-                            if (v[key] != null) v = v[key];
-                        });
-                        return v;
+                        matches.add(k[0]);
+                        return this.#getValue(child, data, k, match, isFor);
                     });
                     return n;
                 });
@@ -673,6 +683,20 @@ class Praxy {
                 };
             }
         }
+    }
+    #getValue(child, data, k, match, isFor) {
+        let v = data[k[0]];
+        if (isFor) {
+            const index = this.#closest(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
+            const parent = this.#closest(child, "px-for");
+            const [_, values] = parent.getAttribute("px-for")?.split(" in ");
+            v = data[values][index];
+            if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
+        }
+        if (match.includes(".")) k.forEach((key)=>{
+            if (v[key] != null) v = v[key];
+        });
+        return v;
     }
     #render(root, map) {
         Object.keys(map).forEach((key)=>{

@@ -6,9 +6,10 @@ const Component = {
   name: 'my-component',
   template: html`
     <div>
+      <p>Hey {{name}}!</p>
       <ul px-for="todo in todos">
         <li>
-          {{todo.title}} ({{todo.done}})
+          {{todo.title}} ({{todo.done ? 'done' : 'not done'}})
           <button class="remove">remove</button>
           <button class="done">done</button>
         </li>
