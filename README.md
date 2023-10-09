@@ -52,7 +52,7 @@ const Component = {
       {title: 'Walk the dog', done: true},
       {title: 'Go to work', done: false},
     ],
-    obj: { value: 'someValue' },
+    obj: {value: 'someValue'},
   },
 };
 
