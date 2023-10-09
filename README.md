@@ -26,7 +26,7 @@ const Component = {
         -->
         <ul px-for="todo in todos">
           <li>
-            {{todo.title}} 
+            {{todo.title}} ({{todo.done ? 'Done' : 'To-do'}}) 
             <button class="remove">Remove</button>
             <button class="done">Done</button>
           </li>
