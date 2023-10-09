@@ -648,9 +648,9 @@ class Praxy {
                 const live = Array.from(nodes).map((node)=>{
                     const n = node.cloneNode(true);
                     if (node.nodeName === "#text") n.nodeValue = n.nodeValue.replaceAll(/{{(.*?)}}/g, (match)=>{
+                        const isTernary = match.includes("?") && match.includes(":");
                         let k = match.replace(/{{|}}/g, "").trim();
-                        if (!k.includes("?") && !k.includes(":")) k = k.split(".");
-                        if (k.includes("?") && k.includes(":")) {
+                        if (isTernary) {
                             const [lh, rh] = k.split("?");
                             const key = lh.trim().split(".");
                             const match = lh.trim();
@@ -669,7 +669,7 @@ class Praxy {
                             }
                             matches.add(key);
                             return val.replaceAll(/['"]/g, "");
-                        }
+                        } else k = k.split(".");
                         matches.add(k[0]);
                         return this.#getValue(child, data, k, match, isFor);
                     });

@@ -9,7 +9,7 @@ const Component = {
       <p>Hey {{name}}!</p>
       <ul px-for="todo in todos">
         <li>
-          {{todo.title}} ({{todo.done ? 'done' : 'not done'}})
+          {{todo.title}} ({{todo.done ? 'done' : 'to-do'}})
           <button class="remove">remove</button>
           <button class="done">done</button>
         </li>
