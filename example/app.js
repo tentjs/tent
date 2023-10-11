@@ -1,12 +1,24 @@
 import {Praxy, html} from '../dist/praxy';
 
-const App = new Praxy();
+const App = new Praxy({
+  store: {
+    name: 'my-store',
+    persist: 'sessionStorage',
+  },
+});
 
 const Component = {
   name: 'my-component',
+  store: {
+    init() {
+      return {
+        storeKey: 'storeValue',
+      };
+    },
+  },
   template: html`
     <div>
-      <p>Hey {{name}}!</p>
+      <p>Hey {{storeKey}}!</p>
       <ul px-for="todo in todos">
         <li>
           {{todo.title}} ({{todo.done ? 'done' : 'to-do'}})
@@ -61,3 +73,24 @@ App.component(Component, ({data, on}) => {
     }
   });
 });
+
+App.component(
+  {
+    name: 'my-component2',
+    data: {},
+    store: {
+      subscribe: ['storeKey'],
+    },
+    template: html`
+      <div>
+        <p>Hey {{storeKey}}!</p>
+        <button>click me</button>
+      </div>
+    `,
+  },
+  ({$store, on}) => {
+    on('click', 'button', () => {
+      $store.storeKey = 'updated value';
+    });
+  }
+);

@@ -581,19 +581,52 @@ parcelHelpers.export(exports, "html", ()=>html);
 class Praxy {
     #events = [];
     #components = {};
-    component(cmpt, mounted) {
+    #store = {};
+    constructor(ctx = {}){
+        this.#store = new Proxy({}, {
+            set: (data, key, value)=>{
+                const s = Reflect.set(data, key, value);
+                const components = Object.entries(this.#components);
+                for (const [, cmpt] of components)if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) {
+                    cmpt.data[key] = data[key];
+                    if (ctx?.store?.persist) {
+                        const storage = window[ctx.store.persist];
+                        if (!storage) throw new Error(`Praxy->store: "${ctx.store.persist}" is not a valid storage type.`);
+                        const { name = "praxy-store" } = ctx.store;
+                        const x = storage.getItem(name);
+                        const z = x ? JSON.parse(x) : {};
+                        z[key] = data[key];
+                        storage.setItem(name, JSON.stringify(z));
+                    }
+                }
+                return s;
+            },
+            get: (data, key)=>{
+                return Reflect.get(data, key);
+            }
+        });
+    }
+    async component(cmpt, mounted) {
         const uuids = [];
         const cmptName = cmpt.name ?? this.#generateUUID(uuids);
         if (this.#components[cmptName] != null) throw new Error(`Praxy->component: "${cmptName}" already exists`);
         const map = {};
         const fors = {};
         const target = cmpt.target;
+        const customEl = document.querySelector(cmptName);
         const el = target ? document.querySelector(target) : document.body;
-        if (el == null) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
+        if (el == null && !customEl) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
         this.#components[cmptName] = {
             ...cmpt,
             fors
         };
+        if (cmpt.store?.init && typeof cmpt.store.init === "function") {
+            const o = await cmpt.store.init();
+            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmptName}" must return an object.`);
+            for(const k in o)if (o.hasOwnProperty(k)) // check if the key is already in sessionStorage/localStorage if persist is set
+            // if so, use that value instead
+            this.#store[k] = o[k];
+        }
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
         if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmptName}" must have a single root element.`);
@@ -614,6 +647,7 @@ class Praxy {
         if (data) {
             this.#renderFor(tmp.content, uuids, data, map, fors);
             this.#map(tmp.content, uuids, data, map);
+            this.#components[cmptName].data = data;
         }
         if (tmp.content.children.length > 1) root.append(tmp.content.children[0].cloneNode(true));
         else {
@@ -622,13 +656,15 @@ class Praxy {
             });
             if (tmp.content.children[0].attributes) for (const attr of tmp.content.children[0].attributes)root.setAttribute(attr.name, attr.value);
         }
-        el.append(root);
+        if (customEl) customEl.replaceWith(root);
+        else el.append(root);
         if (data) this.#render(root, map);
         if (mounted) mounted({
             data,
             root,
             on: this.#on.bind(this),
-            closest: this.#closest.bind(this)
+            closest: this.#closest.bind(this),
+            $store: this.#store
         });
     }
     #map(node, uuids, data, map) {
