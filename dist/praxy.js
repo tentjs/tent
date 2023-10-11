@@ -804,6 +804,7 @@ class Praxy {
             });
             el.addEventListener(event, async ({ target })=>{
                 let item = null;
+                let $el = null;
                 let cmptName = null;
                 const loop = this.#closest(target, "px-for");
                 if (loop) {
@@ -811,12 +812,15 @@ class Praxy {
                     const [_, values] = loop.getAttribute("px-for")?.split(" in ");
                     for (const [, value] of Object.entries(this.#components))if (value.fors[k] != null) cmptName = value.name;
                     const data = this.#components[cmptName]?.data;
-                    const i = this.#closest(target, "i")?.getAttribute("i");
+                    const closest = this.#closest(target, "i");
+                    const i = closest?.getAttribute("i");
                     item = data?.[values]?.[i];
+                    $el = closest;
                 }
                 await fire({
                     target,
-                    item
+                    item,
+                    $el
                 });
             });
         });

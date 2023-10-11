@@ -10,6 +10,7 @@ const Component = {
       <ul px-for="todo in todos">
         <li>
           {{todo.title}} ({{todo.done ? 'done' : 'to-do'}})
+          <input class="check" type="checkbox" />
           <button class="remove">remove</button>
           <button class="done">done</button>
         </li>
@@ -30,6 +31,12 @@ const Component = {
 };
 
 App.component(Component, ({data, on}) => {
+  on('change', '.check', ({item}) => {
+    const items = data.todos;
+    const x = items.find((x) => x.title === item.title);
+    x.done = !x.done;
+    data.todos = items;
+  });
   on('input', 'input', ({target}) => {
     data.newTodo = target.value;
   });
@@ -41,10 +48,16 @@ App.component(Component, ({data, on}) => {
   on('click', 'button.remove', ({item}) => {
     data.todos = data.todos.filter((x) => x !== item);
   });
-  on('click', 'button.done', ({item}) => {
+  on('click', 'button.done', ({item, $el}) => {
     const items = data.todos;
     const x = items.find((x) => x.title === item.title);
     x.done = !x.done;
     data.todos = items;
+    const check = $el.querySelector('.check');
+    if (x.done) {
+      check.setAttribute('checked', '');
+    } else {
+      check.removeAttribute('checked');
+    }
   });
 });
