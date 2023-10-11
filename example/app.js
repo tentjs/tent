@@ -18,7 +18,7 @@ const Component = {
   },
   template: html`
     <div>
-      <p>Hey {{storeKey}}!</p>
+      <p>Hey {{name}}!</p>
       <ul px-for="todo in todos">
         <li>
           {{todo.title}} ({{todo.done ? 'done' : 'to-do'}})
