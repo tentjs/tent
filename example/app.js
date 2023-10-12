@@ -65,11 +65,5 @@ App.component(Component, ({data, on}) => {
     const x = items.find((x) => x.title === item.title);
     x.done = !x.done;
     data.todos = items;
-    // const check = $el.querySelector('.check');
-    // if (x.done) {
-    //   check.setAttribute('checked', '');
-    // } else {
-    //   check.removeAttribute('checked');
-    // }
   });
 });
