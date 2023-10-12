@@ -21,10 +21,10 @@ const Component = {
       <p>Hey {{name}}!</p>
       <ul px-for="todo in todos">
         <li>
-          {{todo.title}} ({{todo.done ? 'done' : 'to-do'}})
-          <input class="check" type="checkbox" />
+          <span>{{todo.title}} ({{todo.done ? 'done' : 'to-do'}})</span>
+          <input class="check" type="checkbox" checked="{{todo.done}}" />
           <button class="remove">remove</button>
-          <button class="done">done</button>
+          <button class="done">{{todo.done ? 'not done' : 'done'}}</button>
         </li>
       </ul>
       <input type="text" placeholder="New todo" />
@@ -52,7 +52,7 @@ App.component(Component, ({data, on}) => {
   on('input', 'input', ({target}) => {
     data.newTodo = target.value;
   });
-  on('click', 'button#add', () => {
+  on('click', 'button#add', ({}) => {
     if (data.newTodo) {
       data.todos = [...data.todos, {title: data.newTodo, done: false}];
     }
@@ -60,37 +60,16 @@ App.component(Component, ({data, on}) => {
   on('click', 'button.remove', ({item}) => {
     data.todos = data.todos.filter((x) => x !== item);
   });
-  on('click', 'button.done', ({item, $el}) => {
+  on('click', 'button.done', ({item}) => {
     const items = data.todos;
     const x = items.find((x) => x.title === item.title);
     x.done = !x.done;
     data.todos = items;
-    const check = $el.querySelector('.check');
-    if (x.done) {
-      check.setAttribute('checked', '');
-    } else {
-      check.removeAttribute('checked');
-    }
+    // const check = $el.querySelector('.check');
+    // if (x.done) {
+    //   check.setAttribute('checked', '');
+    // } else {
+    //   check.removeAttribute('checked');
+    // }
   });
 });
-
-App.component(
-  {
-    name: 'my-component2',
-    data: {},
-    store: {
-      subscribe: ['storeKey'],
-    },
-    template: html`
-      <div>
-        <p>Hey {{storeKey}}!</p>
-        <button>click me</button>
-      </div>
-    `,
-  },
-  ({$store, on}) => {
-    on('click', 'button', () => {
-      $store.storeKey = 'updated value';
-    });
-  }
-);
