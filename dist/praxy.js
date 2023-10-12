@@ -679,11 +679,18 @@ class Praxy {
             if (child.attributes) {
                 const uuid = child.getAttribute("k") ?? this.#generateUUID(uuids);
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
-                for (const attr of clone.attributes)if (attr.value.match(/{{(.*?)}}/g)) {
-                    if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
-                    if (isFor) {
-                        const k = attr.value.replace(/{{|}}/g, "").trim().split(".");
-                        const v = this.#getValue(child, data, k, attr.value, isFor);
+                for (const attr of clone.attributes){
+                    const k = attr.value.replace(/{{|}}/g, "").trim().split(".");
+                    const v = this.#getValue(child, data, k, attr.value, isFor);
+                    if (attr.name === "px-if") map[uuid] = {
+                        clone,
+                        // TODO: Maybe this is not needed.
+                        // Right now the parent node is cloned before the condition is evaluated.
+                        // Which makes it useless for looping the children to find the falsey px-if.
+                        conditionParent: child.parentNode.cloneNode(true),
+                        condition: v
+                    };
+                    else if (attr.value.match(/{{(.*?)}}/g)) {
                         const attributes = {
                             ...map[uuid]?.attributes,
                             [attr.name]: v
@@ -693,6 +700,7 @@ class Praxy {
                             attributes
                         };
                     }
+                    if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 }
             }
             if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
@@ -741,44 +749,40 @@ class Praxy {
             }
         }
     }
-    #getValue(child, data, k, match, isFor) {
-        let v = data[k[0]];
-        if (isFor) {
-            const index = this.#closest(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
-            const parent = this.#closest(child, "px-for");
-            const [_, values] = parent.getAttribute("px-for")?.split(" in ");
-            v = data[values][index];
-            if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
-        }
-        if (match.includes(".")) k.forEach((key)=>{
-            if (v[key] != null) v = v[key];
-        });
-        return v;
-    }
     #render(root, map) {
         Object.keys(map).forEach((key)=>{
             const m = map[key];
             const domEl = root.children.length === 0 || root.attributes && root.getAttribute("k") === key ? root : root.querySelector(`[k="${key}"]`);
-            if (!domEl && !m.attributes) {
+            if (!domEl && !m.attributes && m.condition == null) {
                 delete map[key];
                 return;
+            }
+            if (m.condition != null) {
+                if (!domEl && m.condition === false) return;
+                if (m.condition) {
+                    const placeholder = document.querySelector(`px-if[k="${key}"]`);
+                    if (placeholder) {
+                        m.clone.setAttribute("px-if", m.clone.getAttribute("px-if"));
+                        m.clone.setAttribute("k", key);
+                        placeholder.replaceWith(m.clone);
+                    }
+                } else {
+                    const placeholder = document.createElement("px-if");
+                    placeholder.setAttribute("k", key);
+                    placeholder.setAttribute("px-if", m.clone.getAttribute("px-if"));
+                    domEl.replaceWith(placeholder);
+                }
             }
             if (m.attributes) {
                 for (const [name, value] of Object.entries(m.attributes))if (value) domEl.setAttribute(name, typeof value === "boolean" ? "" : value);
                 else domEl.removeAttribute(name);
             }
-            if (domEl.childNodes.length !== m.live.length) {
-                console.warn(`Praxy->render: The number of live nodes (${m.live.length}) doesn't match the number of DOM nodes (${domEl.childNodes.length}).`, "This may be due to a change in the template. DOM have been synced to match again.");
-                while(domEl.firstChild)domEl.removeChild(domEl.lastChild);
-                m.live.forEach((node)=>{
-                    domEl.append(node);
-                });
-            }
             const domStr = Array.from(domEl.childNodes).map((c)=>c.nodeValue).join("");
             const liveStr = m.live.map((c)=>c.nodeValue).join("");
             if (domStr !== liveStr) m.live.forEach((node, i)=>{
                 const c = domEl.childNodes[i];
-                // Don't replace nodes that's already been processed
+                if (!c) return;
+                // don't replace nodes that's already been processed
                 if (c.attributes && c.hasAttribute("k")) return;
                 if (!c.isEqualNode(node)) domEl.replaceChild(node, c);
             });
@@ -833,6 +837,20 @@ class Praxy {
                 }
             });
         });
+    }
+    #getValue(child, data, k, match, isFor) {
+        let v = data[k[0]];
+        if (isFor) {
+            const index = this.#closest(child, "i")?.getAttribute("i") ?? child.getAttribute("i");
+            const parent = this.#closest(child, "px-for");
+            const [_, values] = parent.getAttribute("px-for")?.split(" in ");
+            v = data[values][index];
+            if (!v) throw new Error(`Praxy->map: No value found for "${match}". This may be due to a change in the template.`);
+        }
+        if (match.includes(".")) k.forEach((key)=>{
+            if (v[key] != null) v = v[key];
+        });
+        return v;
     }
     #closest(el, attrName, attrValue, end = document.body) {
         let parent = el.parentNode;
