@@ -583,20 +583,23 @@ class Praxy {
     #components = {};
     #store = {};
     constructor(ctx = {}){
-        this.#store = new Proxy({}, {
+        this.#store = ctx.store ? new Proxy({
+            $name: ctx.store?.name ?? "praxy-store",
+            $persist: ctx.store?.persist ?? "sessionStorage"
+        }, {
             set: (data, key, value)=>{
+                if (key.startsWith("$")) throw new Error(`Praxy->store: "${key}" is a reserved key.`);
                 const s = Reflect.set(data, key, value);
                 const components = Object.entries(this.#components);
                 for (const [, cmpt] of components)if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) {
                     cmpt.data[key] = data[key];
                     if (ctx?.store?.persist) {
-                        const storage = window[ctx.store.persist];
-                        if (!storage) throw new Error(`Praxy->store: "${ctx.store.persist}" is not a valid storage type.`);
-                        const { name = "praxy-store" } = ctx.store;
-                        const x = storage.getItem(name);
+                        const storage = window[data.$persist];
+                        if (!storage) throw new Error(`Praxy->store: "${data.$persist}" is not a valid storage type.`);
+                        const x = storage.getItem(data.$name);
                         const z = x ? JSON.parse(x) : {};
                         z[key] = data[key];
-                        storage.setItem(name, JSON.stringify(z));
+                        storage.setItem(data.$name, JSON.stringify(z));
                     }
                 }
                 return s;
@@ -604,7 +607,7 @@ class Praxy {
             get: (data, key)=>{
                 return Reflect.get(data, key);
             }
-        });
+        }) : {};
     }
     async component(cmpt, mounted) {
         const uuids = [];
@@ -623,9 +626,8 @@ class Praxy {
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
             if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmptName}" must return an object.`);
-            for(const k in o)if (o.hasOwnProperty(k)) // check if the key is already in sessionStorage/localStorage if persist is set
-            // if so, use that value instead
-            this.#store[k] = o[k];
+            const storage = JSON.parse(window.sessionStorage.getItem("my-store"));
+            for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = storage?.[k] ? storage[k] : o[k];
         }
         const tmp = document.createElement("template");
         tmp.innerHTML = cmpt.template.trim();
