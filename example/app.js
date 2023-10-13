@@ -29,12 +29,6 @@ const Component = {
       </ul>
       <input type="text" placeholder="New todo" />
       <button id="add">Add todo</button>
-      <empty-component>
-        <div>
-          <h1>Empty {{name}}</h1>
-          <p>Empty component with no children</p>
-        </div>
-      </empty-component>
     </div>
   `,
   data: {
@@ -76,5 +70,10 @@ App.component(Component, ({data, on}) => {
 
 App.component({
   name: 'empty-component',
-  inherit: 'my-component',
+  store: {
+    subscribe: ['name', 'storeKey'],
+  },
+}, async ({$store, data}) => {
+  const store = await $store;
+  console.log('data / store', data, store);
 });

@@ -634,13 +634,6 @@ class Praxy {
         if (customEl) customEl.replaceWith(root);
         else el.append(root);
         this.#render(root, map);
-        mounted?.({
-            data,
-            root,
-            on: this.#on.bind(this),
-            closest: this.#closest.bind(this),
-            $store: this.#store
-        });
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
             if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
@@ -648,6 +641,13 @@ class Praxy {
             const store = JSON.parse(storage.getItem(this.#store.$name));
             for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = store?.[k] ? store[k] : o[k];
         }
+        mounted?.({
+            data,
+            root,
+            on: this.#on.bind(this),
+            closest: this.#closest.bind(this),
+            $store: new Promise((resolve)=>resolve(this.#store))
+        });
     }
     #createStore(ctx) {
         return ctx.store ? new Proxy({
