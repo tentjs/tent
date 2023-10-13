@@ -599,13 +599,6 @@ class Praxy {
             ...cmpt,
             fors
         };
-        if (cmpt.store?.init && typeof cmpt.store.init === "function") {
-            const o = await cmpt.store.init();
-            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
-            const storage = window[this.#store.$persist];
-            const store = JSON.parse(storage.getItem(this.#store.$name));
-            for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = store?.[k] ? store[k] : o[k];
-        }
         const tmp = document.createElement("template");
         if (customEl.children.length) tmp.innerHTML = customEl.innerHTML.trim();
         else if (cmpt.template) tmp.innerHTML = cmpt.template.trim();
@@ -648,6 +641,13 @@ class Praxy {
             closest: this.#closest.bind(this),
             $store: this.#store
         });
+        if (cmpt.store?.init && typeof cmpt.store.init === "function") {
+            const o = await cmpt.store.init();
+            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
+            const storage = window[this.#store.$persist];
+            const store = JSON.parse(storage.getItem(this.#store.$name));
+            for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = store?.[k] ? store[k] : o[k];
+        }
     }
     #createStore(ctx) {
         return ctx.store ? new Proxy({

@@ -29,6 +29,12 @@ const Component = {
       </ul>
       <input type="text" placeholder="New todo" />
       <button id="add">Add todo</button>
+      <empty-component>
+        <div>
+          <h1>Empty {{name}}</h1>
+          <p>Empty component with no children</p>
+        </div>
+      </empty-component>
     </div>
   `,
   data: {
