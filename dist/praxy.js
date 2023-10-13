@@ -602,16 +602,20 @@ class Praxy {
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
             if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
-            const storage = JSON.parse(window.sessionStorage.getItem(this.#store.$name));
-            for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = storage?.[k] ? storage[k] : o[k];
+            const storage = window[this.#store.$persist];
+            const store = JSON.parse(storage.getItem(this.#store.$name));
+            for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = store?.[k] ? store[k] : o[k];
         }
         const tmp = document.createElement("template");
-        // TODO: Consider creating the template from the DOM instead.
-        // This might be easier for the user to understand, and it's separation of concerns.
-        tmp.innerHTML = cmpt.template.trim();
-        if (tmp.content.children.length > 1 || tmp.content.children.length === 0) throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
-        const root = tmp.content.children[0].cloneNode();
-        const sample = cmpt.inherit ? this.#components[cmpt.inherit].data : cmpt.data;
+        if (customEl.children.length) tmp.innerHTML = customEl.innerHTML.trim();
+        else if (cmpt.template) tmp.innerHTML = cmpt.template.trim();
+        else throw new Error(`Praxy->component: You must provide a template for "${cmpt.name}" or use a custom element.`);
+        if (tmp.content.children.length > 1 || tmp.content.children.length === 0) {
+            customEl?.remove();
+            throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
+        }
+        const root = cmpt.template ? tmp.content.children[0].cloneNode() : customEl.children[0].cloneNode();
+        const sample = cmpt.inherit && this.#components[cmpt.inherit]?.data ? this.#components[cmpt.inherit].data : cmpt.data;
         const data = new Proxy(sample ?? {}, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);

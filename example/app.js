@@ -68,8 +68,7 @@ App.component(Component, ({data, on}) => {
   });
 });
 
-// create component without data
 App.component({
   name: 'empty-component',
-  template: html`<div>Some text</div>`,
+  inherit: 'my-component',
 });
