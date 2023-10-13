@@ -77,7 +77,7 @@ App.component(
       someBool: true,
     },
     store: {
-      subscribe: ['name', 'storeKey'],
+      subscribe: ['name'],
     },
   },
   async ({$store, on, data}) => {
@@ -86,5 +86,8 @@ App.component(
     on('click', 'button#toggle-bool', () => {
       data.someBool = !data.someBool;
     });
-  }
+  },
+  () => {
+    console.log('unmounted!');
+  },
 );

@@ -584,8 +584,18 @@ class Praxy {
     #store = {};
     constructor(ctx = {}){
         this.#store = this.#createStore(ctx);
+        new MutationObserver((mutations)=>{
+            mutations.forEach((mutation)=>{
+                if (mutation.removedNodes) {
+                    const removed = Array.from(mutation.removedNodes).map((x)=>x.className).filter(Boolean);
+                    for(const name in this.#components)if (removed.find((x)=>x.includes(name))) this.#components[name].unmounted?.();
+                }
+            });
+        }).observe(document.body, {
+            childList: true
+        });
     }
-    async component(cmpt, mounted) {
+    async component(cmpt, mounted, unmounted) {
         const uuids = [];
         if (!cmpt.name) throw new Error(`Praxy->component: You must provide a name for your component.`);
         if (this.#components[cmpt.name]) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
@@ -597,7 +607,8 @@ class Praxy {
         if (!el && !customEl) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
         this.#components[cmpt.name] = {
             ...cmpt,
-            fors
+            fors,
+            unmounted
         };
         const tmp = document.createElement("template");
         if (customEl.children.length) tmp.innerHTML = customEl.innerHTML.trim();
@@ -633,6 +644,7 @@ class Praxy {
         }
         if (customEl) customEl.replaceWith(root);
         else el.append(root);
+        root.classList.add(cmpt.name);
         this.#render(root, map);
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
@@ -897,7 +909,7 @@ class Praxy {
             });
             el.addEventListener(event, async ({ target })=>{
                 let item = null;
-                let $el = null;
+                let $el = target;
                 let cmptName = null;
                 const loop = this.#closest(target, "px-for");
                 if (loop) {
