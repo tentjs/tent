@@ -1,4 +1,4 @@
-import {Praxy, html} from '../dist/praxy';
+import {Praxy} from '../dist/praxy';
 
 const App = new Praxy({
   store: {
@@ -88,3 +88,8 @@ App.component(
     });
   }
 );
+
+function html(...strings) {
+  return strings.join('');
+}
+

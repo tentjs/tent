@@ -577,7 +577,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Praxy", ()=>Praxy);
-parcelHelpers.export(exports, "html", ()=>html);
 class Praxy {
     #events = [];
     #components = {};
@@ -925,7 +924,8 @@ class Praxy {
         });
     }
     #createStore(ctx) {
-        return ctx.store ? new Proxy({
+        if (!ctx.store) return {};
+        return new Proxy({
             $name: ctx.store?.name ?? "praxy-store",
             $persist: ctx.store?.persist ?? "sessionStorage"
         }, {
@@ -949,7 +949,7 @@ class Praxy {
             get: (data, key)=>{
                 return Reflect.get(data, key);
             }
-        }) : {};
+        });
     }
     #unmount() {
         new MutationObserver((mutations)=>{
@@ -975,9 +975,6 @@ class Praxy {
             subtree: true
         });
     }
-}
-function html(...strings) {
-    return strings.join("");
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
