@@ -588,7 +588,7 @@ class Praxy {
     async component(cmpt, mounted) {
         const uuids = [];
         if (!cmpt.name) throw new Error(`Praxy->component: You must provide a name for your component.`);
-        if (this.#components[cmpt.name] != null) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
+        if (this.#components[cmpt.name]) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
         const map = {};
         const fors = {};
         const target = cmpt.target;
@@ -649,33 +649,6 @@ class Praxy {
             $store: new Promise((resolve)=>resolve(this.#store))
         });
     }
-    #createStore(ctx) {
-        return ctx.store ? new Proxy({
-            $name: ctx.store?.name ?? "praxy-store",
-            $persist: ctx.store?.persist ?? "sessionStorage"
-        }, {
-            set: (data, key, value)=>{
-                if (key.startsWith("$")) throw new Error(`Praxy->store: "${key}" is a reserved key.`);
-                const s = Reflect.set(data, key, value);
-                const components = Object.entries(this.#components);
-                for (const [, cmpt] of components){
-                    if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) cmpt.data[key] = data[key];
-                    if (ctx?.store?.persist) {
-                        const storage = window[data.$persist];
-                        if (!storage) throw new Error(`Praxy->store: "${data.$persist}" is not a valid storage type.`);
-                        const x = storage.getItem(data.$name);
-                        const z = x ? JSON.parse(x) : {};
-                        z[key] = data[key];
-                        storage.setItem(data.$name, JSON.stringify(z));
-                    }
-                }
-                return s;
-            },
-            get: (data, key)=>{
-                return Reflect.get(data, key);
-            }
-        }) : {};
-    }
     #map(node, uuids, data, map) {
         if (!node.children || Object.keys(data).length === 0) return;
         for(let i = 0; i < node.children.length; i++){
@@ -702,6 +675,40 @@ class Praxy {
                             clone,
                             attributes
                         };
+                    } else if (attr.value.replace(/\s/g, "").match(/\[(.*?)\]/g)) {
+                        const arr = attr.value.replace(/\[|\]/g, "").replace(/\s/g, "").split(",");
+                        if (arr.length === 0) throw new Error(`Praxy->map: "${attr.value}" is not a valid array.`);
+                        map[uuid] = {
+                            clone,
+                            classes: []
+                        };
+                        for(let i = 0; i < arr.length; i++){
+                            const cl = arr[i];
+                            const isTernary = cl.includes("?") && cl.includes(":");
+                            if (isTernary) {
+                                const [lh, rh] = cl.split("?");
+                                const key = lh.trim().split(".");
+                                const match = lh.trim();
+                                const [v1, v2] = rh.split(":");
+                                const v = this.#getValue(child, data, key, match, isFor);
+                                const val = v ? v1.trim() : v2.trim();
+                                if (!val.includes("'") && !val.includes('"')) {
+                                    const loopItem = this.#getValue(child, data, [
+                                        val
+                                    ], val, isFor);
+                                    const rootValue = this.#getValue(child, data, [
+                                        val
+                                    ], val, false);
+                                    if (loopItem?.[val] || rootValue) map[uuid].classes.push(loopItem[val] ?? rootValue);
+                                } else map[uuid].classes.push(val.replaceAll(/['"]/g, ""));
+                            } else {
+                                const c = cl.replaceAll(/['"]/g, "");
+                                const v = this.#getValue(child, data, [
+                                    c
+                                ], c, isFor);
+                                map[uuid].classes.push(v ? v : c);
+                            }
+                        }
                     }
                     if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 }
@@ -725,7 +732,6 @@ class Praxy {
                             const v = this.#getValue(child, data, key, match, isFor);
                             const val = v ? v1.trim() : v2.trim();
                             if (!val.includes("'") && !val.includes('"')) {
-                                // the evaluated value is a variable
                                 const loopItem = this.#getValue(child, data, [
                                     val
                                 ], val, isFor);
@@ -779,6 +785,10 @@ class Praxy {
             if (m.attributes) {
                 for (const [name, value] of Object.entries(m.attributes))if (value) domEl.setAttribute(name, typeof value === "boolean" ? "" : value);
                 else domEl.removeAttribute(name);
+            }
+            if (m.classes?.length && m.classes.join(" ") !== domEl.className) {
+                domEl.classList.remove(...domEl.classList);
+                domEl.classList.add(...m.classes);
             }
             const domStr = Array.from(domEl.childNodes).map((c)=>c.nodeValue).join("");
             const liveStr = m.live.map((c)=>c.nodeValue).join("");
@@ -907,6 +917,33 @@ class Praxy {
                 });
             });
         });
+    }
+    #createStore(ctx) {
+        return ctx.store ? new Proxy({
+            $name: ctx.store?.name ?? "praxy-store",
+            $persist: ctx.store?.persist ?? "sessionStorage"
+        }, {
+            set: (data, key, value)=>{
+                if (key.startsWith("$")) throw new Error(`Praxy->store: "${key}" is a reserved key.`);
+                const s = Reflect.set(data, key, value);
+                const components = Object.entries(this.#components);
+                for (const [, cmpt] of components){
+                    if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) cmpt.data[key] = data[key];
+                    if (ctx?.store?.persist) {
+                        const storage = window[data.$persist];
+                        if (!storage) throw new Error(`Praxy->store: "${data.$persist}" is not a valid storage type.`);
+                        const x = storage.getItem(data.$name);
+                        const z = x ? JSON.parse(x) : {};
+                        z[key] = data[key];
+                        storage.setItem(data.$name, JSON.stringify(z));
+                    }
+                }
+                return s;
+            },
+            get: (data, key)=>{
+                return Reflect.get(data, key);
+            }
+        }) : {};
     }
 }
 function html(...strings) {

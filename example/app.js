@@ -18,13 +18,14 @@ const Component = {
   },
   template: html`
     <div>
-      <p>Hey {{name}}!</p>
       <ul px-for="todo in todos">
         <li>
-          <span>{{todo.title}} ({{todo.done ? 'done' : 'to-do'}})</span>
+          <span class="[todo.done ? 'done' : 'todo']"
+            >{{todo.title}} ({{todo.done ? 'done' : 'to-do'}})</span
+          >
           <input class="check" type="checkbox" checked="{{todo.done}}" />
           <button class="remove">remove</button>
-          <button class="done">{{todo.done ? 'not done' : 'done'}}</button>
+          <button class="toggle-done">{{todo.done ? 'not done' : 'done'}}</button>
         </li>
       </ul>
       <input type="text" placeholder="New todo" />
@@ -60,7 +61,7 @@ App.component(Component, ({data, on}) => {
   on('click', 'button.remove', ({item}) => {
     data.todos = data.todos.filter((x) => x !== item);
   });
-  on('click', 'button.done', ({item}) => {
+  on('click', 'button.toggle-done', ({item}) => {
     const items = data.todos;
     const x = items.find((x) => x.title === item.title);
     x.done = !x.done;
@@ -68,12 +69,22 @@ App.component(Component, ({data, on}) => {
   });
 });
 
-App.component({
-  name: 'empty-component',
-  store: {
-    subscribe: ['name', 'storeKey'],
+App.component(
+  {
+    name: 'empty-component',
+    data: {
+      someValue: 'some-value',
+      someBool: true,
+    },
+    store: {
+      subscribe: ['name', 'storeKey'],
+    },
   },
-}, async ({$store, data}) => {
-  const store = await $store;
-  console.log('data / store', data, store);
-});
+  async ({$store, on, data}) => {
+    const store = await $store;
+    store.name = 'new-name';
+    on('click', 'button#toggle-bool', () => {
+      data.someBool = !data.someBool;
+    });
+  }
+);

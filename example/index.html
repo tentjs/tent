@@ -10,6 +10,10 @@
         font-family: 'Verdana';
         font-size: 22px;
       }
+
+      .done {
+        text-decoration: line-through;
+      }
     </style>
     <script src="../dist/praxy.js"></script>
     <script type="module" src="app.js"></script>
@@ -18,8 +22,13 @@
     <my-component></my-component>
     <empty-component>
       <div>
-        <h1>Empty {{name}}</h1>
-        <p>Empty component with no children</p>
+        <h1 class="[
+            'simple-class',
+            someValue,
+            someBool ? name : 'ho'
+          ]">Empty {{name}}</h1>
+        <p>The boolean is {{someBool ? 'on' : 'off'}}</p>
+        <button id="toggle-bool">Click me</button>
       </div>
     </empty-component>
   </body>
