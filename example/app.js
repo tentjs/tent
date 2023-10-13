@@ -67,3 +67,9 @@ App.component(Component, ({data, on}) => {
     data.todos = items;
   });
 });
+
+// create component without data
+App.component({
+  name: 'empty-component',
+  template: html`<div>Some text</div>`,
+});

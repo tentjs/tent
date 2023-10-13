@@ -611,33 +611,35 @@ class Praxy {
     }
     async component(cmpt, mounted) {
         const uuids = [];
-        const cmptName = cmpt.name ?? this.#generateUUID(uuids);
-        if (this.#components[cmptName] != null) throw new Error(`Praxy->component: "${cmptName}" already exists`);
+        if (!cmpt.name) throw new Error(`Praxy->component: You must provide a name for your component.`);
+        if (this.#components[cmpt.name] != null) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
         const map = {};
         const fors = {};
         const target = cmpt.target;
-        const customEl = document.querySelector(cmptName);
         const el = target ? document.querySelector(target) : document.body;
-        if (el == null && !customEl) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
-        this.#components[cmptName] = {
+        const customEl = document.querySelector(cmpt.name);
+        if (!el && !customEl) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
+        this.#components[cmpt.name] = {
             ...cmpt,
             fors
         };
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
-            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmptName}" must return an object.`);
+            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
             const storage = JSON.parse(window.sessionStorage.getItem("my-store"));
             for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = storage?.[k] ? storage[k] : o[k];
         }
         const tmp = document.createElement("template");
+        // TODO: Consider creating the template from the DOM instead.
+        // This might be easier for the user to understand, and it's separation of concerns.
         tmp.innerHTML = cmpt.template.trim();
-        if (tmp.content.childNodes.length > 1) throw new Error(`Praxy->component: Your template for "${cmptName}" must have a single root element.`);
+        if (tmp.content.children.length > 1 || tmp.content.children.length === 0) throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
         const root = tmp.content.children[0].cloneNode();
         const sample = cmpt.inherit ? this.#components[cmpt.inherit].data : cmpt.data;
-        const data = sample ? new Proxy(sample, {
+        const data = new Proxy(sample ?? {}, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
-                this.#renderFor(root, uuids, data, map, fors);
+                this.#for(root, uuids, data, map, fors);
                 this.#map(root, uuids, data, map);
                 this.#render(root, map);
                 return s;
@@ -645,12 +647,10 @@ class Praxy {
             get: (data, key)=>{
                 return Reflect.get(data, key);
             }
-        }) : null;
-        if (data) {
-            this.#renderFor(tmp.content, uuids, data, map, fors);
-            this.#map(tmp.content, uuids, data, map);
-            this.#components[cmptName].data = data;
-        }
+        });
+        this.#for(tmp.content, uuids, data, map, fors);
+        this.#map(tmp.content, uuids, data, map);
+        this.#components[cmpt.name].data = data;
         if (tmp.content.children.length > 1) root.append(tmp.content.children[0].cloneNode(true));
         else {
             tmp.content.children[0].childNodes.forEach((node)=>{
@@ -660,8 +660,8 @@ class Praxy {
         }
         if (customEl) customEl.replaceWith(root);
         else el.append(root);
-        if (data) this.#render(root, map);
-        if (mounted) mounted({
+        this.#render(root, map);
+        mounted?.({
             data,
             root,
             on: this.#on.bind(this),
@@ -670,14 +670,14 @@ class Praxy {
         });
     }
     #map(node, uuids, data, map) {
-        if (!node.children) return;
+        if (!node.children || Object.keys(data).length === 0) return;
         for(let i = 0; i < node.children.length; i++){
             const child = node.children[i];
             this.#map(child, uuids, data, map);
             if (child.attributes && child.hasAttribute("px-for")) return;
             const isFor = child.parentNode.attributes && child.parentNode.hasAttribute("px-for") || child.hasAttribute("i") || this.#closest(child, "i", null, "px-for");
             if (child.attributes) {
-                const uuid = child.getAttribute("k") ?? this.#generateUUID(uuids);
+                const uuid = child.getAttribute("k") ?? this.#uuid(uuids);
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
                 for (const attr of clone.attributes){
                     const k = attr.value.replace(/{{|}}/g, "").trim().split(".");
@@ -704,7 +704,7 @@ class Praxy {
                 }
             }
             if (Array.from(child.childNodes)?.some((c)=>c.nodeValue?.match(/{{(.*?)}}/g)) || child.attributes && child.hasAttribute("k")) {
-                const uuid = child.getAttribute("k") ?? this.#generateUUID(uuids);
+                const uuid = child.getAttribute("k") ?? this.#uuid(uuids);
                 if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 const matches = map[uuid]?.keys ?? new Set();
                 const clone = map[uuid]?.clone ?? child.cloneNode(true);
@@ -788,10 +788,11 @@ class Praxy {
             });
         });
     }
-    #renderFor(root, uuids, data, map, fors) {
+    #for(root, uuids, data, map, fors) {
+        if (Object.keys(data).length === 0) return;
         root.querySelectorAll("[px-for]")?.forEach((el)=>{
             const parent = el;
-            const uuid = parent.getAttribute("k") ?? this.#generateUUID(uuids);
+            const uuid = parent.getAttribute("k") ?? this.#uuid(uuids);
             const f = fors[uuid];
             const children = Array.from(parent.children);
             const clone = f ? f.clone : children[0]?.cloneNode(true);
@@ -864,9 +865,9 @@ class Praxy {
         }
         return;
     }
-    #generateUUID(uuids) {
+    #uuid(uuids) {
         const uuid = Math.random().toString(36).substring(5);
-        while(uuids.includes(uuid))return this.#generateUUID(uuids);
+        while(uuids.includes(uuid))return this.#uuid(uuids);
         uuids.push(uuid);
         return uuid;
     }
