@@ -583,31 +583,7 @@ class Praxy {
     #components = {};
     #store = {};
     constructor(ctx = {}){
-        this.#store = ctx.store ? new Proxy({
-            $name: ctx.store?.name ?? "praxy-store",
-            $persist: ctx.store?.persist ?? "sessionStorage"
-        }, {
-            set: (data, key, value)=>{
-                if (key.startsWith("$")) throw new Error(`Praxy->store: "${key}" is a reserved key.`);
-                const s = Reflect.set(data, key, value);
-                const components = Object.entries(this.#components);
-                for (const [, cmpt] of components)if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) {
-                    cmpt.data[key] = data[key];
-                    if (ctx?.store?.persist) {
-                        const storage = window[data.$persist];
-                        if (!storage) throw new Error(`Praxy->store: "${data.$persist}" is not a valid storage type.`);
-                        const x = storage.getItem(data.$name);
-                        const z = x ? JSON.parse(x) : {};
-                        z[key] = data[key];
-                        storage.setItem(data.$name, JSON.stringify(z));
-                    }
-                }
-                return s;
-            },
-            get: (data, key)=>{
-                return Reflect.get(data, key);
-            }
-        }) : {};
+        this.#store = this.#createStore(ctx);
     }
     async component(cmpt, mounted) {
         const uuids = [];
@@ -668,6 +644,33 @@ class Praxy {
             closest: this.#closest.bind(this),
             $store: this.#store
         });
+    }
+    #createStore(ctx) {
+        return ctx.store ? new Proxy({
+            $name: ctx.store?.name ?? "praxy-store",
+            $persist: ctx.store?.persist ?? "sessionStorage"
+        }, {
+            set: (data, key, value)=>{
+                if (key.startsWith("$")) throw new Error(`Praxy->store: "${key}" is a reserved key.`);
+                const s = Reflect.set(data, key, value);
+                const components = Object.entries(this.#components);
+                for (const [, cmpt] of components){
+                    if (cmpt.store?.subscribe?.includes(key) && cmpt.data[key] !== data[key]) cmpt.data[key] = data[key];
+                    if (ctx?.store?.persist) {
+                        const storage = window[data.$persist];
+                        if (!storage) throw new Error(`Praxy->store: "${data.$persist}" is not a valid storage type.`);
+                        const x = storage.getItem(data.$name);
+                        const z = x ? JSON.parse(x) : {};
+                        z[key] = data[key];
+                        storage.setItem(data.$name, JSON.stringify(z));
+                    }
+                }
+                return s;
+            },
+            get: (data, key)=>{
+                return Reflect.get(data, key);
+            }
+        }) : {};
     }
     #map(node, uuids, data, map) {
         if (!node.children || Object.keys(data).length === 0) return;
