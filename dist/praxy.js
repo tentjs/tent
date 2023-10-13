@@ -584,7 +584,7 @@ class Praxy {
     #store = {};
     constructor(ctx = {}){
         this.#store = this.#createStore(ctx);
-        this.#mutationObserver();
+        this.#unmount();
     }
     async component(cmpt, mounted, unmounted) {
         const uuids = [];
@@ -951,7 +951,7 @@ class Praxy {
             }
         }) : {};
     }
-    #mutationObserver() {
+    #unmount() {
         new MutationObserver((mutations)=>{
             const run = (node, ev)=>{
                 if (node === ev.el) {
