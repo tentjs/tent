@@ -687,10 +687,6 @@ class Praxy {
                     const v = this.#getValue(child, data, k, attr.value, isFor);
                     if (attr.name === "px-if") map[uuid] = {
                         clone,
-                        // TODO: Maybe this is not needed.
-                        // Right now the parent node is cloned before the condition is evaluated.
-                        // Which makes it useless for looping the children to find the falsey px-if.
-                        conditionParent: child.parentNode.cloneNode(true),
                         condition: v
                     };
                     else if (attr.value.match(/{{(.*?)}}/g)) {
