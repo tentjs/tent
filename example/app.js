@@ -50,7 +50,7 @@ App.component(Component, ({data, on}) => {
     x.done = !x.done;
     data.todos = items;
   });
-  on('input', 'input', ({target}) => {
+  on('input', 'input[type="text"]', ({target}) => {
     data.newTodo = target.value;
   });
   on('click', 'button#add', ({}) => {
@@ -86,8 +86,5 @@ App.component(
     on('click', 'button#toggle-bool', () => {
       data.someBool = !data.someBool;
     });
-  },
-  () => {
-    console.log('unmounted!');
-  },
+  }
 );

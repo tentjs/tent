@@ -584,16 +584,7 @@ class Praxy {
     #store = {};
     constructor(ctx = {}){
         this.#store = this.#createStore(ctx);
-        new MutationObserver((mutations)=>{
-            mutations.forEach((mutation)=>{
-                if (mutation.removedNodes) {
-                    const removed = Array.from(mutation.removedNodes).map((x)=>x.className).filter(Boolean);
-                    for(const name in this.#components)if (removed.find((x)=>x.includes(name))) this.#components[name].unmounted?.();
-                }
-            });
-        }).observe(document.body, {
-            childList: true
-        });
+        this.#mutationObserver();
     }
     async component(cmpt, mounted, unmounted) {
         const uuids = [];
@@ -851,12 +842,14 @@ class Praxy {
             // sync data
             // TODO: The user could have re-ordered the array.
             // The current implementation always adds new items to the end.
+            const e = [];
             arr.forEach((_, i)=>{
                 const index = children[i]?.getAttribute("i");
                 if (index == null) {
                     const c = clone.cloneNode(true);
                     this.#events.forEach(({ event, target, fire })=>{
-                        this.#on(event, target, fire, c, true);
+                        if (!e.includes(target)) this.#on(event, target, fire, c, true);
+                        e.push(target);
                     });
                     c.setAttribute("i", i);
                     parent.append(c);
@@ -902,10 +895,11 @@ class Praxy {
             if (!silent) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
         }
         els.forEach((el)=>{
-            if (!this.#events.find((ev)=>ev.target === target)) this.#events.push({
+            this.#events.push({
                 event,
                 target,
-                fire
+                fire,
+                el
             });
             el.addEventListener(event, async ({ target })=>{
                 let item = null;
@@ -956,6 +950,30 @@ class Praxy {
                 return Reflect.get(data, key);
             }
         }) : {};
+    }
+    #mutationObserver() {
+        new MutationObserver((mutations)=>{
+            const run = (node, ev)=>{
+                if (node === ev.el) {
+                    ev.el.removeEventListener(ev.event, ev.fire);
+                    const index = this.#events.findIndex((x)=>x.el === ev.el);
+                    this.#events.splice(index, 1);
+                }
+                if (node.children?.length) Array.from(node.children).forEach((child)=>run(child, ev));
+            };
+            for(let i = 0; i < mutations.length; i++){
+                const mutation = mutations[i];
+                if (mutation.removedNodes) {
+                    const removedNodes = Array.from(mutation.removedNodes);
+                    for (const ev of this.#events)removedNodes.forEach((node)=>run(node, ev));
+                    const removed = removedNodes.map((x)=>x.className).filter(Boolean);
+                    for(const name in this.#components)if (removed.find((x)=>x.includes(name))) this.#components[name].unmounted?.();
+                }
+            }
+        }).observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 }
 function html(...strings) {
