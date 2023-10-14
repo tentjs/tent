@@ -585,33 +585,33 @@ class Praxy {
         this.#store = this.#createStore(ctx);
         this.#unmount();
     }
-    async component(name, cmpt, mounted, unmounted) {
+    async component(name, options, mounted, unmounted) {
         const uuids = [];
         if (!name) throw new Error(`Praxy->component: You must provide a name for your component.`);
         if (this.#components[name]) throw new Error(`Praxy->component: "${name}" already exists`);
         const map = {};
         const fors = {};
-        const target = cmpt.target;
+        const target = options.target;
         const customEl = document.querySelector(name);
         if (!customEl && !target) throw new Error(`Praxy->component: You must provide a target for "${name}" or use a custom element.`);
         const el = customEl ? customEl : document.querySelector(target);
         if (!el) throw new Error(`Praxy->component: Your mount point doesn't exist`);
         this.#components[name] = {
-            ...cmpt,
+            ...options,
             fors,
             unmounted
         };
         const tmp = document.createElement("template");
         if (el.children.length) tmp.innerHTML = el.innerHTML.trim();
-        else if (cmpt.template) tmp.innerHTML = cmpt.template.trim();
+        else if (options.template) tmp.innerHTML = options.template.trim();
         else throw new Error(`Praxy->component: You must provide a template for "${name}" or use a custom element.`);
         if (tmp.content.children.length > 1 || tmp.content.children.length === 0) {
             customEl?.remove();
             throw new Error(`Praxy->component: Your template for "${name}" must have a single root element.`);
         }
-        const root = cmpt.template ? tmp.content.children[0].cloneNode() : customEl.children[0].cloneNode();
+        const root = options.template ? tmp.content.children[0].cloneNode() : customEl.children[0].cloneNode();
         let initialData = {};
-        const sample = cmpt.inherit && this.#components[cmpt.inherit]?.data ? this.#components[cmpt.inherit].data : cmpt.data;
+        const sample = options.inherit && this.#components[options.inherit]?.data ? this.#components[options.inherit].data : options.data;
         if (typeof sample === "function") {
             if (customEl) while(customEl.firstChild)customEl.removeChild(customEl.lastChild);
             initialData = await sample();
@@ -642,8 +642,8 @@ class Praxy {
         else el.append(root);
         root.classList.add(name);
         this.#render(root, map);
-        if (cmpt.store?.init && typeof cmpt.store.init === "function") {
-            const o = await cmpt.store.init();
+        if (options.store?.init && typeof options.store.init === "function") {
+            const o = await options.store.init();
             if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${name}" must return an object.`);
             const storage = window[this.#store.$persist];
             const store = JSON.parse(storage.getItem(this.#store.$name));
