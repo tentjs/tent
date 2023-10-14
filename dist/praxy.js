@@ -585,18 +585,18 @@ class Praxy {
         this.#store = this.#createStore(ctx);
         this.#unmount();
     }
-    async component(cmpt, mounted, unmounted) {
+    async component(name, cmpt, mounted, unmounted) {
         const uuids = [];
-        if (!cmpt.name) throw new Error(`Praxy->component: You must provide a name for your component.`);
-        if (this.#components[cmpt.name]) throw new Error(`Praxy->component: "${cmpt.name}" already exists`);
+        if (!name) throw new Error(`Praxy->component: You must provide a name for your component.`);
+        if (this.#components[name]) throw new Error(`Praxy->component: "${name}" already exists`);
         const map = {};
         const fors = {};
         const target = cmpt.target;
-        const customEl = document.querySelector(cmpt.name);
-        if (!customEl && !target) throw new Error(`Praxy->component: You must provide a target for "${cmpt.name}" or use a custom element.`);
+        const customEl = document.querySelector(name);
+        if (!customEl && !target) throw new Error(`Praxy->component: You must provide a target for "${name}" or use a custom element.`);
         const el = customEl ? customEl : document.querySelector(target);
         if (!el) throw new Error(`Praxy->component: Your mount point doesn't exist`);
-        this.#components[cmpt.name] = {
+        this.#components[name] = {
             ...cmpt,
             fors,
             unmounted
@@ -604,10 +604,10 @@ class Praxy {
         const tmp = document.createElement("template");
         if (el.children.length) tmp.innerHTML = el.innerHTML.trim();
         else if (cmpt.template) tmp.innerHTML = cmpt.template.trim();
-        else throw new Error(`Praxy->component: You must provide a template for "${cmpt.name}" or use a custom element.`);
+        else throw new Error(`Praxy->component: You must provide a template for "${name}" or use a custom element.`);
         if (tmp.content.children.length > 1 || tmp.content.children.length === 0) {
             customEl?.remove();
-            throw new Error(`Praxy->component: Your template for "${cmpt.name}" must have a single root element.`);
+            throw new Error(`Praxy->component: Your template for "${name}" must have a single root element.`);
         }
         const root = cmpt.template ? tmp.content.children[0].cloneNode() : customEl.children[0].cloneNode();
         const sample = cmpt.inherit && this.#components[cmpt.inherit]?.data ? this.#components[cmpt.inherit].data : cmpt.data;
@@ -625,7 +625,7 @@ class Praxy {
         });
         this.#for(tmp.content, uuids, data, map, fors);
         this.#map(tmp.content, uuids, data, map);
-        this.#components[cmpt.name].data = data;
+        this.#components[name].data = data;
         if (tmp.content.children.length > 1) root.append(tmp.content.children[0].cloneNode(true));
         else {
             tmp.content.children[0].childNodes.forEach((node)=>{
@@ -635,11 +635,11 @@ class Praxy {
         }
         if (customEl) customEl.replaceWith(root);
         else el.append(root);
-        root.classList.add(cmpt.name);
+        root.classList.add(name);
         this.#render(root, map);
         if (cmpt.store?.init && typeof cmpt.store.init === "function") {
             const o = await cmpt.store.init();
-            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${cmpt.name}" must return an object.`);
+            if (typeof o !== "object") throw new Error(`Praxy->component: Your store for "${name}" must return an object.`);
             const storage = window[this.#store.$persist];
             const store = JSON.parse(storage.getItem(this.#store.$name));
             for(const k in o)if (o.hasOwnProperty(k)) this.#store[k] = store?.[k] ? store[k] : o[k];
