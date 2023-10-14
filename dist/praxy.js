@@ -592,16 +592,17 @@ class Praxy {
         const map = {};
         const fors = {};
         const target = cmpt.target;
-        const el = target ? document.querySelector(target) : document.body;
         const customEl = document.querySelector(cmpt.name);
-        if (!el && !customEl) throw new Error(`Praxy->component: Your mount point "${target ?? document.body}" doesn't exist`);
+        if (!customEl && !target) throw new Error(`Praxy->component: You must provide a target for "${cmpt.name}" or use a custom element.`);
+        const el = customEl ? customEl : document.querySelector(target);
+        if (!el) throw new Error(`Praxy->component: Your mount point doesn't exist`);
         this.#components[cmpt.name] = {
             ...cmpt,
             fors,
             unmounted
         };
         const tmp = document.createElement("template");
-        if (customEl.children.length) tmp.innerHTML = customEl.innerHTML.trim();
+        if (el.children.length) tmp.innerHTML = el.innerHTML.trim();
         else if (cmpt.template) tmp.innerHTML = cmpt.template.trim();
         else throw new Error(`Praxy->component: You must provide a template for "${cmpt.name}" or use a custom element.`);
         if (tmp.content.children.length > 1 || tmp.content.children.length === 0) {
@@ -704,13 +705,14 @@ class Praxy {
                                     if (loopItem?.[val] || rootValue) map[uuid].classes.push(loopItem[val] ?? rootValue);
                                 } else map[uuid].classes.push(val.replaceAll(/['"]/g, ""));
                             } else {
-                                const c = cl.replaceAll(/['"]/g, "");
                                 const v = this.#getValue(child, data, [
-                                    c
-                                ], c, isFor);
-                                map[uuid].classes.push(v ? v : c);
+                                    cl
+                                ], cl, isFor);
+                                if (cl.includes("'") || cl.includes('"')) map[uuid].classes.push(cl.replaceAll(/['"]/g, ""));
+                                else if (v) map[uuid].classes.push(v);
                             }
                         }
+                        map[uuid].classes = map[uuid].classes.filter(Boolean);
                     }
                     if (!child.hasAttribute("k")) child.setAttribute("k", uuid);
                 }
@@ -839,8 +841,6 @@ class Praxy {
                 }
             });
             // sync data
-            // TODO: The user could have re-ordered the array.
-            // The current implementation always adds new items to the end.
             const e = [];
             arr.forEach((_, i)=>{
                 const index = children[i]?.getAttribute("i");
@@ -911,7 +911,7 @@ class Praxy {
                     for (const [, value] of Object.entries(this.#components))if (value.fors[k] != null) cmptName = value.name;
                     const data = this.#components[cmptName]?.data;
                     const closest = this.#closest(target, "i");
-                    const i = closest?.getAttribute("i");
+                    const i = target.getAttribute("i") ?? closest?.getAttribute("i");
                     item = data?.[values]?.[i];
                     $el = closest;
                 }
