@@ -5,30 +5,27 @@ const App = new Praxy();
 App.component(
   'todo-list',
   {
-    data: {
-      newTodo: '',
-      todos: [
-        {text: 'Learn JavaScript', done: false},
-        {text: 'Learn Praxy', done: false},
-        {text: 'Build something awesome', done: false},
-      ],
+    async data() {
+      const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+      const todos = await res.json();
+      return {todos: todos.filter((t) => !t.completed).slice(0, 8)};
     },
   },
   ({on, data}) => {
-    let todoInput = null;
+    let input = null;
 
     on('click', '.delete', ({item}) => {
       const {todos} = data;
-      data.todos = todos.filter((t) => t.text !== item.text);
+      data.todos = todos.filter((t) => t.id !== item.id);
     });
 
     on('click', '.toggle', ({item}) => {
       const {todos} = data;
-      const todo = todos.find((t) => t.text === item.text);
+      const todo = todos.find((t) => t.id === item.id);
       const index = todos.indexOf(todo);
-      todo.done = !todo.done;
+      todo.completed = !todo.completed;
       todos.splice(index, 1);
-      if (todo.done) {
+      if (todo.completed) {
         todos.push(todo);
       } else {
         todos.unshift(todo);
@@ -37,16 +34,16 @@ App.component(
     });
 
     on('input', '#add-todo', ({target}) => {
-      todoInput = target;
+      input = target;
       data.newTodo = target.value;
     });
 
     on('click', '#add-button', () => {
       const {todos, newTodo} = data;
       if (newTodo) {
-        todos.unshift({text: newTodo, done: false});
+        todos.unshift({title: newTodo, completed: false});
         data.todos = todos;
-        todoInput.value = '';
+        input.value = '';
       }
     });
   }

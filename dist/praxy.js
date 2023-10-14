@@ -610,8 +610,13 @@ class Praxy {
             throw new Error(`Praxy->component: Your template for "${name}" must have a single root element.`);
         }
         const root = cmpt.template ? tmp.content.children[0].cloneNode() : customEl.children[0].cloneNode();
+        let initialData = {};
         const sample = cmpt.inherit && this.#components[cmpt.inherit]?.data ? this.#components[cmpt.inherit].data : cmpt.data;
-        const data = new Proxy(sample ?? {}, {
+        if (typeof sample === "function") {
+            if (customEl) while(customEl.firstChild)customEl.removeChild(customEl.lastChild);
+            initialData = await sample();
+        } else initialData = sample;
+        const data = new Proxy(initialData ?? {}, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
                 this.#for(root, uuids, data, map, fors);
