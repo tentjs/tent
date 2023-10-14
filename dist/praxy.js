@@ -814,14 +814,14 @@ class Praxy {
             const children = Array.from(parent.children);
             const clone = f ? f.clone : children[0]?.cloneNode(true);
             const firstRender = f == null;
-            if (firstRender) fors[uuid] = {
-                clone,
-                parent
-            };
             const attr = parent.getAttribute("px-for");
             const [_, value] = attr.split(" in ");
             const arr = data[value];
             if (firstRender) {
+                fors[uuid] = {
+                    clone,
+                    parent
+                };
                 parent.setAttribute("k", uuid);
                 for(let i = 0; i < arr?.length; i++){
                     const c = clone.cloneNode(true);
@@ -908,7 +908,7 @@ class Praxy {
                 if (loop) {
                     const k = loop.getAttribute("k");
                     const [_, values] = loop.getAttribute("px-for")?.split(" in ");
-                    for (const [, value] of Object.entries(this.#components))if (value.fors[k] != null) cmptName = value.name;
+                    for (const [name, value] of Object.entries(this.#components))if (value.fors[k] != null) cmptName = name;
                     const data = this.#components[cmptName]?.data;
                     const closest = this.#closest(target, "i");
                     const i = target.getAttribute("i") ?? closest?.getAttribute("i");
