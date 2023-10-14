@@ -42,7 +42,7 @@ App.component(
     on('click', '#add-button', () => {
       const {todos, newTodo} = data;
       if (newTodo) {
-        const highestId = todos.reduce((max, todo) => todo.id > max ? todo.id : max, 0);
+        const highestId = todos.reduce((max, todo) => (todo.id > max ? todo.id : max), 0);
         todos.unshift({id: highestId + 1, title: newTodo, completed: false});
         data.todos = todos;
         input.value = '';
