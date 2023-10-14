@@ -7,8 +7,9 @@ App.component(
   {
     async data() {
       const res = await fetch('https://jsonplaceholder.typicode.com/todos');
-      const todos = await res.json();
-      return {todos: todos.filter((t) => !t.completed).slice(0, 8)};
+      const json = await res.json();
+      const todos = json.filter((t) => !t.completed).slice(0, 8);
+      return {todos};
     },
   },
   ({on, data}) => {
@@ -34,14 +35,15 @@ App.component(
     });
 
     on('input', '#add-todo', ({target}) => {
-      input = target;
+      input = input ?? target;
       data.newTodo = target.value;
     });
 
     on('click', '#add-button', () => {
       const {todos, newTodo} = data;
       if (newTodo) {
-        todos.unshift({title: newTodo, completed: false});
+        const highestId = todos.reduce((max, todo) => todo.id > max ? todo.id : max, 0);
+        todos.unshift({id: highestId + 1, title: newTodo, completed: false});
         data.todos = todos;
         input.value = '';
       }
