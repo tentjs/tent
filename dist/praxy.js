@@ -616,7 +616,7 @@ class Praxy {
             if (customEl) while(customEl.firstChild)customEl.removeChild(customEl.lastChild);
             initialData = await sample();
         } else initialData = sample;
-        const data = new Proxy(initialData ?? {}, {
+        const data = new Proxy(initialData, {
             set: (data, key, value)=>{
                 const s = Reflect.set(data, key, value);
                 this.#for(root, uuids, data, map, fors);
