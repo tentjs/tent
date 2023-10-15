@@ -852,7 +852,10 @@ class Praxy {
                 if (index == null) {
                     const c = clone.cloneNode(true);
                     this.#events.forEach(({ event, target, fire })=>{
-                        if (!e.includes(target)) this.#on(event, target, fire, c, true);
+                        if (!e.includes(target)) this.#on(event, target, fire, {
+                            parent: c,
+                            silent: true
+                        });
                         e.push(target);
                     });
                     c.setAttribute("i", i);
@@ -893,7 +896,13 @@ class Praxy {
         uuids.push(uuid);
         return uuid;
     }
-    #on(event, target, fire, parent, silent = false) {
+    #on(event, target, fire, options = {
+        parent: null,
+        silent: false,
+        triggers: null,
+        preventDefault: true
+    }) {
+        const { parent, silent, triggers, preventDefault } = options;
         const els = (parent ?? document).querySelectorAll(target);
         if (!els?.length || fire == null) {
             if (!silent) console.error(`Praxy->on: No possible matches for "${target}" or no callback provided.`);
@@ -905,7 +914,9 @@ class Praxy {
                 fire,
                 el
             });
-            el.addEventListener(event, async ({ target })=>{
+            el.addEventListener(event, async (ev)=>{
+                if (preventDefault) ev.preventDefault();
+                const { target } = ev;
                 let item = null;
                 let $el = target;
                 let cmptName = null;
@@ -923,8 +934,12 @@ class Praxy {
                 await fire({
                     target,
                     item,
-                    $el
+                    $el,
+                    $event: ev
                 });
+            });
+            if (triggers) el.addEventListener("keypress", (ev)=>{
+                for(const trigger in triggers)if (ev.key.toLowerCase() === trigger) triggers[trigger](ev);
             });
         });
     }

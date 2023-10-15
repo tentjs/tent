@@ -13,8 +13,6 @@ App.component(
     },
   },
   ({on, data}) => {
-    let input = null;
-
     on('click', '.delete', ({item}) => {
       const {todos} = data;
       data.todos = todos.filter((t) => t.id !== item.id);
@@ -34,19 +32,25 @@ App.component(
       data.todos = todos;
     });
 
-    on('input', '#add-todo', ({target}) => {
-      input = input ?? target;
-      data.newTodo = target.value;
-    });
-
-    on('click', '#add-button', () => {
-      const {todos, newTodo} = data;
-      if (newTodo) {
-        const highestId = todos.reduce((max, todo) => (todo.id > max ? todo.id : max), 0);
-        todos.unshift({id: highestId + 1, title: newTodo, completed: false});
-        data.todos = todos;
-        input.value = '';
-      }
-    });
+    on(
+      'input',
+      '#add-todo',
+      ({target}) => {
+        data.newTodo = target.value;
+      },
+      {
+        triggers: {
+          enter({target}) {
+            const {todos, newTodo} = data;
+            if (newTodo) {
+              const highestId = todos.reduce((max, todo) => (todo.id > max ? todo.id : max), 0);
+              todos.unshift({id: highestId + 1, title: newTodo, completed: false});
+              data.todos = todos;
+              target.value = '';
+            }
+          },
+        },
+      },
+    );
   }
 );
