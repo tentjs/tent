@@ -21,9 +21,8 @@ App.component(
     on('click', '.toggle', ({item}) => {
       const {todos} = data;
       const todo = todos.find((t) => t.id === item.id);
-      const index = todos.indexOf(todo);
       todo.completed = !todo.completed;
-      todos.splice(index, 1);
+      todos.splice(todos.indexOf(todo), 1);
       if (todo.completed) {
         todos.push(todo);
       } else {
@@ -50,7 +49,7 @@ App.component(
             }
           },
         },
-      }
+      },
     );
   }
 );
