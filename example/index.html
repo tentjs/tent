@@ -35,16 +35,14 @@
         color: #333;
         background-color: #eee;
       }
-      #add {
-        display: flex;
-      }
       #add-todo {
-        padding: 0.5em;
+        box-sizing: border-box;
+        padding: 1em;
+        font-size: 1.05em;
         border: none;
         border-radius: 3px;
         margin-bottom: 6px;
         width: 100%;
-        margin-right: 6px;
       }
       #add-button {
         padding: 0.5em;
@@ -62,6 +60,7 @@
       .button-wrap button {
         background-color: transparent;
         border: 0;
+        cursor: pointer;
       }
     </style>
     <script src="../dist/praxy.js"></script>
@@ -70,11 +69,8 @@
   <body>
     <todo-list>
       <div>
-        <h2>Todo List</h2>
-        <div id="add">
-          <input ref="input" type="text" id="add-todo" placeholder="Add a todo" />
-          <button id="add-button">Add</button>
-        </div>
+        <h2>Todo</h2>
+        <input ref="input" type="text" id="add-todo" placeholder="Add a todo" />
         <ul px-for="todo in todos">
           <li class="[todo.completed ? 'done' : '', 'todo']">
             <span>{{todo.id}}: {{todo.title}}</span>
