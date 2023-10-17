@@ -644,7 +644,6 @@ L("div", {
         L("div", {
             data: {
                 amount: 0,
-                text: "",
                 errors: [],
                 items: [
                     {
@@ -716,22 +715,17 @@ L("div", {
                             L("input", {
                                 type: "text",
                                 onblur (e) {
-                                    data.text = e.target.value;
-                                    data.errors = [
-                                        "Error 1",
-                                        "Error 2"
+                                    data.items = [
+                                        ...data.items,
+                                        {
+                                            id: 4,
+                                            name: e.target.value,
+                                            description: "New item",
+                                            subtitle: "New item sub"
+                                        }
                                     ];
+                                    e.target.value = "";
                                 }
-                            }),
-                            L("p", {
-                                children: [
-                                    data.text
-                                ]
-                            }),
-                            L("p", {
-                                children: [
-                                    data.errors.join(", ")
-                                ]
                             })
                         ]
                     })
