@@ -63,24 +63,38 @@
         cursor: pointer;
       }
     </style>
-    <script src="../dist/praxy.js"></script>
-    <script type="module" src="app.js"></script>
+    <!-- <script src="../dist/praxy.js"></script> -->
+    <!-- <script type="module" src="app.js"></script> -->
+    <!-- <script type="module" src="todo-list.js"></script> -->
+    <!-- <script type="module" src="form.js"></script> -->
   </head>
   <body>
-    <todo-list>
-      <div>
-        <h2>Todo</h2>
-        <input ref="input" type="text" id="add-todo" placeholder="Add a todo" />
-        <ul px-for="todo in todos">
-          <li class="[todo.completed ? 'done' : '', 'todo']">
-            <span>{{todo.id}}: {{todo.title}}</span>
-            <div class="button-wrap">
-              <button class="toggle">✅</button>
-              <button class="delete">❌</button>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </todo-list>
+    <!-- <my-form> -->
+    <!--   <form id="my-form"> -->
+    <!--     <input type="text" name="name" placeholder="Name" /> -->
+    <!--     <input type="text" name="email" placeholder="E-mail" /> -->
+    <!--     <input type="text" name="phone" placeholder="Phone" /> -->
+    <!--     <input type="submit" /> -->
+    <!--     <!-1- <ul px-for="error in errors"> -1-> -->
+    <!--     <!-1-   <li>{{error}}</li> -1-> -->
+    <!--     <!-1- </ul> -1-> -->
+    <!--   </form> -->
+    <!-- </my-form> -->
+    <!-- <todo-list> -->
+    <!--   <div> -->
+    <!--     <h2>Todo</h2> -->
+    <!--     <input ref="input" type="text" id="add-todo" placeholder="Add a todo" /> -->
+    <!--     <ul px-for="todo in todos"> -->
+    <!--       <li class="[todo.completed ? 'done' : '', 'todo']"> -->
+    <!--         <span>{{todo.id}}: {{todo.title}}</span> -->
+    <!--         <div class="button-wrap"> -->
+    <!--           <button class="toggle">✅</button> -->
+    <!--           <button class="delete">❌</button> -->
+    <!--         </div> -->
+    <!--       </li> -->
+    <!--     </ul> -->
+    <!--   </div> -->
+    <!-- </todo-list> -->
+    <script src="../lib/test.js"></script>
   </body>
 </html>
