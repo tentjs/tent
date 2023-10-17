@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"3UG8Z":[function(require,module,exports) {
+})({"iFIM0":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "b39b76893c11f204";
+module.bundle.HMR_BUNDLE_ID = "ca5f92d1ba323ebb";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -573,7 +573,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"4oasv":[function(require,module,exports) {
+},{}],"Wl99X":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "L", ()=>L);
@@ -611,16 +611,14 @@ function L(as, opts = {}) {
                     if (dom.children.length === 0) dom.replaceWith(child);
                     const domChildren = Array.from(dom.children);
                     const childChildren = Array.from(child.children);
-                    const childWasAdded = childChildren.length > domChildren.length;
-                    const childWasRemoved = domChildren.length > childChildren.length;
-                    if (childWasAdded) {
+                    if (childChildren.length > domChildren.length) {
                         let j = 0;
                         for (const c of childChildren){
                             if (!domChildren[j]) dom.append(c);
                             j++;
                         }
                     }
-                    if (childWasRemoved) {
+                    if (domChildren.length > childChildren.length) {
                         let j = 0;
                         for (const c of domChildren){
                             if (!childChildren[j]) {
@@ -672,6 +670,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["3UG8Z","4oasv"], "4oasv", "parcelRequire94c2")
+},{}]},["iFIM0","Wl99X"], "Wl99X", "parcelRequire94c2")
 
-//# sourceMappingURL=test.js.map
+//# sourceMappingURL=lement.js.map

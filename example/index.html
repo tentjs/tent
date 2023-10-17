@@ -3,98 +3,13 @@
   <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta content="utf-8" http-equiv="encoding" />
-    <style>
-      body {
-        color: #fff;
-        background-color: #222;
-        font-size: 16px;
-        height: 100vh;
-        font-family: sans-serif;
-      }
-      .todo-list {
-        margin: 0 auto;
-        width: 400px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-      }
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      .todo {
-        padding: 0.5em;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        margin-bottom: 6px;
-        display: flex;
-        justify-content: space-between;
-      }
-      .todo.done {
-        color: #333;
-        background-color: #eee;
-      }
-      #add-todo {
-        box-sizing: border-box;
-        padding: 1em;
-        font-size: 1.05em;
-        border: none;
-        border-radius: 3px;
-        margin-bottom: 6px;
-        width: 100%;
-      }
-      #add-button {
-        padding: 0.5em;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        margin-bottom: 6px;
-        background-color: #333;
-        color: #fff;
-        cursor: pointer;
-      }
-      .button-wrap {
-        min-width: 70px;
-        margin-left: 6px;
-      }
-      .button-wrap button {
-        background-color: transparent;
-        border: 0;
-        cursor: pointer;
-      }
-    </style>
+    <script src="../dist/lement.js"></script>
     <!-- <script src="../dist/praxy.js"></script> -->
     <!-- <script type="module" src="app.js"></script> -->
     <!-- <script type="module" src="todo-list.js"></script> -->
     <!-- <script type="module" src="form.js"></script> -->
   </head>
   <body>
-    <!-- <my-form> -->
-    <!--   <form id="my-form"> -->
-    <!--     <input type="text" name="name" placeholder="Name" /> -->
-    <!--     <input type="text" name="email" placeholder="E-mail" /> -->
-    <!--     <input type="text" name="phone" placeholder="Phone" /> -->
-    <!--     <input type="submit" /> -->
-    <!--     <!-1- <ul px-for="error in errors"> -1-> -->
-    <!--     <!-1-   <li>{{error}}</li> -1-> -->
-    <!--     <!-1- </ul> -1-> -->
-    <!--   </form> -->
-    <!-- </my-form> -->
-    <!-- <todo-list> -->
-    <!--   <div> -->
-    <!--     <h2>Todo</h2> -->
-    <!--     <input ref="input" type="text" id="add-todo" placeholder="Add a todo" /> -->
-    <!--     <ul px-for="todo in todos"> -->
-    <!--       <li class="[todo.completed ? 'done' : '', 'todo']"> -->
-    <!--         <span>{{todo.id}}: {{todo.title}}</span> -->
-    <!--         <div class="button-wrap"> -->
-    <!--           <button class="toggle">✅</button> -->
-    <!--           <button class="delete">❌</button> -->
-    <!--         </div> -->
-    <!--       </li> -->
-    <!--     </ul> -->
-    <!--   </div> -->
-    <!-- </todo-list> -->
-    <script src="../lib/test.js"></script>
+    <script type="module" src="app2.js"></script>
   </body>
 </html>
