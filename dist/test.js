@@ -574,14 +574,13 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"4oasv":[function(require,module,exports) {
-function L(as = "div", props) {
-    const { children, root, data, ...attributes } = props;
-    if (as instanceof HTMLElement) return as;
-    const div = document.createElement(as ? as : "div");
+function L(as, opts = {}) {
+    const { children = [], mount, data, ...attributes } = opts;
+    const el = document.createElement(as);
     for(const attr in attributes){
         const a = attributes[attr];
-        if (typeof a === "function") div[attr] = data != null ? a.bind(data) : a;
-        else div.setAttribute(attr, props[attr]);
+        if (typeof a === "function") el[attr] = data != null ? a.bind(data) : a;
+        else el.setAttribute(attr, opts[attr]);
     }
     const $data = data ? new Proxy(data, {
         get (target, key) {
@@ -594,9 +593,11 @@ function L(as = "div", props) {
         }
     }) : null;
     const render = ()=>{
-        const ch = typeof children === "function" ? children($data) : Array.from(children);
-        if (div.children.length === 0) {
-            div.append(...ch);
+        const ch = typeof children === "function" ? children({
+            data: $data
+        }) : Array.from(children);
+        if (el.children.length === 0) {
+            el.append(...ch);
             return;
         }
         const t = (ch, compare)=>{
@@ -631,49 +632,20 @@ function L(as = "div", props) {
                 i++;
             }
         };
-        t(ch, div);
+        t(ch, el);
     };
     render();
-    if (root) document.body.append(div);
-    else return div;
+    if (mount) mount.append(el);
+    else return el;
 }
-const Custom = L("div", {
-    data: {
-        amount: 0
-    },
-    children: (data)=>[
-            L("h1", {
-                children: [
-                    "Hello world"
-                ]
-            }),
-            L("p", {
-                children: [
-                    "This is a paragraph"
-                ]
-            }),
-            L("p", {
-                children: [
-                    `The button was clicked ${data.amount} times.`
-                ]
-            }),
-            L("button", {
-                name: "my-button",
-                children: [
-                    "Click me"
-                ],
-                onclick () {
-                    data.amount = data.amount + 1;
-                }
-            })
-        ]
-});
 L("div", {
-    root: true,
+    mount: document.body,
     children: [
         L("div", {
             data: {
                 amount: 0,
+                text: "",
+                errors: [],
                 items: [
                     {
                         id: 1,
@@ -695,11 +667,11 @@ L("div", {
                     }
                 ]
             },
-            children: (data)=>[
+            children: ({ data })=>[
                     L("ul", {
                         children: data.items.map((item)=>L("li", {
                                 children: [
-                                    L("h2", {
+                                    L("strong", {
                                         children: [
                                             item.name
                                         ]
@@ -707,7 +679,8 @@ L("div", {
                                     L("p", {
                                         children: [
                                             item.description
-                                        ]
+                                        ],
+                                        style: "margin: 0"
                                     }),
                                     L("p", {
                                         children: [
@@ -716,12 +689,13 @@ L("div", {
                                                     item.subtitle
                                                 ]
                                             })
-                                        ]
+                                        ],
+                                        style: "margin: 0"
                                     })
-                                ]
+                                ],
+                                style: "margin-bottom: 0.5em"
                             }))
                     }),
-                    L(Custom, {}),
                     L("button", {
                         name: "my-button",
                         children: [
@@ -736,6 +710,30 @@ L("div", {
                             items[1].subtitle = "ReactX";
                             data.items = items;
                         }
+                    }),
+                    L("div", {
+                        children: [
+                            L("input", {
+                                type: "text",
+                                onblur (e) {
+                                    data.text = e.target.value;
+                                    data.errors = [
+                                        "Error 1",
+                                        "Error 2"
+                                    ];
+                                }
+                            }),
+                            L("p", {
+                                children: [
+                                    data.text
+                                ]
+                            }),
+                            L("p", {
+                                children: [
+                                    data.errors.join(", ")
+                                ]
+                            })
+                        ]
                     })
                 ]
         })
