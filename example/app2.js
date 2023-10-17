@@ -1,39 +1,28 @@
-import {L} from '../dist/lement';
+import {L, R} from '../dist/lement';
 
-L('div', {
-  mount: document.body,
-  data: {
-    amount: 0,
-    errors: [],
-    items: [
-      {id: 1, name: 'JS', description: 'JavaScript is nice', subtitle: 'JSX'},
-      {id: 2, name: 'Svelte', description: 'Svelte is cool', subtitle: 'SvelteX'},
-      {id: 3, name: 'Praxy', description: 'Praxy is awesome', subtitle: 'PraxyX'},
-    ],
-  },
-  children: ({data}) => [
-    L('ul', {
-      children: data.items.map((item) =>
-        L('li', {
-          children: [
-            L('strong', {children: [item.name]}),
-            L('p', {children: [item.description], style: 'margin: 0'}),
-            L('p', {
-              children: [
-                L('span', {children: [item.subtitle]})
-              ],
-              style: 'margin: 0'
+const Home = L(
+  'div',
+  ({data}) => [
+    L('h1', ['Home']),
+    L(
+      'ul',
+      data.items.map((item) =>
+        L(
+          'li',
+          [
+            L('strong', [item.name]),
+            L('p', [item.description], {style: 'margin: 0'}),
+            L('p', [L('span', [item.subtitle])], {
+              style: 'margin: 0',
             }),
           ],
-          style: 'margin-bottom: 0.5em',
-        }),
-      ),
-    }),
-    L('button', {
-      name: 'my-button',
-      children: [
-        data.amount ? `Clicked ${data.amount} times` : 'Click me'
-      ],
+          {
+            style: 'margin-bottom: 0.5em',
+          }
+        )
+      )
+    ),
+    L('button', [data.amount ? `Clicked ${data.amount} times` : 'Click me'], {
       onclick() {
         data.amount = data.amount + 1;
         const items = [...data.items];
@@ -42,24 +31,44 @@ L('div', {
         data.items = items;
       },
     }),
-    L('div', {
-      children: [
-        L('input', {
-          type: 'text',
-          onblur(e) {
-            data.items = [
-              ...data.items,
-              {
-                id: 4,
-                name: e.target.value,
-                description: 'New item',
-                subtitle: 'New item sub',
-              }
-            ];
-            e.target.value = '';
-          },
-        }),
-      ],
-    }),
+    L('div', [
+      L('input', [], {
+        type: 'text',
+        onblur(e) {
+          data.items = [
+            ...data.items,
+            {
+              id: 4,
+              name: e.target.value,
+              description: 'New item',
+              subtitle: 'New item sub',
+            },
+          ];
+          e.target.value = '';
+        },
+      }),
+    ]),
   ],
-});
+  {
+    data: {
+      amount: 0,
+      items: [
+        {id: 1, name: 'JS', description: 'JavaScript is nice', subtitle: 'JSX'},
+        {id: 2, name: 'Svelte', description: 'Svelte is cool', subtitle: 'SvelteX'},
+        {id: 3, name: 'Praxy', description: 'Praxy is awesome', subtitle: 'PraxyX'},
+      ],
+    },
+  }
+);
+
+const About = L('div', [L('h1', ['About']), L('p', ['This is a SPA'])]);
+
+R(
+  [
+    {path: '#home', component: Home},
+    {path: '#about-us', component: About},
+  ],
+  {
+    fallback: '#home',
+  }
+);

@@ -577,8 +577,9 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "L", ()=>L);
-function L(as, opts = {}) {
-    const { children = [], mount, data, ...attributes } = opts;
+parcelHelpers.export(exports, "R", ()=>R);
+function L(as, children = [], opts = {}) {
+    const { mount, data, ...attributes } = opts;
     const el = document.createElement(as);
     for(const attr in attributes){
         const a = attributes[attr];
@@ -638,6 +639,25 @@ function L(as, opts = {}) {
     render();
     if (mount) mount.append(el);
     else return el;
+}
+function R(routes, opts) {
+    window.onload = router;
+    window.onhashchange = router;
+    function router() {
+        const hash = window.location.hash;
+        let route = null;
+        for (const r of routes)if (r.path === hash) {
+            route = r;
+            break;
+        }
+        if (route) {
+            const app = document.getElementById("app");
+            if (!app) throw new Error("No app element found");
+            const current = app.children?.[0];
+            if (current && !current.isEqualNode(route.component)) current.replaceWith(route.component);
+            else app.append(route.component);
+        } else if (opts.fallback) window.location.hash = opts.fallback;
+    }
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
