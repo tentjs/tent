@@ -1,5 +1,13 @@
 import {L, R} from '../dist/lement';
 
+const Layout = L('div', [
+  L('header', [
+    L('nav', [L('a', ['Home'], {href: '#home'}), L('a', ['About us'], {href: '#about-us'})]),
+  ]),
+  L('main', [], {id: 'mount'}),
+  L('footer', ['Footer']),
+]);
+
 const Home = L(
   'div',
   ({data}) => [
@@ -48,9 +56,6 @@ const Home = L(
         },
       }),
     ]),
-    L('p', [
-      L('a', ['Go to about us'], {href: '#about-us'}),
-    ]),
   ],
   {
     data: {
@@ -66,14 +71,13 @@ const Home = L(
 
 const AboutContent = L('div', [
   L('p', ['This is the about us page.']),
-  L('a', ['Go back to home'], {href: '#home'}),
 ]);
 const About = L('div', [L('h1', ['About']), AboutContent]);
 
 R(
   [
-    {path: '#home', component: Home},
-    {path: '#about-us', component: About},
+    {path: '#home', component: Home, layout: Layout},
+    {path: '#about-us', component: About, layout: Layout},
   ],
   {
     fallback: '#home',

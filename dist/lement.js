@@ -579,7 +579,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "L", ()=>L);
 parcelHelpers.export(exports, "R", ()=>R);
 function L(as, children = [], opts = {}) {
-    const { mount, data, ...attributes } = opts;
+    const { mount, data, layout, ...attributes } = opts;
     const el = document.createElement(as);
     for(const attr in attributes){
         const a = attributes[attr];
@@ -637,8 +637,15 @@ function L(as, children = [], opts = {}) {
         t(ch, el);
     };
     render();
-    if (mount) mount.append(el);
-    else return el;
+    if (mount) {
+        if (layout) {
+            if (typeof mount !== "string") throw new Error("When using `layout` the mount point must be a string");
+            const mountEl = layout.querySelector(mount);
+            if (!mountEl) throw new Error(`It was not possible to render layout since mount point wasn't found: ${mount}`);
+            mountEl?.append(el);
+            return layout;
+        } else mount.append(el);
+    } else return el;
 }
 function R(routes, opts) {
     window.onload = router;
@@ -653,9 +660,19 @@ function R(routes, opts) {
         if (route) {
             const app = document.getElementById("app");
             if (!app) throw new Error("No app element found");
+            if (route.layout) {
+                // TODO: Don't hardcode mount point
+                const mount = route.layout.querySelector("#mount");
+                if (mount) {
+                    if (mount.children.length === 0) mount.append(route.component);
+                    else if (mount.children.length > 1) throw new Error("Mount point must have only one child");
+                    else mount.children[0].replaceWith(route.component);
+                }
+            }
+            const el = route.layout || route.component;
             const current = app.children?.[0];
-            if (current && !current.isEqualNode(route.component)) current.replaceWith(route.component);
-            else app.append(route.component);
+            if (current && !current.isEqualNode(el)) current.replaceWith(el);
+            else app.append(el);
         } else if (opts.fallback) window.location.hash = opts.fallback;
     }
 }

@@ -17,6 +17,9 @@ const SomeLayout = L('div', [
 const ComponentWithLayout = L('div', [
   L('span', ['This is the /my-page component']),
 ], {
+  // `layout` means that the component should be merged into the layout.
+  // The component knows where to mount by using the `mount` proprety.
+  // TODO: Layout has to be on a router basis, since other wise multiple components would mount at the same time.
   layout: SomeLayout,
   // I think it would be nice to make it possible to define if you want to append or replace the content when mounting.
   // Maybe just have `mount` and `replace`, where `mount` appends and the other replaces. But then it might be nicer to have:
@@ -38,7 +41,7 @@ const MyPage = L('div', [
 ]);
 
 const router = R([
-  { path: '/my-page', component: MyPage },
+  { path: '/my-page', component: MyPage, layout: SomeLayout },
 ]);
 ```
 
