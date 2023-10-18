@@ -88,8 +88,37 @@ const Home = L(
   }
 )
 
-const AboutContent = L('div', [L('p', ['This is the about us page.'])])
-const About = L('div', [L('h1', ['About']), AboutContent])
+const C1 = ({data}) =>
+  L('div', [
+    L('p', ['Show']),
+    L('p', [data.name]),
+    L('button', ['Swap name'], {
+      onclick() {
+        data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+      },
+    }),
+  ])
+const C2 = ({data}) => L('div', [L('p', [L('span', [`Hey ${data.lastname}`])])])
+
+const About = L(
+  'div',
+  ({data}) => [
+    L('h1', ['About']),
+    data.show ? C1 : C2,
+    L('button', ['Toggle'], {
+      onclick() {
+        data.show = !data.show
+      },
+    }),
+  ],
+  {
+    data: {
+      show: true,
+      name: 'Seb',
+      lastname: 'Toombs',
+    },
+  }
+)
 
 R(
   [
