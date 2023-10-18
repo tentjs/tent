@@ -28,10 +28,11 @@ const Home = L(
             }),
           ],
           {
-            style: 'margin-bottom: 0.5em',
+            class: 'list-item',
           }
         )
-      )
+      ),
+      {class: 'items-list'}
     ),
     L('button', [data.amount ? `Clicked ${data.amount} times` : 'Click me'], {
       onclick() {
