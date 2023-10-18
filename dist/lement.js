@@ -651,14 +651,15 @@ function R(routes, opts = {}) {
         if (!route) {
             if (opts.fallback) window.location.hash = opts.fallback;
         }
-        if (route.layout) {
-            const mount = route.layout.querySelector("[view]");
+        const layout = route.layout ?? opts.layout;
+        if (layout) {
+            const mount = layout.querySelector("[view]");
             if (!mount) throw new Error(`When using "layout" it is required to specify "view" in the targets options.`);
             if (mount.children.length > 1) throw new Error("Mount point must have only one child");
             if (mount.children.length === 0) mount.append(route.component);
             else mount.children[0].replaceWith(route.component);
         }
-        const el = route.layout || route.component;
+        const el = layout || route.component;
         const current = app.children?.[0];
         if (current && !current.isEqualNode(el)) current.replaceWith(el);
         else app.append(el);

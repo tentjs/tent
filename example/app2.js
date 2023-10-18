@@ -93,11 +93,12 @@ const About = L('div', [L('h1', ['About']), AboutContent])
 
 R(
   [
-    {path: '#home', component: Home, layout: Layout},
-    {path: '#about-us', component: About, layout: Layout},
+    {path: '#home', component: Home},
+    {path: '#about-us', component: About},
   ],
   {
     fallback: '#home',
     root: document.querySelector('#app'),
+    layout: Layout,
   }
 )
