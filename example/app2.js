@@ -1,12 +1,15 @@
-import {L, R} from '../dist/lement';
+import {L, R} from '../dist/lement'
 
 const Layout = L('div', [
   L('header', [
-    L('nav', [L('a', ['Home'], {href: '#home'}), L('a', ['About us'], {href: '#about-us'})]),
+    L('nav', [
+      L('a', ['Home'], {href: '#home'}),
+      L('a', ['About us'], {href: '#about-us'}),
+    ]),
   ]),
   L('main', [], {view: true}),
   L('footer', ['Footer']),
-]);
+])
 
 const Home = L(
   'div',
@@ -32,11 +35,11 @@ const Home = L(
     ),
     L('button', [data.amount ? `Clicked ${data.amount} times` : 'Click me'], {
       onclick() {
-        data.amount = data.amount + 1;
-        const items = [...data.items];
-        items[0].name = 'React';
-        items[1].subtitle = 'ReactX';
-        data.items = items;
+        data.amount = data.amount + 1
+        const items = [...data.items]
+        items[0].name = 'React'
+        items[1].subtitle = 'ReactX'
+        data.items = items
       },
     }),
     L('div', [
@@ -51,8 +54,8 @@ const Home = L(
               description: 'New item',
               subtitle: 'New item sub',
             },
-          ];
-          e.target.value = '';
+          ]
+          e.target.value = ''
         },
       }),
     ]),
@@ -61,16 +64,31 @@ const Home = L(
     data: {
       amount: 0,
       items: [
-        {id: 1, name: 'JS', description: 'JavaScript is nice', subtitle: 'JSX'},
-        {id: 2, name: 'Svelte', description: 'Svelte is cool', subtitle: 'SvelteX'},
-        {id: 3, name: 'Praxy', description: 'Praxy is awesome', subtitle: 'PraxyX'},
+        {
+          id: 1,
+          name: 'JS',
+          description: 'JavaScript is nice',
+          subtitle: 'JSX',
+        },
+        {
+          id: 2,
+          name: 'Svelte',
+          description: 'Svelte is cool',
+          subtitle: 'SvelteX',
+        },
+        {
+          id: 3,
+          name: 'Praxy',
+          description: 'Praxy is awesome',
+          subtitle: 'PraxyX',
+        },
       ],
     },
   }
-);
+)
 
-const AboutContent = L('div', [L('p', ['This is the about us page.'])]);
-const About = L('div', [L('h1', ['About']), AboutContent]);
+const AboutContent = L('div', [L('p', ['This is the about us page.'])])
+const About = L('div', [L('h1', ['About']), AboutContent])
 
 R(
   [
@@ -81,4 +99,4 @@ R(
     fallback: '#home',
     root: document.querySelector('#app'),
   }
-);
+)
