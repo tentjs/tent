@@ -4,7 +4,7 @@ const Layout = L('div', [
   L('header', [
     L('nav', [L('a', ['Home'], {href: '#home'}), L('a', ['About us'], {href: '#about-us'})]),
   ]),
-  L('main', [], {id: 'mount'}),
+  L('main', [], {view: true}),
   L('footer', ['Footer']),
 ]);
 
@@ -69,9 +69,7 @@ const Home = L(
   }
 );
 
-const AboutContent = L('div', [
-  L('p', ['This is the about us page.']),
-]);
+const AboutContent = L('div', [L('p', ['This is the about us page.'])]);
 const About = L('div', [L('h1', ['About']), AboutContent]);
 
 R(

@@ -584,7 +584,7 @@ function L(as, children = [], opts = {}) {
     for(const attr in attributes){
         const a = attributes[attr];
         if (typeof a === "function") el[attr] = data != null ? a.bind(data) : a;
-        else el.setAttribute(attr, opts[attr]);
+        else el.setAttribute(attr, typeof opts[attr] === "boolean" ? "" : opts[attr]);
     }
     const $data = data ? new Proxy(data, {
         get (target, key) {
@@ -637,15 +637,8 @@ function L(as, children = [], opts = {}) {
         t(ch, el);
     };
     render();
-    if (mount) {
-        if (layout) {
-            if (typeof mount !== "string") throw new Error("When using `layout` the mount point must be a string");
-            const mountEl = layout.querySelector(mount);
-            if (!mountEl) throw new Error(`It was not possible to render layout since mount point wasn't found: ${mount}`);
-            mountEl?.append(el);
-            return layout;
-        } else mount.append(el);
-    } else return el;
+    if (mount) mount.append(el);
+    else return el;
 }
 function R(routes, opts) {
     window.onload = router;
@@ -661,13 +654,12 @@ function R(routes, opts) {
             const app = document.getElementById("app");
             if (!app) throw new Error("No app element found");
             if (route.layout) {
-                // TODO: Don't hardcode mount point
-                const mount = route.layout.querySelector("#mount");
+                const mount = route.layout.querySelector("[view]");
                 if (mount) {
                     if (mount.children.length === 0) mount.append(route.component);
                     else if (mount.children.length > 1) throw new Error("Mount point must have only one child");
                     else mount.children[0].replaceWith(route.component);
-                }
+                } else throw new Error(`When using "layout" it is required to specify "view" in the targets options.`);
             }
             const el = route.layout || route.component;
             const current = app.children?.[0];
