@@ -641,7 +641,7 @@ function L(as, children = [], opts = {}) {
     else return el;
 }
 function R(routes, opts = {}) {
-    const app = document.querySelector(opts.root ?? "#app");
+    const app = opts.root ?? document.body;
     if (!app) throw new Error("No root element found");
     window.onload = router;
     window.onhashchange = router;
@@ -653,11 +653,10 @@ function R(routes, opts = {}) {
         }
         if (route.layout) {
             const mount = route.layout.querySelector("[view]");
-            if (mount) {
-                if (mount.children.length === 0) mount.append(route.component);
-                else if (mount.children.length > 1) throw new Error("Mount point must have only one child");
-                else mount.children[0].replaceWith(route.component);
-            } else throw new Error(`When using "layout" it is required to specify "view" in the targets options.`);
+            if (!mount) throw new Error(`When using "layout" it is required to specify "view" in the targets options.`);
+            if (mount.children.length > 1) throw new Error("Mount point must have only one child");
+            if (mount.children.length === 0) mount.append(route.component);
+            else mount.children[0].replaceWith(route.component);
         }
         const el = route.layout || route.component;
         const current = app.children?.[0];

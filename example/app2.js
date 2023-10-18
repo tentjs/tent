@@ -79,5 +79,6 @@ R(
   ],
   {
     fallback: '#home',
+    root: document.querySelector('#app'),
   }
 );
