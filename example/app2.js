@@ -48,6 +48,9 @@ const Home = L(
         },
       }),
     ]),
+    L('p', [
+      L('a', ['Go to about us'], {href: '#about-us'}),
+    ]),
   ],
   {
     data: {
@@ -61,7 +64,11 @@ const Home = L(
   }
 );
 
-const About = L('div', [L('h1', ['About']), L('p', ['This is a SPA'])]);
+const AboutContent = L('div', [
+  L('p', ['This is the about us page.']),
+  L('a', ['Go back to home'], {href: '#home'}),
+]);
+const About = L('div', [L('h1', ['About']), AboutContent]);
 
 R(
   [
