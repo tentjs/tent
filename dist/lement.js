@@ -647,7 +647,7 @@ function R(routes, opts = {}) {
     window.onhashchange = router;
     function router() {
         const hash = window.location.hash;
-        let route = routes.find((r)=>r.path === hash);
+        const route = routes.find((r)=>r.path === hash);
         if (!route) {
             if (opts.fallback) window.location.hash = opts.fallback;
         }
