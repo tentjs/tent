@@ -89,15 +89,23 @@ const Home = L(
 )
 
 const C1 = ({data}) =>
-  L('div', [
-    L('p', ['Show']),
-    L('p', [data.name]),
-    L('button', ['Swap name'], {
-      onclick() {
-        data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+  L(
+    'div',
+    [
+      L('p', ['Show']),
+      L('p', [data.name]),
+      L('button', ['Swap name'], {
+        onclick() {
+          data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+        },
+      }),
+    ],
+    {
+      mounted({el}) {
+        console.log('mounted', el)
       },
-    }),
-  ])
+    }
+  )
 const C2 = ({data}) => L('div', [L('p', [L('span', [`Hey ${data.lastname}`])])])
 
 const About = L(
