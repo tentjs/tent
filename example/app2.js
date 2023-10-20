@@ -99,6 +99,9 @@ const C1 = ({data}) =>
         onclick() {
           data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
         },
+        styles: {
+          background: 'pink',
+        },
       }),
     ],
     {
@@ -108,9 +111,6 @@ const C1 = ({data}) =>
       styles: {
         color: 'pink',
         background: 'red',
-        button: {
-          background: 'none',
-        },
         div: {
           color: 'purple',
           background: 'grey',
