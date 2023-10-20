@@ -1,5 +1,10 @@
 # Ideas
 
+## Mounted
+
+Is a good idea, but it doesn't really work 100%. It triggers even when data is changed, which is not ideal.
+Need a way of storing if some element have been mounted before.
+
 ## Scoped styles
 
 Not sure about scoped styles, but since I am using a `style` tag for the `load` event for `mounted` it could be a thing?
