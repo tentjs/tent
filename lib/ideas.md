@@ -1,5 +1,9 @@
 # Ideas
 
+## To-do
+
+- Store uuid's for scoped styles, and check if it exists when creating new ones.
+
 ## Mounted
 
 Is a good idea, but it doesn't really work 100%. It triggers even when data is changed, which is not ideal.
