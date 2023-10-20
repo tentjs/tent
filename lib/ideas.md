@@ -4,10 +4,9 @@
 
 Not sure about scoped styles, but since I am using a `style` tag for the `load` event for `mounted` it could be a thing?
 The thing I am not 100% sure about is how you would define those styles. It could be a template string, but there's no
-syntax highlighting
-out of the box, and it might be a bit messy.
+syntax highlighting out of the box, and it might be a bit messy.
 
-Another way could be to define styles in an object, and then process that into a stylesheet. (Like this more!
+Another way could be to define styles in an object, and then process that into a stylesheet. (Like this more!)
 
 ## Theme
 

@@ -1,4 +1,4 @@
-import {L, R} from '../dist/lement'
+import {L, R} from '../dist/el'
 
 const Layout = L('div', [
   L('header', [
@@ -94,6 +94,7 @@ const C1 = ({data}) =>
     [
       L('p', ['Show']),
       L('p', [data.name]),
+      L('div', [L('div', [L('span', ['Some span'])])]),
       L('button', ['Swap name'], {
         onclick() {
           data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
@@ -102,7 +103,24 @@ const C1 = ({data}) =>
     ],
     {
       mounted({el}) {
-        console.log('mounted', el)
+        console.log('mounted is good', el)
+      },
+      styles: {
+        color: 'pink',
+        background: 'red',
+        button: {
+          background: 'none',
+        },
+        div: {
+          color: 'purple',
+          background: 'grey',
+          span: {
+            background: 'orange',
+            p: {
+              color: 'black',
+            },
+          },
+        },
       },
     }
   )
