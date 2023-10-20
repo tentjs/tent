@@ -8,57 +8,33 @@ syntax highlighting out of the box, and it might be a bit messy.
 
 Another way could be to define styles in an object, and then process that into a stylesheet. (Like this more!)
 
-## Theme
+## Theme (WIP)
 
-Could be cool to have a Theme object, which can be used in all components. Something like:
+Could be cool to have a Theme object, which can be used in all components.
+
+But I am not sure what the benefit would be from just have a local object with styles?
+
+- One benefit would be that you can share themes.
+- You can give a parent element a theme via opts, and then all children can use it.
+  - But a regular object can do the same? In fact, it's easier since you don't have to pass it anywhere.
 
 ```js
+const theme = T({
+  text: {
+    color: '#eee',
+  },
+})
+
 L('div', [
   L('p', ['Styled paragraph'], {
     styles({theme}) {
       return {
         // And then access values as you would a normal object
-        color: Theme.text.color,
+        color: theme.text.color,
       };
     },
   }),
-])
-```
-
-And define a Theme like:
-
-```js
-T({
-  text: {
-    color: '#eee',
-  },
-})
-```
-
-## Layouts
-
-It might be a good idea to have a way to define a general layout that each component can use.
-The layout would then have a mounting point for the component that is using it. So that when the layout renders
-it will inject the component in the right place.
-
-A layout could be the general page structure like header, nav, footer etc., and then each component defines the content
-of the page.
-
-```js
-const SomeLayout = L('div', [
-  L('header', ['This is the header of the layout']),
-  L('div', [], {id: 'mount'}),
-  L('footer', ['This is the footer of the layout']),
-]);
-const ComponentWithLayout = L('div', [
-  L('span', ['This is the /my-page component']),
-], {
-  // I think it would be nice to make it possible to define if you want to append or replace the content when mounting.
-  // Maybe just have `mount` and `replace`, where `mount` appends and the other replaces. But then it might be nicer to have:
-  // `append` and `replace`, which is more descriptive than `mount`.
-  // If `replace` is given it has to remove all elements one by one, which might be a performance issue.
-  mount: '#mount',
-});
+], {theme})
 ```
 
 ## Router
@@ -87,6 +63,6 @@ I am not 100% sure how to write the router function.
 
 In short the function should:
 
-- Register each component on a route.
-- When changing route it should tear down the component on the route, and setup the new one.
+- ~~Register each component on a route.~~
+- ~~When changing route it should tear down the component on the route, and setup the new one.~~
 - Handle dynamic params and replace them with values.
