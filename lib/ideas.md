@@ -60,7 +60,7 @@ const router = R([
 
 ### To-do
 
-- Add dynamic params, i.e. `/some-path/:id` or `/some/:path/:id`
+- Figure out if relying on the hash is a bad idea, since it's hijacking the normal # jumping
 
 ### How?
 
