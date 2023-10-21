@@ -2,7 +2,8 @@
 
 ## To-do
 
-- Find a way to only append styles  if the element is visible on the screen. 
+- Find a way to only append styles  if the element is visible.
+- Don't re-render styles if they already exist.
 - ~~Store uuid's for scoped styles, and check if it exists when creating new ones.~~
 
 ## Mounted
