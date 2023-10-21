@@ -1,8 +1,9 @@
 # To-do
 
-- Find a way to only append styles  if the element is visible.
+- Find a way to only append styles if the element is visible.
 - Don't re-render styles if they already exist.
   - when replacing, first check for style attributes, and transfer to replacing element.
+    - don't do this if it is a function, since we have to re-render it anyway.
 - Let the user cache elements with 'cache' in options.
   - if 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
 - Find a way to use the same styles on a looped element.
@@ -30,15 +31,18 @@ const theme = T({
   },
 })
 
-L('div', [
-  L('p', ['Styled paragraph'], {
-    styles({theme}) {
-      return {
-        // And then access values as you would a normal object
-        color: theme.text.color,
-      };
-    },
-  }),
-], {theme})
+L(
+  'div',
+  [
+    L('p', ['Styled paragraph'], {
+      styles({theme}) {
+        return {
+          // And then access values as you would a normal object
+          color: theme.text.color,
+        }
+      },
+    }),
+  ],
+  {theme}
+)
 ```
-
