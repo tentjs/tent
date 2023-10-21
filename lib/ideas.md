@@ -2,6 +2,7 @@
 
 - Find a way to only append styles  if the element is visible.
 - Don't re-render styles if they already exist.
+  - when replacing, first check for style attributes, and transfer to replacing element.
 - Let the user cache elements with 'cache' in options.
   - if 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
 - Find a way to use the same styles on a looped element.
