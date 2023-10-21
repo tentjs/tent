@@ -5,3 +5,4 @@ example/dist
 .npmrc
 dist/
 .fleet
+.zed
