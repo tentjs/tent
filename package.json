@@ -1,0 +1,37 @@
+{
+  "name": "praxy",
+  "version": "0.0.1-alpha",
+  "description": "Build web apps with atomic components.",
+  "source": "lib/l.js",
+  "main": "dist/l.cjs",
+  "module": "dist/l.mjs",
+  "directories": {
+    "example": "example",
+    "lib": "lib",
+    "test": "lib/tests"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.23.2",
+    "@parcel/config-default": "^2.10.0",
+    "@testing-library/dom": "^9.3.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "parcel": "^2.10.0"
+  },
+  "scripts": {
+    "watch": "parcel watch",
+    "build": "parcel build"
+  },
+  "author": "",
+  "license": "ISC",
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env"
+      ]
+    ]
+  }
+}
