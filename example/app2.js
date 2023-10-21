@@ -2,10 +2,20 @@ import {L, R} from '../dist/el'
 
 const Layout = L('div', [
   L('header', [
-    L('nav', [
-      L('a', ['Home'], {href: '#home'}),
-      L('a', ['About us'], {href: '#about-us'}),
-    ]),
+    L(
+      'nav',
+      [
+        L('a', ['Home'], {href: '#home'}),
+        L('a', ['About us'], {href: '#about-us'}),
+      ],
+      {
+        styles: {
+          a: {
+            margin: '0 10px 0 0',
+          },
+        },
+      }
+    ),
   ]),
   L('main', [], {view: true}),
   L('footer', ['Footer']),
@@ -32,7 +42,21 @@ const Home = L(
           }
         )
       ),
-      {class: 'items-list'}
+      {
+        class: 'items-list',
+        styles: {
+          'list-style': 'none',
+          margin: 0,
+          padding: 0,
+          li: {
+            padding: '8px',
+            color: '#333',
+            background: '#eee',
+            'border-radius': '4px',
+            margin: '0 0 4px 0',
+          },
+        },
+      }
     ),
     L('button', [data.amount ? `Clicked ${data.amount} times` : 'Click me'], {
       onclick() {
