@@ -2,7 +2,8 @@
 
 ## To-do
 
-- Store uuid's for scoped styles, and check if it exists when creating new ones.
+- Find a way to only append styles  if the element is visible on the screen. 
+- ~~Store uuid's for scoped styles, and check if it exists when creating new ones.~~
 
 ## Mounted
 
