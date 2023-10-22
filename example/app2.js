@@ -21,6 +21,19 @@ const Layout = L('div', [
   L('footer', ['Footer']),
 ])
 
+const Test = L('div', ['Test'], {
+  onmount({el}) {
+    new IntersectionObserver((entries) => {
+      const entry = entries?.[0]
+      if (entry) {
+        if (entry.isIntersecting) {
+          console.log('Intersecting', entry)
+        }
+      }
+    }).observe(el)
+  },
+})
+
 const Home = () =>
   L(
     'div',
@@ -119,6 +132,7 @@ const About = () =>
           data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
         },
       }),
+      Test,
     ],
     {
       data: {
