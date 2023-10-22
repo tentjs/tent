@@ -5,11 +5,6 @@
 - Let the user cache elements with 'cache' in options.
   - if 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
 
-## Mounted (WIP)
-
-Is a good idea, but it doesn't really work 100%. It triggers even when data is changed, which is not ideal.
-Need a way of storing if some element have been mounted before.
-
 ## Theme (WIP)
 
 Could be cool to have a Theme object, which can be used in all components.
