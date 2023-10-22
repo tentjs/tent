@@ -21,7 +21,9 @@ const Layout = L('div', [
   L('footer', ['Footer']),
 ])
 
-const Test = L('div', ['Test'], {
+const Test = L('div', ({data}) => `Test ${data.someProp}`, {
+  props: ['someProp'],
+  data: {someProp: 'hey'},
   onmount({el}) {
     new IntersectionObserver((entries) => {
       const entry = entries?.[0]
@@ -129,7 +131,8 @@ const About = () =>
         : L('div', ['test 2'], {styles: {background: 'green'}}),
       L('button', ['Swap name'], {
         onclick() {
-          data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+          // data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+          Test.someProp = 'yoyo'
         },
       }),
       Test,
