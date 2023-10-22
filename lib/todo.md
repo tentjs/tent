@@ -2,7 +2,10 @@
 
 - Find a way to only append styles if the element is visible.
 - Let the user cache elements with 'cache' in options.
-  - if 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
+  - If 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
+- Document `onmounted` and mention that it's called when the element is mounted, but before it's rendered if the component is not a function.
+  - This is useful if you want to do something with the element before it's rendered.
+  - If the component is a function, it will be called after the element is rendered.
 
 ## Theme (WIP)
 
