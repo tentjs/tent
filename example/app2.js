@@ -37,22 +37,15 @@ const Home = () =>
       L(
         'ul',
         data.items.map((item) =>
-          L(
-            'li',
-            [
-              L('strong', [item.name]),
-              L('p', [item.description], {style: 'margin: 0'}),
-              L('p', [L('span', [item.subtitle])], {
-                style: 'margin: 0',
-              }),
-            ],
-            {
-              class: 'list-item',
-            }
-          )
+          L('li', [
+            L('strong', [item.name]),
+            L('p', [item.description], {style: 'margin: 0'}),
+            L('p', [L('span', [item.subtitle])], {
+              style: 'margin: 0',
+            }),
+          ])
         ),
         {
-          class: 'items-list',
           styles: {
             'list-style': 'none',
             margin: 0,
