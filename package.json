@@ -19,7 +19,7 @@
     "parcel": "^2.10.0"
   },
   "scripts": {
-    "watch": "parcel watch",
+    "watch": "parcel watch --no-cache",
     "build": "parcel build",
     "test": "jest"
   },
