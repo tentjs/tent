@@ -105,28 +105,29 @@ const Home = () =>
     }
   )
 
-const About = L(
-  'div',
-  ({data}) => [
-    L('h1', ['About']),
-    L('p', [`Hello ${data.name} ${data.lastname}`], {styles: {color: 'red'}}),
-    data.name === 'Seb'
-      ? L('div', ['test 1'], {styles: {background: 'red'}})
-      : L('div', ['test 2'], {styles: {background: 'green'}}),
-    L('button', ['Swap name'], {
-      onclick() {
-        data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+const About = () =>
+  L(
+    'div',
+    ({data}) => [
+      L('h1', ['About']),
+      L('p', [`Hello ${data.name} ${data.lastname}`], {styles: {color: 'red'}}),
+      data.name === 'Seb'
+        ? L('div', ['test 1'], {styles: {background: 'red'}})
+        : L('div', ['test 2'], {styles: {background: 'green'}}),
+      L('button', ['Swap name'], {
+        onclick() {
+          data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+        },
+      }),
+    ],
+    {
+      data: {
+        show: true,
+        name: 'Seb',
+        lastname: 'Toombs',
       },
-    }),
-  ],
-  {
-    data: {
-      show: true,
-      name: 'Seb',
-      lastname: 'Toombs',
-    },
-  }
-)
+    }
+  )
 
 R(
   [
