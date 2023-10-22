@@ -1,6 +1,5 @@
 # To-do
 
-- When removing styles, only do so if count is 1.
 - Find a way to only append styles if the element is visible.
 - Let the user cache elements with 'cache' in options.
   - if 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
