@@ -20,7 +20,8 @@
   },
   "scripts": {
     "watch": "parcel watch",
-    "build": "parcel build"
+    "build": "parcel build",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
