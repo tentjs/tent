@@ -23,7 +23,7 @@
     "build": "parcel build",
     "test": "jest"
   },
-  "author": "",
+  "author": "sebkolind <sks1993@gmail.com>",
   "license": "ISC",
   "jest": {
     "testEnvironment": "jsdom"
