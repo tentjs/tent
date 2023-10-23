@@ -32,6 +32,8 @@ const Test = L(
 )
 
 function List(items) {
+  items = [...items, {id: 4, name: 'Item 4', description: 'Description 4'}]
+
   return L(
     'ul',
     items.map((item) => ListItem(item)),
@@ -58,7 +60,7 @@ function ListItem(item) {
     [
       L('strong', [item.name]),
       L('p', [item.description]),
-      L('p', [L('span', [item.subtitle])]),
+      item.subtitle && L('p', [L('span', [item.subtitle])]),
     ],
     {styles: {p: {margin: 0}}}
   )
@@ -69,9 +71,8 @@ function Home() {
     'div',
     ({data}) => [
       L('h1', ['Home']),
-      L('button', [data.amount ? `Clicked ${data.amount} times` : 'Click me'], {
+      L('button', 'Click me', {
         onclick() {
-          data.amount = data.amount + 1
           const items = [...data.items]
           items.splice(0, 1)
           data.items = items
