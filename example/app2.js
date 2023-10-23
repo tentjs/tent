@@ -32,8 +32,9 @@ const Test = L(
 )
 
 function List(items) {
-  items = [...items, {id: 4, name: 'Item 4', description: 'Description 4'}]
-
+  if (!items.length) {
+    return L('p', ['Loading...'])
+  }
   return L(
     'ul',
     items.map((item) => ListItem(item)),
@@ -66,70 +67,76 @@ function ListItem(item) {
   )
 }
 
-function Home() {
-  return L(
-    'div',
-    ({data}) => [
-      L('h1', ['Home']),
-      L('button', 'Click me', {
-        onclick() {
-          const items = [...data.items]
-          items.splice(0, 1)
-          data.items = items
+const Home = L(
+  'div',
+  ({data}) => [
+    L('h1', ['Home']),
+    L('button', 'Click me', {
+      onclick() {
+        const items = [...data.items]
+        items.splice(0, 1)
+        data.items = items
+      },
+    }),
+    List(data.items),
+    L('div', [
+      L('input', [], {
+        type: 'text',
+        onblur(e) {
+          data.items = [
+            ...data.items,
+            {
+              id: 5,
+              name: e.target.value,
+              description: `${e.target.value} title`,
+              subtitle: `${e.target.value} subtitle`,
+            },
+          ]
+          e.target.value = ''
         },
       }),
-      List(data.items),
-      L('div', [
-        L('input', [], {
-          type: 'text',
-          onblur(e) {
-            data.items = [
-              ...data.items,
-              {
-                id: 4,
-                name: e.target.value,
-                description: `${e.target.value} title`,
-                subtitle: `${e.target.value} subtitle`,
-              },
-            ]
-            e.target.value = ''
-          },
-        }),
-      ]),
-    ],
-    {
-      data: {
-        amount: 0,
-        items: [
-          {
-            id: 1,
-            name: 'JS',
-            description: 'JavaScript is nice',
-            subtitle: 'JSX',
-          },
-          {
-            id: 2,
-            name: 'Svelte',
-            description: 'Svelte is cool',
-            subtitle: 'SvelteX',
-          },
-          {
-            id: 3,
-            name: 'Praxy',
-            description: 'Praxy is awesome',
-            subtitle: 'PraxyX',
-          },
-        ],
-      },
-    }
-  )
-}
+    ]),
+  ],
+  {
+    async onmount({data}) {
+      const items = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve([
+            {
+              id: 1,
+              name: 'JS',
+              description: 'JavaScript is nice',
+              subtitle: 'JSX',
+            },
+            {
+              id: 2,
+              name: 'Svelte',
+              description: 'Svelte is cool',
+              subtitle: 'SvelteX',
+            },
+            {
+              id: 3,
+              name: 'Praxy',
+              description: 'Praxy is awesome',
+              subtitle: 'PraxyX',
+            },
+          ])
+        }, 1500)
+      })
+      data.items = items
+    },
+    data: {
+      amount: 0,
+      items: [],
+    },
+  }
+)
 
 const About = L(
   'div',
   ({data}) => [
     L('h1', ['About']),
-    L('p', [`Hello ${data.name} ${data.lastname}`], {
+    L('p', [`Hello ${data.name}`], {
       styles: {
         color: 'purple',
         background: 'yellow',
@@ -152,7 +159,6 @@ const About = L(
     data: {
       show: true,
       name: 'Seb',
-      lastname: 'Toombs',
     },
   }
 )
