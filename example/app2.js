@@ -125,9 +125,16 @@ const About = () =>
     'div',
     ({data}) => [
       L('h1', ['About']),
-      L('p', [`Hello ${data.name} ${data.lastname}`], {styles: {color: 'red'}}),
+      L('p', [`Hello ${data.name} ${data.lastname}`], {
+        styles: {
+          color: 'purple',
+          background: 'yellow',
+          padding: '8px',
+          'border-radius': '4px',
+        },
+      }),
       data.name === 'Seb'
-        ? L('div', ['test 1'], {styles: {background: 'red'}})
+        ? L('div', ['test 1'], {styles: {background: 'purple'}})
         : L('div', ['test 2'], {styles: {background: 'green'}}),
       L('button', ['Swap name'], {
         onclick() {
