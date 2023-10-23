@@ -24,30 +24,48 @@ const Layout = L('div', [
 const Test = L(
   'div',
   ({data}) => [
-    L('div', data.someProp ? `Test ${data.someProp}` : 'Test'),
-    L('button', ['Click me'], {
-      onclick() {
-        data.someProp = 'clicked'
-      },
-    }),
+    L('div', data.props.someProp ? `Test ${data.props.someProp}` : 'Test'),
   ],
   {
     props: ['someProp'],
   }
 )
 
-const ListItem = (item) => {
-  return L('li', [
-    L('strong', [item.name]),
-    L('p', [item.description], {style: 'margin: 0'}),
-    L('p', [L('span', [item.subtitle])], {
-      style: 'margin: 0',
-    }),
-  ])
+function List(items) {
+  return L(
+    'ul',
+    items.map((item) => ListItem(item)),
+    {
+      styles: {
+        margin: 0,
+        padding: 0,
+        'list-style': 'none',
+        li: {
+          padding: '8px',
+          color: '#333',
+          background: '#eee',
+          margin: '0 0 4px 0',
+          'border-radius': '4px',
+        },
+      },
+    }
+  )
 }
 
-const Home = () =>
-  L(
+function ListItem(item) {
+  return L(
+    'li',
+    [
+      L('strong', [item.name]),
+      L('p', [item.description]),
+      L('p', [L('span', [item.subtitle])]),
+    ],
+    {styles: {p: {margin: 0}}}
+  )
+}
+
+function Home() {
+  return L(
     'div',
     ({data}) => [
       L('h1', ['Home']),
@@ -59,24 +77,7 @@ const Home = () =>
           data.items = items
         },
       }),
-      L(
-        'ul',
-        data.items.map((item) => ListItem(item)),
-        {
-          styles: {
-            'list-style': 'none',
-            margin: 0,
-            padding: 0,
-            li: {
-              padding: '8px',
-              color: '#333',
-              background: '#eee',
-              'border-radius': '4px',
-              margin: '0 0 4px 0',
-            },
-          },
-        }
-      ),
+      List(data.items),
       L('div', [
         L('input', [], {
           type: 'text',
@@ -121,6 +122,7 @@ const Home = () =>
       },
     }
   )
+}
 
 const About = L(
   'div',
@@ -140,7 +142,7 @@ const About = L(
     L('button', ['Swap name'], {
       onclick() {
         data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
-        Test.someProp = 'yoyo'
+        Test.props.someProp = 'yoyo'
       },
     }),
     Test,
