@@ -21,20 +21,24 @@ const Layout = L('div', [
   L('footer', ['Footer']),
 ])
 
-const Test = L('div', ({data}) => `Test ${data.someProp}`, {
-  props: ['someProp'],
-  data: {someProp: 'hey'},
-  onmount({el}) {
-    new IntersectionObserver((entries) => {
-      const entry = entries?.[0]
-      if (entry) {
-        if (entry.isIntersecting) {
-          console.log('Intersecting', entry)
-        }
-      }
-    }).observe(el)
-  },
-})
+const Test = L(
+  'div',
+  ({data}) => [
+    L('div', data.someProp ? `Test ${data.someProp}` : 'Test'),
+    L('button', ['Click me'], {
+      onclick() {
+        console.log('clicked')
+        data.someProp = 'clicked'
+      },
+    }),
+  ],
+  {
+    props: ['someProp'],
+    onmount({el}) {
+      console.log('mounted', el)
+    },
+  }
+)
 
 const Home = () =>
   L(
@@ -120,38 +124,37 @@ const Home = () =>
     }
   )
 
-const About = () =>
-  L(
-    'div',
-    ({data}) => [
-      L('h1', ['About']),
-      L('p', [`Hello ${data.name} ${data.lastname}`], {
-        styles: {
-          color: 'purple',
-          background: 'yellow',
-          padding: '8px',
-          'border-radius': '4px',
-        },
-      }),
-      data.name === 'Seb'
-        ? L('div', ['test 1'], {styles: {background: 'purple'}})
-        : L('div', ['test 2'], {styles: {background: 'green'}}),
-      L('button', ['Swap name'], {
-        onclick() {
-          // data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
-          Test.someProp = 'yoyo'
-        },
-      }),
-      Test,
-    ],
-    {
-      data: {
-        show: true,
-        name: 'Seb',
-        lastname: 'Toombs',
+const About = L(
+  'div',
+  ({data}) => [
+    L('h1', ['About']),
+    L('p', [`Hello ${data.name} ${data.lastname}`], {
+      styles: {
+        color: 'purple',
+        background: 'yellow',
+        padding: '8px',
+        'border-radius': '4px',
       },
-    }
-  )
+    }),
+    data.name === 'Seb'
+      ? L('div', ['test 1'], {styles: {background: 'purple'}})
+      : L('div', ['test 2'], {styles: {background: 'green'}}),
+    L('button', ['Swap name'], {
+      onclick() {
+        data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+        Test.someProp = 'yoyo'
+      },
+    }),
+    Test,
+  ],
+  {
+    data: {
+      show: true,
+      name: 'Seb',
+      lastname: 'Toombs',
+    },
+  }
+)
 
 R(
   [
