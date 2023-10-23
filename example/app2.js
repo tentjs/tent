@@ -27,16 +27,12 @@ const Test = L(
     L('div', data.someProp ? `Test ${data.someProp}` : 'Test'),
     L('button', ['Click me'], {
       onclick() {
-        console.log('clicked')
         data.someProp = 'clicked'
       },
     }),
   ],
   {
     props: ['someProp'],
-    onmount({el}) {
-      console.log('mounted', el)
-    },
   }
 )
 
