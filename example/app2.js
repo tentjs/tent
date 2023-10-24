@@ -1,4 +1,5 @@
 import { L, R } from '../dist/l'
+import { getItems } from './services/getItems'
 
 const Layout = L('div', [
   L('header', [
@@ -18,7 +19,7 @@ const Layout = L('div', [
     ),
   ]),
   L('main', [], { view: true }),
-  L('footer', ['Footer']),
+  L('footer', ['Footer'], { styles: { margin: '120px 0 0 0' } }),
 ])
 
 const TestProps = L(
@@ -31,31 +32,37 @@ const TestProps = L(
   }
 )
 
-function List(items, isLoading) {
-  if (isLoading) {
+function List(data) {
+  if (data.isLoading) {
     return L('p', ['Loading...'])
   }
   return L(
     'ul',
-    items.map((item) => ListItem(item)),
+    data.items.map((item) => ListItem(item, data)),
     {
       styles: {
-        margin: 0,
+        margin: '0 auto',
         padding: 0,
+        width: '350px',
         'list-style': 'none',
+        display: 'flex',
+        'flex-direction': 'column',
+        gap: '4px',
         li: {
           padding: '8px',
           color: '#333',
           background: '#eee',
-          margin: '0 0 4px 0',
           'border-radius': '4px',
+        },
+        'li.done': {
+          background: 'green',
         },
       },
     }
   )
 }
 
-function ListItem(item) {
+function ListItem(item, data) {
   return L(
     'li',
     [
@@ -63,7 +70,17 @@ function ListItem(item) {
       L('p', [item.description]),
       item.subtitle && L('p', [L('span', [item.subtitle])]),
     ],
-    { styles: { p: { margin: 0 } } }
+    {
+      onclick() {
+        item.done = !item.done
+        data.items = data.items
+      },
+      class: `${item.done ? 'done' : ''}`,
+      styles: {
+        cursor: 'pointer',
+        p: { margin: 0 },
+      },
+    }
   )
 }
 
@@ -71,36 +88,68 @@ const Home = L(
   'div',
   ({ data }) => [
     L('h1', ['Home']),
-    L('button', 'Click me', {
-      onclick() {
-        const items = [...data.items]
-        items.splice(0, 1)
-        data.items = items
-      },
-    }),
-    List(data.items, data.isLoading),
-    L('label', [
-      L('span', 'Title'),
-      L('input', [], {
-        type: 'text',
-        name: 'title',
-        placeholder: 'Insert title...',
-        disabled: data.isLoading,
-        onkeyup(event) {
-          if (event.keyCode === 13) {
-            data.items = [
-              ...data.items,
-              {
-                id: 5,
-                name: event.target.value,
-                description: `${event.target.value} title`,
-              },
-            ]
-            event.target.value = ''
-          }
+    L('div', [
+      L('button', 'Click me', {
+        onclick() {
+          const items = [...data.items]
+          items.splice(0, 1)
+          data.items = items
+        },
+        styles: {
+          background: 'bisque',
+          border: 'none',
+          'border-radius': '4px',
+          padding: '4px 8px',
+          cursor: 'pointer',
         },
       }),
     ]),
+    L(
+      'label',
+      [
+        L('input', [], {
+          type: 'text',
+          'aria-label': 'Insert title...',
+          placeholder: 'Insert title...',
+          disabled: data.isLoading,
+          onkeyup(event) {
+            if (event.keyCode === 13) {
+              data.items = [
+                ...data.items,
+                {
+                  id: 5,
+                  name: event.target.value,
+                  description: `${event.target.value} title`,
+                },
+              ]
+              event.target.value = ''
+            }
+          },
+          styles: {
+            'box-sizing': 'border-box',
+            padding: '8px',
+            width: '100%',
+            'border-radius': '4px',
+            border: 'none',
+          },
+        }),
+      ],
+      {
+        styles: {
+          padding: '8px 0',
+          margin: '0 auto',
+          display: 'block',
+          width: '350px',
+          span: {
+            display: 'block',
+            margin: '0 0 2px 0',
+            'font-size': '12px',
+            'text-transform': 'uppercase',
+          },
+        },
+      }
+    ),
+    List(data),
   ],
   {
     async onmount({ data }) {
@@ -161,30 +210,3 @@ R(
     root: document.querySelector('#app'),
   }
 )
-
-async function getItems() {
-  return await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: 1,
-          name: 'JS',
-          description: 'JavaScript is nice',
-          subtitle: 'JSX',
-        },
-        {
-          id: 2,
-          name: 'Svelte',
-          description: 'Svelte is cool',
-          subtitle: 'SvelteX',
-        },
-        {
-          id: 3,
-          name: 'Praxy',
-          description: 'Praxy is awesome',
-          subtitle: 'PraxyX',
-        },
-      ])
-    }, 1500)
-  })
-}
