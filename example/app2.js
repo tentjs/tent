@@ -80,21 +80,26 @@ const Home = L(
     }),
     List(data.items),
     L('div', [
-      L('input', [], {
-        type: 'text',
-        onblur(e) {
-          data.items = [
-            ...data.items,
-            {
-              id: 5,
-              name: e.target.value,
-              description: `${e.target.value} title`,
-              subtitle: `${e.target.value} subtitle`,
-            },
-          ]
-          e.target.value = ''
-        },
-      }),
+      L('label', [
+        L('span', 'Title'),
+        L('input', [], {
+          type: 'text',
+          name: 'title',
+          placeholder: 'Insert title...',
+          onblur(e) {
+            data.items = [
+              ...data.items,
+              {
+                id: 5,
+                name: e.target.value,
+                description: `${e.target.value} title`,
+                subtitle: `${e.target.value} subtitle`,
+              },
+            ]
+            e.target.value = ''
+          },
+        }),
+      ]),
     ]),
   ],
   {
