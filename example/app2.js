@@ -85,6 +85,7 @@ const Home = L(
         type: 'text',
         name: 'title',
         placeholder: 'Insert title...',
+        disabled: data.isLoading,
         onkeyup(event) {
           if (event.keyCode === 13) {
             data.items = [
