@@ -86,17 +86,19 @@ const Home = L(
           type: 'text',
           name: 'title',
           placeholder: 'Insert title...',
-          onblur(e) {
-            data.items = [
-              ...data.items,
-              {
-                id: 5,
-                name: e.target.value,
-                description: `${e.target.value} title`,
-                subtitle: `${e.target.value} subtitle`,
-              },
-            ]
-            e.target.value = ''
+          onkeyup(event) {
+            if (event.keyCode === 13) {
+              data.items = [
+                ...data.items,
+                {
+                  id: 5,
+                  name: event.target.value,
+                  description: `${event.target.value} title`,
+                  subtitle: `${event.target.value} subtitle`,
+                },
+              ]
+              event.target.value = ''
+            }
           },
         }),
       ]),
@@ -106,9 +108,11 @@ const Home = L(
     async onmount({data}) {
       data.items = await getItems()
     },
-    data: {
-      amount: 0,
-      items: [],
+    data() {
+      return {
+        amount: 0,
+        items: [],
+      }
     },
   }
 )
@@ -137,9 +141,11 @@ const About = L(
     TestProps,
   ],
   {
-    data: {
-      show: true,
-      name: 'Seb',
+    data() {
+      return {
+        show: true,
+        name: 'Seb',
+      }
     },
   }
 )
