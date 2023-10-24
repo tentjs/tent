@@ -21,7 +21,7 @@ const Layout = L('div', [
   L('footer', ['Footer']),
 ])
 
-const Test = L(
+const TestProps = L(
   'div',
   ({data}) => [
     L('div', data.props.someProp ? `Test ${data.props.someProp}` : 'Test'),
@@ -99,31 +99,7 @@ const Home = L(
   ],
   {
     async onmount({data}) {
-      const items = await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve([
-            {
-              id: 1,
-              name: 'JS',
-              description: 'JavaScript is nice',
-              subtitle: 'JSX',
-            },
-            {
-              id: 2,
-              name: 'Svelte',
-              description: 'Svelte is cool',
-              subtitle: 'SvelteX',
-            },
-            {
-              id: 3,
-              name: 'Praxy',
-              description: 'Praxy is awesome',
-              subtitle: 'PraxyX',
-            },
-          ])
-        }, 1500)
-      })
-      data.items = items
+      data.items = await getItems()
     },
     data: {
       amount: 0,
@@ -150,10 +126,10 @@ const About = L(
     L('button', ['Swap name'], {
       onclick() {
         data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
-        Test.props.someProp = 'yoyo'
+        TestProps.props.someProp = 'yoyo'
       },
     }),
-    Test,
+    TestProps,
   ],
   {
     data: {
@@ -174,3 +150,30 @@ R(
     root: document.querySelector('#app'),
   }
 )
+
+async function getItems() {
+  return await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        {
+          id: 1,
+          name: 'JS',
+          description: 'JavaScript is nice',
+          subtitle: 'JSX',
+        },
+        {
+          id: 2,
+          name: 'Svelte',
+          description: 'Svelte is cool',
+          subtitle: 'SvelteX',
+        },
+        {
+          id: 3,
+          name: 'Praxy',
+          description: 'Praxy is awesome',
+          subtitle: 'PraxyX',
+        },
+      ])
+    }, 1500)
+  })
+}
