@@ -18,7 +18,7 @@ L(
     }),
   ],
   {
-    data: {text: 'World!'},
+    data() { return: {text: 'World!'} },
     mount: document.querySelector('#app'),
   }
 )
