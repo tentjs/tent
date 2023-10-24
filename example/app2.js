@@ -1,12 +1,12 @@
-import {L, R} from '../dist/l'
+import { L, R } from '../dist/l'
 
 const Layout = L('div', [
   L('header', [
     L(
       'nav',
       [
-        L('a', ['Home'], {href: '#home'}),
-        L('a', ['About us'], {href: '#about-us'}),
+        L('a', ['Home'], { href: '#home' }),
+        L('a', ['About us'], { href: '#about-us' }),
       ],
       {
         styles: {
@@ -17,13 +17,13 @@ const Layout = L('div', [
       }
     ),
   ]),
-  L('main', [], {view: true}),
+  L('main', [], { view: true }),
   L('footer', ['Footer']),
 ])
 
 const TestProps = L(
   'div',
-  ({data}) => [
+  ({ data }) => [
     L('div', data.props.someProp ? `Test ${data.props.someProp}` : 'Test'),
   ],
   {
@@ -31,8 +31,8 @@ const TestProps = L(
   }
 )
 
-function List(items) {
-  if (!items.length) {
+function List(items, isLoading) {
+  if (isLoading) {
     return L('p', ['Loading...'])
   }
   return L(
@@ -63,13 +63,13 @@ function ListItem(item) {
       L('p', [item.description]),
       item.subtitle && L('p', [L('span', [item.subtitle])]),
     ],
-    {styles: {p: {margin: 0}}}
+    { styles: { p: { margin: 0 } } }
   )
 }
 
 const Home = L(
   'div',
-  ({data}) => [
+  ({ data }) => [
     L('h1', ['Home']),
     L('button', 'Click me', {
       onclick() {
@@ -78,40 +78,39 @@ const Home = L(
         data.items = items
       },
     }),
-    List(data.items),
-    L('div', [
-      L('label', [
-        L('span', 'Title'),
-        L('input', [], {
-          type: 'text',
-          name: 'title',
-          placeholder: 'Insert title...',
-          onkeyup(event) {
-            if (event.keyCode === 13) {
-              data.items = [
-                ...data.items,
-                {
-                  id: 5,
-                  name: event.target.value,
-                  description: `${event.target.value} title`,
-                  subtitle: `${event.target.value} subtitle`,
-                },
-              ]
-              event.target.value = ''
-            }
-          },
-        }),
-      ]),
+    List(data.items, data.isLoading),
+    L('label', [
+      L('span', 'Title'),
+      L('input', [], {
+        type: 'text',
+        name: 'title',
+        placeholder: 'Insert title...',
+        onkeyup(event) {
+          if (event.keyCode === 13) {
+            data.items = [
+              ...data.items,
+              {
+                id: 5,
+                name: event.target.value,
+                description: `${event.target.value} title`,
+              },
+            ]
+            event.target.value = ''
+          }
+        },
+      }),
     ]),
   ],
   {
-    async onmount({data}) {
+    async onmount({ data }) {
       data.items = await getItems()
+      data.isLoading = false
     },
     data() {
       return {
         amount: 0,
         items: [],
+        isLoading: true,
       }
     },
   }
@@ -119,7 +118,7 @@ const Home = L(
 
 const About = L(
   'div',
-  ({data}) => [
+  ({ data }) => [
     L('h1', ['About']),
     L('p', [`Hello ${data.name}`], {
       styles: {
@@ -130,8 +129,8 @@ const About = L(
       },
     }),
     data.name === 'Seb'
-      ? L('div', ['test 1'], {styles: {background: 'purple'}})
-      : L('div', ['test 2'], {styles: {background: 'green'}}),
+      ? L('div', ['test 1'], { styles: { background: 'purple' } })
+      : L('div', ['test 2'], { styles: { background: 'green' } }),
     L('button', ['Swap name'], {
       onclick() {
         data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
@@ -152,8 +151,8 @@ const About = L(
 
 R(
   [
-    {path: '#home', component: Home},
-    {path: '#about-us', component: About},
+    { path: '#home', component: Home },
+    { path: '#about-us', component: About },
   ],
   {
     fallback: '#home',
