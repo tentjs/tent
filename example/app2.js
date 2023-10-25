@@ -126,7 +126,7 @@ function ListItem(item, data) {
       class: `${item.done ? 'done' : ''}`,
       styles: {
         p: { margin: 0 },
-      },
+      }
     }
   )
 }
