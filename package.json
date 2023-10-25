@@ -2,7 +2,7 @@
   "name": "else.js",
   "version": "0.0.1-alpha",
   "description": "Build web apps with atomic components.",
-  "source": "lib/else.js",
+  "source": "lib/index.js",
   "main": "dist/else.cjs",
   "module": "dist/else.mjs",
   "directories": {
