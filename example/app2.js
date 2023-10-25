@@ -1,4 +1,4 @@
-import { L, R } from '../dist/l'
+import { L, R, Link } from '../dist/l'
 import { getItems } from './services/getItems'
 
 const Layout = L('div', [
@@ -69,15 +69,34 @@ function ListItem(item, data) {
       L('strong', [item.name]),
       L('p', [item.description]),
       item.subtitle && L('p', [L('span', [item.subtitle])]),
+      L('div', [
+        L('button', 'Done', {
+          onclick() {
+            item.done = !item.done
+            data.items = data.items
+          },
+        }),
+        L('button', 'Delete', {
+          onclick() {
+            data.items = data.items.filter(item => item.id !== item.id)
+          }
+        })
+      ], 
+        {
+          styles: {
+            display: 'flex',
+            gap: '4px',
+            margin: '6px 0 0 0',
+            button: {
+              cursor: 'pointer'
+            }
+          }
+        }
+      ),
     ],
     {
-      onclick() {
-        item.done = !item.done
-        data.items = data.items
-      },
       class: `${item.done ? 'done' : ''}`,
       styles: {
-        cursor: 'pointer',
         p: { margin: 0 },
       },
     }
@@ -88,6 +107,10 @@ const Home = L(
   'div',
   ({ data }) => [
     L('h1', ['Home']),
+    Link({
+      href: '/some-path',
+      text: 'Some path link',
+    }),
     L('div', [
       L('button', 'Click me', {
         onclick() {
@@ -117,7 +140,7 @@ const Home = L(
               data.items = [
                 ...data.items,
                 {
-                  id: 5,
+                  id: data.items[data.items.length - 1].id + 1,
                   name: event.target.value,
                   description: `${event.target.value} title`,
                 },
