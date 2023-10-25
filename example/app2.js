@@ -6,8 +6,8 @@ const Layout = L('div', [
     L(
       'nav',
       [
-        L('a', ['Home'], { href: '#home' }),
-        L('a', ['About us'], { href: '#about-us' }),
+        Link({ href: '/', text: 'Home' }),
+        Link({ href: '/about-us', text: 'About us' }),
       ],
       {
         styles: {
@@ -66,6 +66,7 @@ function ListItem(item, data) {
   return L(
     'li',
     [
+      L('div', `Id: ${item.id}`),
       L('strong', [item.name]),
       L('p', [item.description]),
       item.subtitle && L('p', [L('span', [item.subtitle])]),
@@ -78,7 +79,8 @@ function ListItem(item, data) {
         }),
         L('button', 'Delete', {
           onclick() {
-            data.items = data.items.filter(item => item.id !== item.id)
+            console.log('delete', data.items, item)
+            data.items = data.items.filter(x => x.id !== item.id)
           }
         })
       ], 
@@ -106,11 +108,7 @@ function ListItem(item, data) {
 const Home = L(
   'div',
   ({ data }) => [
-    L('h1', ['Home']),
-    Link({
-      href: '/some-path',
-      text: 'Some path link',
-    }),
+    L('h1', 'Home'),
     L('div', [
       L('button', 'Click me', {
         onclick() {
@@ -172,7 +170,7 @@ const Home = L(
         },
       }
     ),
-    List(data),
+    ({ data }) => List(data),
   ],
   {
     async onmount({ data }) {
@@ -192,7 +190,7 @@ const Home = L(
 const About = L(
   'div',
   ({ data }) => [
-    L('h1', ['About']),
+    L('h1', 'About'),
     L('p', [`Hello ${data.name}`], {
       styles: {
         color: 'purple',
@@ -224,11 +222,11 @@ const About = L(
 
 R(
   [
-    { path: '#home', component: Home },
-    { path: '#about-us', component: About },
+    { path: '/', component: Home },
+    { path: '/about-us', component: About },
   ],
   {
-    fallback: '#home',
+    fallback: '/',
     layout: Layout,
     root: document.querySelector('#app'),
   }
