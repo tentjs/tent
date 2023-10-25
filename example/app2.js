@@ -102,7 +102,6 @@ function ListItem(item, data) {
         }),
         L('button', 'Delete', {
           onclick() {
-            console.log('delete', data.items, item)
             data.items = data.items.filter(x => x.id !== item.id)
           }
         })
