@@ -1,10 +1,10 @@
 {
-  "name": "praxy",
+  "name": "else.js",
   "version": "0.0.1-alpha",
   "description": "Build web apps with atomic components.",
-  "source": "lib/l.js",
-  "main": "dist/l.cjs",
-  "module": "dist/l.mjs",
+  "source": "lib/else.js",
+  "main": "dist/else.cjs",
+  "module": "dist/else.mjs",
   "directories": {
     "example": "example",
     "lib": "lib",

@@ -1,11 +1,11 @@
-# Praxy
+# else.js
 
 Build web apps with atomic components.
 
 ## Usage
 
 ```js
-import {L} from 'praxy'
+import {L} from 'else'
 
 L(
   'div',

@@ -17,9 +17,9 @@ export async function getItems() {
       },
       {
         id: 3,
-        name: 'Praxy',
-        description: 'Praxy is awesome',
-        subtitle: 'PraxyX',
+        name: 'else.js',
+        description: 'else.js is awesome',
+        subtitle: 'else.jsX',
         done: false,
       },
     ])
