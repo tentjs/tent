@@ -44,7 +44,8 @@ const Layout = L('div', [
       'margin-top': 0
     }
   }
-})
+}
+)
 
 const TestProps = L(
   'div',
@@ -91,37 +92,42 @@ function List(data) {
 }
 
 function ListItem(item, data) {
+  const Buttons = L('div', [
+    L('button', 'Done', {
+      onclick() {
+        item.done = !item.done
+        data.items = data.items
+      },
+    }),
+    L('button', 'Delete', {
+      onclick() {
+        data.items = data.items.filter(x => x.id !== item.id)
+      }
+    })
+  ], 
+    {
+      styles: {
+        display: 'flex',
+        gap: '4px',
+        margin: '6px 0 0 0',
+        button: {
+          cursor: 'pointer'
+        }
+      }
+    }
+  )
+
   return L(
     'li',
     [
       L('div', `#${item.id}`, { styles: { 'font-size': '0.8em', margin: '0 0 4px 0' } }),
       L('strong', [item.name]),
-      L('p', [item.description]),
-      item.subtitle && L('p', [L('span', [item.subtitle])]),
-      L('div', [
-        L('button', 'Done', {
-          onclick() {
-            item.done = !item.done
-            data.items = data.items
-          },
-        }),
-        L('button', 'Delete', {
-          onclick() {
-            data.items = data.items.filter(x => x.id !== item.id)
-          }
-        })
-      ], 
-        {
-          styles: {
-            display: 'flex',
-            gap: '4px',
-            margin: '6px 0 0 0',
-            button: {
-              cursor: 'pointer'
-            }
-          }
-        }
-      ),
+      !item.done ? 
+        L('div', [
+          L('p', [item.description]),
+          item.subtitle && L('p', [L('span', [item.subtitle])]),
+          Buttons,
+        ]) : Buttons,
     ],
     {
       class: `${item.done ? 'done' : ''}`,
