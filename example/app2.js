@@ -79,10 +79,11 @@ function List(data) {
           color: '#eee',
           background: '#444',
           'border-radius': '4px',
-          'border': '2px solid #444'
+          opacity: 1,
         },
         'li.done': {
-          'border': '2px solid green',
+          opacity: 0.5,
+          background: 'seagreen',
         },
       },
     }
