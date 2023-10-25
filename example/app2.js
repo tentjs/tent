@@ -1,4 +1,4 @@
-import { L, R, Link } from '../dist/l'
+import { L, Link, createRouter } from '../dist/else'
 import { getItems } from './services/getItems'
 
 const Layout = L('div', [
@@ -58,7 +58,10 @@ const TestProps = L(
 
 function List(data) {
   if (data.isLoading) {
-    return L('p', ['Loading...'])
+    return L('p', 'Loading...')
+  }
+  if (!data.items.length && !data.isLoading) {
+    return L('p', 'Yay! You rock 🎉')
   }
   return L(
     'ul',
@@ -70,15 +73,16 @@ function List(data) {
         'list-style': 'none',
         display: 'flex',
         'flex-direction': 'column',
-        gap: '4px',
+        gap: '6px',
         li: {
           padding: '8px',
-          color: '#333',
-          background: '#eee',
+          color: '#eee',
+          background: '#444',
           'border-radius': '4px',
+          'border': '2px solid #444'
         },
         'li.done': {
-          background: 'green',
+          'border': '2px solid green',
         },
       },
     }
@@ -89,7 +93,7 @@ function ListItem(item, data) {
   return L(
     'li',
     [
-      L('div', `Id: ${item.id}`),
+      L('div', `#${item.id}`, { styles: { 'font-size': '0.8em', margin: '0 0 4px 0' } }),
       L('strong', [item.name]),
       L('p', [item.description]),
       item.subtitle && L('p', [L('span', [item.subtitle])]),
@@ -135,8 +139,8 @@ const Home = L(
       [
         L('input', [], {
           type: 'text',
-          'aria-label': 'Insert title...',
-          placeholder: 'Insert title...',
+          'aria-label': 'What is up next?',
+          placeholder: 'What is up next?',
           disabled: data.isLoading,
           onkeyup(event) {
             if (event.keyCode === 13) {
@@ -154,9 +158,10 @@ const Home = L(
           },
           styles: {
             'box-sizing': 'border-box',
-            padding: '8px',
+            padding: '16px',
             width: '100%',
             'border-radius': '4px',
+            'font-size': '1em',
             border: 'none',
           },
         }),
@@ -164,8 +169,8 @@ const Home = L(
       {
         styles: {
           padding: '8px 0',
-          margin: '0 auto',
           display: 'block',
+          'margin-bottom': '1em',
           width: '350px',
           span: {
             display: 'block',
@@ -226,7 +231,7 @@ const About = L(
   }
 )
 
-R(
+createRouter(
   [
     { path: '/', component: Home },
     { path: '/about-us', component: About },
