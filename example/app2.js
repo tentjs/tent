@@ -135,10 +135,11 @@ const Home = L(
           disabled: data.isLoading,
           onkeyup(event) {
             if (event.keyCode === 13) {
+              const id = data.items.length ? data.items[data.items.length - 1].id + 1 : 1
               data.items = [
                 ...data.items,
                 {
-                  id: data.items[data.items.length - 1].id + 1,
+                  id,
                   name: event.target.value,
                   description: `${event.target.value} title`,
                 },
@@ -170,7 +171,7 @@ const Home = L(
         },
       }
     ),
-    ({ data }) => List(data),
+    () => List(data),
   ],
   {
     async onmount({ data }) {
