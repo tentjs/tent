@@ -1,50 +1,57 @@
 import { L, Link, createRouter } from '../dist/else'
 import { getItems } from './services/getItems'
 
-const Layout = L('div', [
-  L('header', [
+const Layout = L(
+  'div',
+  [
     L(
-      'nav',
+      'header',
       [
-        Link({ href: '/', text: 'home' }),
-        Link({ href: '/about-us', text: 'about us' }),
+        L(
+          'nav',
+          [
+            Link({ href: '/', text: 'home' }),
+            Link({ href: '/about-us', text: 'about us' }),
+          ],
+          {
+            styles: {
+              a: {
+                margin: '0 10px 0 0',
+                'text-decoration': 'none',
+              },
+              'a:hover': {
+                'text-decoration': 'underline',
+              },
+            },
+          }
+        ),
       ],
       {
         styles: {
-          a: {
-            margin: '0 10px 0 0',
-            'text-decoration': 'none',
-          },
-          'a:hover': {
-            'text-decoration': 'underline',
-          }
+          padding: '60px 0',
         },
-      },
+      }
     ),
-  ], { 
-    styles: { 
-      padding: '60px 0', 
-    } 
-  }),
-  L('main', [], { view: true, styles: { width: '350px' } }),
-  L('footer', '💛 else.js', { 
-    styles: { 
-      position: 'fixed', 
-      bottom: 0, 
-      padding: '24px 0', 
-      'font-size': '0.9em' 
-    } 
-  }),
-], {
-  styles: {
-    display: 'flex',
-    'flex-direction': 'column',
-    'align-items': 'center',
-    h1: {
-      'margin-top': 0
-    }
+    L('main', [], { view: true, styles: { width: '350px' } }),
+    L('footer', '💛 else.js', {
+      styles: {
+        position: 'fixed',
+        bottom: 0,
+        padding: '24px 0',
+        'font-size': '0.9em',
+      },
+    }),
+  ],
+  {
+    styles: {
+      display: 'flex',
+      'flex-direction': 'column',
+      'align-items': 'center',
+      h1: {
+        'margin-top': 0,
+      },
+    },
   }
-}
 )
 
 const TestProps = L(
@@ -92,48 +99,53 @@ function List(data) {
 }
 
 function ListItem(item, data) {
-  const Buttons = L('div', [
-    L('button', 'Done', {
-      onclick() {
-        item.done = !item.done
-        data.items = data.items
-      },
-    }),
-    L('button', 'Delete', {
-      onclick() {
-        data.items = data.items.filter(x => x.id !== item.id)
-      }
-    })
-  ], 
+  const Buttons = L(
+    'div',
+    [
+      L('button', 'Done', {
+        onclick() {
+          item.done = !item.done
+          data.items = data.items
+        },
+      }),
+      L('button', 'Delete', {
+        onclick() {
+          data.items = data.items.filter((x) => x.id !== item.id)
+        },
+      }),
+    ],
     {
       styles: {
         display: 'flex',
         gap: '4px',
         margin: '6px 0 0 0',
         button: {
-          cursor: 'pointer'
-        }
-      }
+          cursor: 'pointer',
+        },
+      },
     }
   )
 
   return L(
     'li',
     [
-      L('div', `#${item.id}`, { styles: { 'font-size': '0.8em', margin: '0 0 4px 0' } }),
+      L('div', `#${item.id}`, {
+        styles: { 'font-size': '0.8em', margin: '0 0 4px 0' },
+      }),
       L('strong', [item.name]),
-      !item.done ? 
-        L('div', [
-          L('p', [item.description]),
-          item.subtitle && L('p', [L('span', [item.subtitle])]),
-          Buttons,
-        ]) : Buttons,
+      !item.done
+        ? L('div', [
+            L('p', [item.description]),
+            item.subtitle && L('p', [L('span', [item.subtitle])]),
+            Buttons,
+          ])
+        : Buttons,
     ],
     {
       class: `${item.done ? 'done' : ''}`,
       styles: {
         p: { margin: 0 },
-      }
+      },
     }
   )
 }
@@ -151,7 +163,9 @@ const Home = L(
           disabled: data.isLoading,
           onkeyup(event) {
             if (event.keyCode === 13) {
-              const id = data.items.length ? data.items[data.items.length - 1].id + 1 : 1
+              const id = data.items.length
+                ? data.items[data.items.length - 1].id + 1
+                : 1
               data.items = [
                 ...data.items,
                 {
@@ -209,7 +223,7 @@ const About = L(
   'div',
   ({ data }) => [
     L('h1', 'About'),
-    L('p', [`Hello ${data.name}`], {
+    L('p', `Hello ${data.name}`, {
       styles: {
         color: 'purple',
         background: 'yellow',
@@ -218,9 +232,9 @@ const About = L(
       },
     }),
     data.name === 'Seb'
-      ? L('div', ['test 1'], { styles: { background: 'purple' } })
-      : L('div', ['test 2'], { styles: { background: 'green' } }),
-    L('button', ['Swap name'], {
+      ? L('div', 'test 1', { styles: { background: 'purple' } })
+      : L('div', 'test 2', { styles: { background: 'green' } }),
+    L('button', 'Swap name', {
       onclick() {
         data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
         TestProps.props.someProp = 'yoyo'
