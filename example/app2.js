@@ -6,21 +6,42 @@ const Layout = L('div', [
     L(
       'nav',
       [
-        Link({ href: '/', text: 'Home' }),
-        Link({ href: '/about-us', text: 'About us' }),
+        Link({ href: '/', text: 'home' }),
+        Link({ href: '/about-us', text: 'about us' }),
       ],
       {
         styles: {
           a: {
             margin: '0 10px 0 0',
+            'text-decoration': 'none',
           },
+          'a:hover': {
+            'text-decoration': 'underline',
+          }
         },
-      }
+      },
     ),
-  ]),
-  L('main', [], { view: true }),
-  L('footer', ['Footer'], { styles: { margin: '120px 0 0 0' } }),
-])
+  ], { 
+    styles: { 
+      padding: '60px 0', 
+    } 
+  }),
+  L('main', [], { view: true, styles: { width: '350px' } }),
+  L('footer', '💛 else.js', { 
+    styles: { 
+      position: 'fixed', 
+      bottom: 0, 
+      padding: '24px 0', 
+      'font-size': '0.9em' 
+    } 
+  }),
+], {
+  styles: {
+    display: 'flex',
+    'flex-direction': 'column',
+    'align-items': 'center',
+  }
+})
 
 const TestProps = L(
   'div',
@@ -43,7 +64,6 @@ function List(data) {
       styles: {
         margin: '0 auto',
         padding: 0,
-        width: '350px',
         'list-style': 'none',
         display: 'flex',
         'flex-direction': 'column',
@@ -108,23 +128,6 @@ function ListItem(item, data) {
 const Home = L(
   'div',
   ({ data }) => [
-    L('h1', 'Home'),
-    L('div', [
-      L('button', 'Click me', {
-        onclick() {
-          const items = [...data.items]
-          items.splice(0, 1)
-          data.items = items
-        },
-        styles: {
-          background: 'bisque',
-          border: 'none',
-          'border-radius': '4px',
-          padding: '4px 8px',
-          cursor: 'pointer',
-        },
-      }),
-    ]),
     L(
       'label',
       [
