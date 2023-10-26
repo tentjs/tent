@@ -102,13 +102,13 @@ function ListItem(item, data) {
   const Buttons = L(
     'div',
     [
-      L('button', 'Done', {
+      L('button', '✅', {
         onclick() {
           item.done = !item.done
           data.items = data.items
         },
       }),
-      L('button', 'Delete', {
+      L('button', '🗑️', {
         onclick() {
           data.items = data.items.filter((x) => x.id !== item.id)
         },
@@ -117,10 +117,13 @@ function ListItem(item, data) {
     {
       styles: {
         display: 'flex',
-        gap: '4px',
-        margin: '6px 0 0 0',
+        gap: '6px',
+        margin: '12px 0 0 0',
         button: {
           cursor: 'pointer',
+          background: 'none',
+          border: 'none',
+          padding: 0,
         },
       },
     }
@@ -132,13 +135,19 @@ function ListItem(item, data) {
       L('div', `#${item.id}`, {
         styles: { 'font-size': '0.8em', margin: '0 0 4px 0' },
       }),
-      L('strong', [item.name]),
+      L('strong', item.name, {
+        styles: { 'font-size': '1.2em', margin: '0 0 4px 0', display: 'block' },
+      }),
       !item.done
-        ? L('div', [
-            L('p', [item.description]),
-            item.subtitle && L('p', [L('span', [item.subtitle])]),
-            Buttons,
-          ])
+        ? L(
+            'div',
+            [
+              item.subtitle && L('p', item.subtitle),
+              L('p', item.description),
+              Buttons,
+            ],
+            { styles: { p: { 'font-size': '0.85em' } } }
+          )
         : Buttons,
     ],
     {
@@ -171,7 +180,7 @@ const Home = L(
                 {
                   id,
                   name: event.target.value,
-                  description: `${event.target.value} title`,
+                  description: `${event.target.value} description`,
                 },
               ]
               event.target.value = ''

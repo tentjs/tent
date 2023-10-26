@@ -4,22 +4,19 @@ export async function getItems() {
       {
         id: 1,
         name: 'JS',
-        description: 'JavaScript is nice',
-        subtitle: 'JSX',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         done: false,
       },
       {
         id: 2,
         name: 'Svelte',
-        description: 'Svelte is cool',
-        subtitle: 'SvelteX',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         done: false,
       },
       {
         id: 3,
         name: 'else.js',
-        description: 'else.js is awesome',
-        subtitle: 'else.jsX',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         done: false,
       },
     ])
