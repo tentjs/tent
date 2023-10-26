@@ -1,14 +1,18 @@
 # To-do
 
-- Check if adding a uuid to each component el (el.$$uuid) and saving in a Map<uuid, el> would give the opportunity to compare fn components instead of replacing the entire element.
-- Find a way to only append styles if the element is visible.
+- [x] Rename `data` to `context` since it also holds `props` and `route`, and not just data. Data will be on the root of the object, to make it easy to use `context.X`, and `context.route.X` and `context.props.X`.
+- [ ] Create a `$$else` property on the element where the route and props are stored.
+  - This is to avoid any clashes with any other properties.
+  - And it's easy to do `Object.defineProperty(el, '$$else' { ... })` and then handle both route, props and future features in the same go.
+- [ ] Check if adding a uuid to each component el (el.$$uuid) and saving in a Map<uuid, el> would give the opportunity to compare fn components instead of replacing the entire element.
+- [ ] Find a way to only append styles if the element is visible.
   - If component is a function it will append styles when it's called, but if it's not a function it will append styles when component is created.
     - This means it'll append styles even if the element is not visible. But, that means it'll be ready when the element is put into the DOM, i.e. no flickering.
     - On the other hand the styles will be added immediately even if the element is never put into the DOM.
-- Let the user cache elements with 'cache' in options.
+- [ ] Let the user cache elements with 'cache' in options.
   - If 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data changes.
-- Document differences between `[() => L( ... )]` vs. `[L( ... )]`, and when to use a function returning elements. I.e. it'll re-render everytime.
-- Document `onmount` and mention that it's called when the element is mounted, but before it's rendered if the component is not a function.
+- [ ] Document differences between `[() => L( ... )]` vs. `[L( ... )]`, and when to use a function returning elements. I.e. it'll re-render everytime.
+- [ ] Document `onmount` and mention that it's called when the element is mounted, but before it's rendered if the component is not a function.
   - This is useful if you want to do something with the element before it's rendered.
   - If the component is a function, it will be called after the element is rendered.
 
@@ -33,7 +37,7 @@ L(
   'div',
   [
     L('p', ['Styled paragraph'], {
-      styles({theme}) {
+      styles({ theme }) {
         return {
           // And then access values as you would a normal object
           color: theme.text.color,
@@ -41,6 +45,6 @@ L(
       },
     }),
   ],
-  {theme}
+  { theme }
 )
 ```

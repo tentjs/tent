@@ -56,24 +56,27 @@ const Layout = L(
 
 const TestProps = L(
   'div',
-  ({ data }) => [
-    L('div', data.props.someProp ? `Test ${data.props.someProp}` : 'Test'),
+  ({ context }) => [
+    L(
+      'div',
+      context.props.someProp ? `Test ${context.props.someProp}` : 'Test'
+    ),
   ],
   {
     props: ['someProp'],
   }
 )
 
-function List(data) {
-  if (data.isLoading) {
+function List(context) {
+  if (context.isLoading) {
     return L('p', 'Loading...')
   }
-  if (!data.items.length && !data.isLoading) {
+  if (!context.items.length && !context.isLoading) {
     return L('p', 'Yay! You rock 🎉')
   }
   return L(
     'ul',
-    data.items.map((item) => ListItem(item, data)),
+    context.items.map((item) => ListItem(item, context)),
     {
       styles: {
         margin: '0 auto',
@@ -98,19 +101,19 @@ function List(data) {
   )
 }
 
-function ListItem(item, data) {
+function ListItem(item, context) {
   const Buttons = L(
     'div',
     [
       L('button', '✅', {
         onclick() {
           item.done = !item.done
-          data.items = data.items
+          context.items = context.items
         },
       }),
       L('button', '🗑️', {
         onclick() {
-          data.items = data.items.filter((x) => x.id !== item.id)
+          context.items = context.items.filter((x) => x.id !== item.id)
         },
       }),
     ],
@@ -162,7 +165,7 @@ function ListItem(item, data) {
 
 const Home = L(
   'div',
-  ({ data }) => [
+  ({ context }) => [
     L(
       'label',
       [
@@ -170,14 +173,14 @@ const Home = L(
           type: 'text',
           'aria-label': 'What is up next?',
           placeholder: 'What is up next?',
-          disabled: data.isLoading,
+          disabled: context.isLoading,
           onkeyup(event) {
             if (event.keyCode === 13) {
-              const id = data.items.length
-                ? data.items[data.items.length - 1].id + 1
+              const id = context.items.length
+                ? context.items[context.items.length - 1].id + 1
                 : 1
-              data.items = [
-                ...data.items,
+              context.items = [
+                ...context.items,
                 {
                   id,
                   name: event.target.value,
@@ -212,12 +215,12 @@ const Home = L(
         },
       }
     ),
-    List(data),
+    List(context),
   ],
   {
-    async onmount({ data }) {
-      data.items = await getItems()
-      data.isLoading = false
+    async onmount({ context }) {
+      context.items = await getItems()
+      context.isLoading = false
     },
     data() {
       return {
@@ -231,9 +234,9 @@ const Home = L(
 
 const About = L(
   'div',
-  ({ data }) => [
+  ({ context }) => [
     L('h1', 'About'),
-    L('p', `Hello ${data.name}`, {
+    L('p', `Hello ${context.name} ${context.route.params?.id}`, {
       styles: {
         color: 'purple',
         background: 'yellow',
@@ -241,12 +244,12 @@ const About = L(
         'border-radius': '4px',
       },
     }),
-    data.name === 'Seb'
+    context.name === 'Seb'
       ? L('div', 'test 1', { styles: { background: 'purple' } })
       : L('div', 'test 2', { styles: { background: 'green' } }),
     L('button', 'Swap name', {
       onclick() {
-        data.name = data.name === 'Seb' ? 'Sebastian' : 'Seb'
+        context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
         TestProps.props.someProp = 'yoyo'
       },
     }),
@@ -266,6 +269,10 @@ createRouter(
   [
     { path: '/', component: Home },
     { path: '/about-us', component: About },
+    { path: '/about-us/:id', component: About },
+    { path: '/some/:id', component: About },
+    { path: '/test/:id', component: About },
+    { path: '/some/:param/:id', component: About },
   ],
   {
     fallback: '/',
