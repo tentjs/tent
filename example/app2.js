@@ -151,6 +151,7 @@ function ListItem(item, data) {
         : Buttons,
     ],
     {
+      key: item.id,
       class: `${item.done ? 'done' : ''}`,
       styles: {
         p: { margin: 0 },
@@ -211,7 +212,7 @@ const Home = L(
         },
       }
     ),
-    () => List(data),
+    List(data),
   ],
   {
     async onmount({ data }) {
