@@ -1,4 +1,4 @@
-import {App} from './app';
+import { App } from './app'
 
 App.component(
   'my-form',
@@ -12,41 +12,41 @@ App.component(
       errors: [],
     },
   },
-  ({on, data}) => {
-    const ul = document.createElement('ul');
-    const errorsMap = new Map();
+  ({ on, data }) => {
+    const ul = document.createElement('ul')
+    const errorsMap = new Map()
 
-    on('input', '#my-form input', ({target}) => {
+    on('input', '#my-form input', ({ target }) => {
       if (data.form[target.name] != null) {
-        data.form[target.name] = target.value;
+        data.form[target.name] = target.value
       }
-    });
-    on('submit', '#my-form', ({target}) => {
-      data.errors = [];
+    })
+    on('submit', '#my-form', ({ target }) => {
+      data.errors = []
       for (const key in data.form) {
         if (data.form[key] === '') {
-          const li = document.createElement('li');
-          data.errors = [...data.errors, `${key} is required`];
-          li.setAttribute('key', key);
-          li.textContent = `${key} is required`;
+          const li = document.createElement('li')
+          data.errors = [...data.errors, `${key} is required`]
+          li.setAttribute('key', key)
+          li.textContent = `${key} is required`
           if (!errorsMap.has(key)) {
-            errorsMap.set(key, li);
-            ul.appendChild(li);
+            errorsMap.set(key, li)
+            ul.appendChild(li)
           }
         } else {
-          errorsMap.delete(key);
-          ul.querySelector(`li[key="${key}"]`)?.remove();
+          errorsMap.delete(key)
+          ul.querySelector(`li[key="${key}"]`)?.remove()
         }
       }
       if (errorsMap.size > 0) {
         if (!target.contains(ul)) {
-          target.appendChild(ul);
+          target.appendChild(ul)
         }
       } else {
-        ul.remove();
+        ul.remove()
       }
-      console.log(JSON.stringify(data));
-      console.log(errorsMap);
-    });
+      console.log(JSON.stringify(data))
+      console.log(errorsMap)
+    })
   }
-);
+)
