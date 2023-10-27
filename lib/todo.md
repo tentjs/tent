@@ -14,6 +14,7 @@
 - [ ] Document `onmount` and mention that it's called when the element is mounted, but before it's rendered if the component is not a function.
   - This is useful if you want to do something with the element before it's rendered.
   - If the component is a function, it will be called after the element is rendered.
+- [ ] Write tests for ./router
 
 ## Theme (WIP)
 
@@ -36,7 +37,7 @@ L(
   'div',
   [
     L('p', ['Styled paragraph'], {
-      styles({ theme }) {
+      styles({theme}) {
         return {
           // And then access values as you would a normal object
           color: theme.text.color,
@@ -44,6 +45,6 @@ L(
       },
     }),
   ],
-  { theme }
+  {theme}
 )
 ```
