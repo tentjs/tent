@@ -1,5 +1,5 @@
-import { L, Link, createRouter } from '../dist/else'
-import { getItems } from './services/getItems'
+import {L, Link, createRouter} from '../dist/else'
+import {getItems} from './services/getItems'
 
 const Layout = L(
   'div',
@@ -10,8 +10,8 @@ const Layout = L(
         L(
           'nav',
           [
-            Link({ href: '/', text: 'home' }),
-            Link({ href: '/about-us', text: 'about us' }),
+            Link({href: '/', text: 'home'}),
+            Link({href: '/about-us', text: 'about us'}),
           ],
           {
             styles: {
@@ -32,7 +32,7 @@ const Layout = L(
         },
       }
     ),
-    L('main', [], { view: true, styles: { width: '350px' } }),
+    L('main', [], {view: true, styles: {width: '350px'}}),
     L('footer', '💛 else.js', {
       styles: {
         position: 'fixed',
@@ -56,7 +56,7 @@ const Layout = L(
 
 const TestProps = L(
   'div',
-  ({ context }) => [
+  ({context}) => [
     L(
       'div',
       context.props.someProp ? `Test ${context.props.someProp}` : 'Test'
@@ -136,10 +136,10 @@ function ListItem(item, context) {
     'li',
     [
       L('div', `#${item.id}`, {
-        styles: { 'font-size': '0.8em', margin: '0 0 4px 0' },
+        styles: {'font-size': '0.8em', margin: '0 0 4px 0'},
       }),
       L('strong', item.name, {
-        styles: { 'font-size': '1.2em', margin: '0 0 4px 0', display: 'block' },
+        styles: {'font-size': '1.2em', margin: '0 0 4px 0', display: 'block'},
       }),
       !item.done
         ? L(
@@ -149,7 +149,7 @@ function ListItem(item, context) {
               L('p', item.description),
               Buttons,
             ],
-            { styles: { p: { 'font-size': '0.85em' } } }
+            {styles: {p: {'font-size': '0.85em'}}}
           )
         : Buttons,
     ],
@@ -157,7 +157,7 @@ function ListItem(item, context) {
       key: item.id,
       class: `${item.done ? 'done' : ''}`,
       styles: {
-        p: { margin: 0 },
+        p: {margin: 0},
       },
     }
   )
@@ -165,7 +165,7 @@ function ListItem(item, context) {
 
 const Home = L(
   'div',
-  ({ context }) => [
+  ({context}) => [
     L(
       'label',
       [
@@ -218,7 +218,7 @@ const Home = L(
     List(context),
   ],
   {
-    async onmount({ context }) {
+    async onmount({context}) {
       context.items = await getItems()
       context.isLoading = false
     },
@@ -234,7 +234,7 @@ const Home = L(
 
 const About = L(
   'div',
-  ({ context }) => [
+  ({context}) => [
     L('h1', 'About'),
     L('p', `Hello ${context.name} ${context.route.params?.id}`, {
       styles: {
@@ -245,8 +245,8 @@ const About = L(
       },
     }),
     context.name === 'Seb'
-      ? L('div', 'test 1', { styles: { background: 'purple' } })
-      : L('div', 'test 2', { styles: { background: 'green' } }),
+      ? L('div', 'test 1', {styles: {background: 'purple'}})
+      : L('div', 'test 2', {styles: {background: 'green'}}),
     L('button', 'Swap name', {
       onclick() {
         context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
@@ -267,12 +267,12 @@ const About = L(
 
 createRouter(
   [
-    { path: '/', component: Home },
-    { path: '/about-us', component: About },
-    { path: '/about-us/:id', component: About },
-    { path: '/some/:id', component: About },
-    { path: '/test/:id', component: About },
-    { path: '/some/:param/:id', component: About },
+    {path: '/', component: Home},
+    {path: '/about-us', component: About},
+    {path: '/about-us/:id', component: About},
+    {path: '/some/:id', component: About},
+    {path: '/test/:id', component: About},
+    {path: '/some/:param/:id', component: About},
   ],
   {
     fallback: '/',
