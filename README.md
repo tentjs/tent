@@ -5,7 +5,7 @@ Build web apps with atomic components.
 ## Usage
 
 ```js
-import {L} from 'else'
+import {e} from 'else'
 
 L(
   'div',

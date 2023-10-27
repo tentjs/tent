@@ -1,13 +1,13 @@
-import {L, Link, createRouter} from '../dist/else'
+import {e, Link, createRouter} from '../dist/else'
 import {getItems} from './services/getItems'
 
-const Layout = L(
+const Layout = e(
   'div',
   [
-    L(
+    e(
       'header',
       [
-        L(
+        e(
           'nav',
           [
             Link({href: '/', text: 'home'}),
@@ -32,8 +32,8 @@ const Layout = L(
         },
       }
     ),
-    L('main', [], {view: true, styles: {width: '350px'}}),
-    L('footer', '💛 else.js', {
+    e('main', [], {view: true, styles: {width: '350px'}}),
+    e('footer', '💛 else.js', {
       styles: {
         position: 'fixed',
         bottom: 0,
@@ -54,10 +54,10 @@ const Layout = L(
   }
 )
 
-const TestProps = L(
+const TestProps = e(
   'div',
   ({context}) => [
-    L(
+    e(
       'div',
       context.props.someProp ? `Test ${context.props.someProp}` : 'Test'
     ),
@@ -69,12 +69,12 @@ const TestProps = L(
 
 function List(context) {
   if (context.isLoading) {
-    return L('p', 'Loading...')
+    return e('p', 'Loading...')
   }
   if (!context.items.length && !context.isLoading) {
-    return L('p', 'Yay! You rock 🎉')
+    return e('p', 'Yay! You rock 🎉')
   }
-  return L(
+  return e(
     'ul',
     context.items.map((item) => ListItem(item, context)),
     {
@@ -102,16 +102,16 @@ function List(context) {
 }
 
 function ListItem(item, context) {
-  const Buttons = L(
+  const Buttons = e(
     'div',
     [
-      L('button', '✅', {
+      e('button', '✅', {
         onclick() {
           item.done = !item.done
           context.items = context.items
         },
       }),
-      L('button', '🗑️', {
+      e('button', '🗑️', {
         onclick() {
           context.items = context.items.filter((x) => x.id !== item.id)
         },
@@ -132,21 +132,21 @@ function ListItem(item, context) {
     }
   )
 
-  return L(
+  return e(
     'li',
     [
-      L('div', `#${item.id}`, {
+      e('div', `#${item.id}`, {
         styles: {'font-size': '0.8em', margin: '0 0 4px 0'},
       }),
-      L('strong', item.name, {
+      e('strong', item.name, {
         styles: {'font-size': '1.2em', margin: '0 0 4px 0', display: 'block'},
       }),
       !item.done
-        ? L(
+        ? e(
             'div',
             [
-              item.subtitle && L('p', item.subtitle),
-              L('p', item.description),
+              item.subtitle && e('p', item.subtitle),
+              e('p', item.description),
               Buttons,
             ],
             {styles: {p: {'font-size': '0.85em'}}}
@@ -163,13 +163,13 @@ function ListItem(item, context) {
   )
 }
 
-const Home = L(
+const Home = e(
   'div',
   ({context}) => [
-    L(
+    e(
       'label',
       [
-        L('input', [], {
+        e('input', [], {
           type: 'text',
           'aria-label': 'What is up next?',
           placeholder: 'What is up next?',
@@ -232,11 +232,11 @@ const Home = L(
   }
 )
 
-const About = L(
+const About = e(
   'div',
   ({context}) => [
-    L('h1', 'About'),
-    L('p', `Hello ${context.name} ${context.route.params?.id}`, {
+    e('h1', 'About'),
+    e('p', `Hello ${context.name} ${context.route.params?.id}`, {
       styles: {
         color: 'purple',
         background: 'yellow',
@@ -245,9 +245,9 @@ const About = L(
       },
     }),
     context.name === 'Seb'
-      ? L('div', 'test 1', {styles: {background: 'purple'}})
-      : L('div', 'test 2', {styles: {background: 'green'}}),
-    L('button', 'Swap name', {
+      ? e('div', 'test 1', {styles: {background: 'purple'}})
+      : e('div', 'test 2', {styles: {background: 'green'}}),
+    e('button', 'Swap name', {
       onclick() {
         context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
         TestProps.props.someProp = 'yoyo'
