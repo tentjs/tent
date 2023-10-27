@@ -30,6 +30,7 @@ Could be cool to have a Theme object, which can be used in all components.
 But I am not sure what the benefit would be from just have a local object with styles?
 
 - One benefit would be that you can share themes.
+- It would be cool to have a Theme registered, so 3rd party UI components can utilize the theme somehow.
 - You can give a parent element a theme via opts, and then all children can use it.
   - But a regular object can do the same? In fact, it's easier since you don't have to pass it anywhere.
 
