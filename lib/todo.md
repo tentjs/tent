@@ -22,6 +22,7 @@
   - This is useful if you want to do something with the element before it's rendered.
   - If the component is a function, it will be called after the element is rendered.
 - [ ] Write tests for ./router
+- [ ] Figure out if a store utilizing session-/localStorage a good fit?
 
 ## Theme (WIP)
 
