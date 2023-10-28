@@ -5,7 +5,7 @@ function List(context) {
   if (context.isLoading) {
     return e('p', 'Loading...')
   }
-  if (!context.items.length && !context.isLoading) {
+  if (context.items.length === 0 && !context.isLoading) {
     return e('p', 'Yay! You rock 🎉')
   }
   return e(
