@@ -36,8 +36,12 @@ const Layout = e(
       styles: {
         position: 'fixed',
         bottom: 0,
-        padding: '24px 0',
+        padding: '4px 6px',
         'font-size': '0.9em',
+        background: '#333',
+        'border-radius': '4px',
+        'margin-bottom': '24px',
+        opacity: 0.85,
       },
     }),
   ],

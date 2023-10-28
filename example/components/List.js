@@ -2,15 +2,14 @@ import {e} from '../../dist/else'
 import {ListItem} from './ListItem'
 
 function List(context) {
-  if (context.isLoading) {
-    return e('p', 'Loading...')
-  }
   if (context.items.length === 0 && !context.isLoading) {
     return e('div', [e('p', 'Yay! You rock 🎉')])
   }
   return e(
     'ul',
-    context.items.map((item) => ListItem(item, context)),
+    context.isLoading
+      ? [1, 2, 3, 4].map((i) => e('li', [], {key: i, class: 'loading'}))
+      : context.items.map((item) => ListItem(item, context)),
     {
       styles: {
         margin: '0 auto',
@@ -29,6 +28,9 @@ function List(context) {
         'li.done': {
           opacity: 0.5,
           background: 'seagreen',
+        },
+        'li.loading': {
+          height: '92px',
         },
       },
     }
