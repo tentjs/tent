@@ -32,8 +32,24 @@ const About = e(
       }
     ),
     context.name === 'Seb'
-      ? e('div', 'test 1', {styles: {background: 'purple'}})
-      : e('div', 'test 2', {styles: {background: 'green'}}),
+      ? e('div', [e('p', 'test 1')], {
+          key: 'test1',
+          styles: {background: 'purple'},
+        })
+      : e(
+          'div',
+          [
+            e('div', [
+              e('p', 'test 2'),
+              e('span', 'test 2.a'),
+              e('span', 'test 2.b'),
+            ]),
+          ],
+          {
+            key: 'test2',
+            styles: {background: 'green'},
+          }
+        ),
     e('button', 'Swap name', {
       onclick() {
         context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
