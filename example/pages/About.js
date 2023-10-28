@@ -5,7 +5,7 @@ const TestProps = e(
   ({context}) => [
     e(
       'div',
-      context.props.someProp ? `Test ${context.props.someProp}` : 'Test'
+      context.$props.someProp ? `Test ${context.$props.someProp}` : 'Test'
     ),
   ],
   {
@@ -20,7 +20,7 @@ const About = e(
     e(
       'p',
       `Hello ${context.name} ${
-        context.route.params?.id ? context.route.params.id : ''
+        context.$route.params?.id ? context.$route.params.id : ''
       }`,
       {
         styles: {

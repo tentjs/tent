@@ -1,8 +1,8 @@
 # To-do
 
 - [x] Rename `data` to `context` since it also holds `props` and `route`, and not just data. Data will be on the root of
-  the object, to make it easy to use `context.X`, and `context.route.X` and `context.props.X`.
-- [ ] Create a `$$else` property on the element where the route and props are stored.
+      the object, to make it easy to use `context.X`, and `context.$route.X` and `context.$props.X`.
+- [x] Create a `$$else` property on the element where the route and props are stored.
   - This is to avoid any clashes with any other properties.
   - And it's easy to do `Object.defineProperty(el, '$$else' { ... })` and then handle both route, props and future
     features in the same go.
@@ -16,13 +16,13 @@
   - If 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data
     changes.
 - [ ] Document differences between `[() => e( ... )]` vs. `[e( ... )]`, and when to use a function returning elements.
-  I.e. it'll re-render everytime.
+      I.e. it'll re-render everytime.
 - [ ] Document `onmount` and mention that it's called when the element is mounted, but before it's rendered if the
-  component is not a function.
+      component is not a function.
   - This is useful if you want to do something with the element before it's rendered.
   - If the component is a function, it will be called after the element is rendered.
 - [ ] Write tests for ./router
-- [ ] Figure out if a store utilizing session-/localStorage a good fit?
+- [ ] Figure out if a store utilizing session-/localStorage is a good fit?
 
 ## Theme (WIP)
 
