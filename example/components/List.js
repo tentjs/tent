@@ -6,7 +6,7 @@ function List(context) {
     return e('p', 'Loading...')
   }
   if (context.items.length === 0 && !context.isLoading) {
-    return e('p', 'Yay! You rock 🎉')
+    return e('div', [e('p', 'Yay! You rock 🎉')])
   }
   return e(
     'ul',
