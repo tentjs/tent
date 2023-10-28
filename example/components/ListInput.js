@@ -1,6 +1,8 @@
 import {e} from '../../dist/else'
 
 function ListInput(context) {
+  const label = 'What is up next?'
+
   return e(
     'label',
     [
@@ -29,8 +31,8 @@ function ListInput(context) {
           }
         },
         type: 'text',
-        'aria-label': 'What is up next?',
-        placeholder: 'What is up next?',
+        'aria-label': label,
+        placeholder: label,
         disabled: context.isLoading,
         styles: {
           'box-sizing': 'border-box',
@@ -44,9 +46,8 @@ function ListInput(context) {
     ],
     {
       styles: {
-        padding: '8px 0',
         display: 'block',
-        'margin-bottom': '1em',
+        'margin-bottom': '24px',
         width: '350px',
         span: {
           display: 'block',

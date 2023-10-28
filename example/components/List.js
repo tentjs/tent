@@ -8,8 +8,8 @@ function List(context) {
   return e(
     'ul',
     context.isLoading
-      ? [1, 2, 3, 4].map((i) => e('li', [], {key: i, class: 'loading'}))
-      : context.items.map((item) => ListItem(item, context)),
+      ? [1, 2, 3, 4, 5].map((v) => e('li', [], {key: v, class: 'skeleton'}))
+      : context.items.map((item) => ListItem(context, item)),
     {
       styles: {
         margin: '0 auto',
@@ -29,7 +29,7 @@ function List(context) {
           opacity: 0.5,
           background: 'seagreen',
         },
-        'li.loading': {
+        'li.skeleton': {
           height: '92px',
         },
       },
