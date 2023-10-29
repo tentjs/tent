@@ -34,23 +34,25 @@ function ListItem(context, item) {
   return e(
     'li',
     [
-      e('div', `#${item.id}`, {
-        styles: {'font-size': '0.8em', margin: '0 0 4px 0'},
-      }),
-      e('strong', item.name, {
-        styles: {'font-size': '1.2em', margin: '0 0 4px 0', display: 'block'},
-      }),
-      !item.done
-        ? e(
-            'div',
-            [
-              item.subtitle && e('p', item.subtitle),
-              e('p', item.description),
-              Buttons,
-            ],
-            {styles: {p: {'font-size': '0.85em'}}}
-          )
-        : Buttons,
+      e('div', [
+        e('div', `#${item.id}`, {
+          styles: {'font-size': '0.8em', margin: '0 0 4px 0'},
+        }),
+        e('strong', item.name, {
+          styles: {'font-size': '1.2em', margin: '0 0 4px 0', display: 'block'},
+        }),
+        !item.done
+          ? e(
+              'div',
+              [
+                item.subtitle && e('p', item.subtitle),
+                e('p', item.description),
+                Buttons,
+              ],
+              {styles: {p: {'font-size': '0.85em'}}}
+            )
+          : Buttons,
+      ]),
     ],
     {
       key: item.id,

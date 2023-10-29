@@ -23,7 +23,9 @@ function List(context) {
           color: '#eee',
           background: '#333',
           'border-radius': '4px',
-          opacity: 1,
+          '> div': {
+            animation: 'fade-in 0.5s ease-in-out',
+          },
         },
         'li.done': {
           opacity: 0.5,
