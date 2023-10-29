@@ -10,8 +10,8 @@ import {e} from 'else'
 e(
   'div',
   ({context}) => [
-    e('div', [`Hello ${context.text}`]),
-    e('button', ['Click me!'], {
+    e('div', `Hello ${context.text}`),
+    e('button', 'Click me!', {
       onclick() {
         context.text = context.text.split('').reverse().join('')
       },
@@ -37,9 +37,9 @@ const Layout = e('div', [
   e('footer', 'Footer'),
 ])
 
-const Home = e('div', [e('div', 'This is home')])
+const Home = e('div', e('div', 'This is home'))
 
-const AboutUs = e('div', [e('div', 'This is all about us')])
+const AboutUs = e('div', e('div', 'This is all about us'))
 
 createRouter(
   [
