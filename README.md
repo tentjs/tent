@@ -29,7 +29,7 @@ e(
 ### Router
 
 ```js
-import {L, createRouter} from 'else'
+import {e, createRouter} from 'else'
 
 const Layout = e('div', [
   e('header', 'Header'),
