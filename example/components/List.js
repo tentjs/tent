@@ -8,7 +8,7 @@ function List(context) {
   return e(
     'ul',
     context.isLoading
-      ? [1, 2, 3, 4, 5].map((v) => e('li', [], {key: v, class: 'skeleton'}))
+      ? [1, 2, 3].map((v) => e('li', [], {key: v, class: 'skeleton'}))
       : context.items.map((item) => ListItem(context, item)),
     {
       styles: {
@@ -21,7 +21,7 @@ function List(context) {
         li: {
           padding: '8px',
           color: '#eee',
-          background: '#444',
+          background: '#333',
           'border-radius': '4px',
           opacity: 1,
         },

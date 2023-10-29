@@ -4,21 +4,21 @@ export async function getItems() {
       resolve([
         {
           id: 1,
-          name: 'JS',
+          name: 'Grocery shopping',
           description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false,
         },
         {
           id: 2,
-          name: 'Svelte',
+          name: 'Clean the house',
           description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false,
         },
         {
           id: 3,
-          name: 'else.js',
+          name: 'Go to the gym',
           description:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false,
