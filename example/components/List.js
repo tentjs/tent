@@ -21,7 +21,7 @@ function List(context) {
         li: {
           padding: '8px',
           color: '#eee',
-          background: '#333',
+          background: '#222',
           'border-radius': '4px',
           '> div': {
             animation: 'fade-in 0.5s ease-in-out',

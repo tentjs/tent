@@ -38,7 +38,7 @@ const Layout = e(
         bottom: 0,
         padding: '4px 6px',
         'font-size': '0.9em',
-        background: '#333',
+        background: '#222',
         'border-radius': '4px',
         'margin-bottom': '24px',
         opacity: 0.85,
