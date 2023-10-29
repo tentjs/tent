@@ -23,6 +23,7 @@
   - If the component is a function, it will be called after the element is rendered.
 - [ ] Write tests for ./router
 - [ ] Figure out if a store utilizing session-/localStorage is a good fit?
+- [ ] How to add animations on appearing and disappearing elements?
 
 ## Theme (WIP)
 
