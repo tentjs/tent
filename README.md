@@ -7,11 +7,11 @@ Build web apps with atomic components.
 ```js
 import {e} from 'else'
 
-L(
+e(
   'div',
   ({context}) => [
-    L('div', [`Hello ${context.text}`]),
-    L('button', ['Click me!'], {
+    e('div', [`Hello ${context.text}`]),
+    e('button', ['Click me!'], {
       onclick() {
         context.text = context.text.split('').reverse().join('')
       },
@@ -31,15 +31,15 @@ L(
 ```js
 import {L, createRouter} from 'else'
 
-const Layout = L('div', [
-  L('header', 'Header'),
-  L('main', [], {view: true}),
-  L('footer', 'Footer'),
+const Layout = e('div', [
+  e('header', 'Header'),
+  e('main', [], {view: true}),
+  e('footer', 'Footer'),
 ])
 
-const Home = L('div', [L('div', 'This is home')])
+const Home = e('div', [e('div', 'This is home')])
 
-const AboutUs = L('div', [L('div', 'This is all about us')])
+const AboutUs = e('div', [e('div', 'This is all about us')])
 
 createRouter(
   [
