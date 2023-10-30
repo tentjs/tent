@@ -7,16 +7,9 @@ function About() {
     'div',
     ({context}) => [
       e('h1', 'About'),
-      e(
-        'p',
-        `Hello ${context.name} ${
-          context.$route.params?.id ? context.$route.params.id : ''
-        }`
-      ),
+      e('p', `Hello ${context.name} ${context.$route.params?.id ?? ''}`),
       context.show
-        ? e('div', [e('p', 'test 1')], {
-            class: styles.purple,
-          })
+        ? e('div', [e('p', 'test 1')], {class: styles.purple})
         : e(
             'div',
             [
@@ -26,9 +19,7 @@ function About() {
                 e('span', 'test 2.b'),
               ]),
             ],
-            {
-              class: styles.green,
-            }
+            {class: styles.green}
           ),
       Button({
         text: 'Toggle show',
