@@ -13,6 +13,7 @@ const Layout = e(
           [
             Link({href: '/', text: 'home'}),
             Link({href: '/about-us', text: 'about us'}),
+            Link({href: '/form', text: 'form'}),
           ],
           {
             class: styles.nav,
