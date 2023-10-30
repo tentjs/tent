@@ -24,7 +24,7 @@ function Button(options) {
     disabled,
     class: [
       styles.button,
-      variant === 'primary' ? styles.primary : styles.secondary,
+      styles[variant],
       classNames ? classNames : '',
       disabled ? styles.disabled : '',
     ]
