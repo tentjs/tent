@@ -8,3 +8,4 @@ dist/
 .zed
 project.*
 scratch.js
+.vscode/
