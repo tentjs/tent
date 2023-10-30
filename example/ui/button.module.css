@@ -1,4 +1,14 @@
 .button {
-  color: blueviolet;
-  background-color: coral;
+  background-color: #111;
+  padding: 12px 16px;
+  border-radius: 4px;
+  color: #eee;
+  cursor: pointer;
+  border: 2px solid #222;
+  font: inherit;
+}
+
+.primary {
+  background-color: #eee;
+  color: #111;
 }

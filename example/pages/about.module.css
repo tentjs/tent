@@ -1,7 +1,17 @@
 .purple {
+  padding: 8px;
+  margin-bottom: 1em;
+  border-radius: 4px;
   background-color: purple;
 }
 
 .green {
+  padding: 8px;
+  margin-bottom: 1em;
+  border-radius: 4px;
   background-color: green;
+}
+
+.button {
+  margin-right: 12px;
 }

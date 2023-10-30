@@ -13,7 +13,7 @@ function About() {
           context.$route.params?.id ? context.$route.params.id : ''
         }`
       ),
-      context.name === 'Seb'
+      context.show
         ? e('div', [e('p', 'test 1')], {
             class: styles.purple,
           })
@@ -30,22 +30,27 @@ function About() {
               class: styles.green,
             }
           ),
-      e('button', 'Swap name', {
+      Button({
+        text: 'Toggle show',
+        onclick() {
+          console.log('clicked', context)
+          context.show = !context.show
+        },
+        className: styles.button,
+      }),
+      Button({
+        text: 'Swap the name',
         onclick() {
           context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
         },
-      }),
-      Button({
-        text: 'Button',
-        onclick() {
-          console.log('clicked', context)
-        },
+        variant: 'secondary',
       }),
     ],
     {
       data() {
         return {
           name: 'Seb',
+          show: false,
         }
       },
     }
