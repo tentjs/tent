@@ -8,16 +8,25 @@ import styles from './button.module.css'
  * @param {function} options.onclick
  * @param {string} [options.variant=primary]
  * @param {string} [options.className]
+ * @param {boolean} [options.disabled=false]
  * @returns void
  */
 function Button(options) {
-  const {text, onclick, className, variant = 'primary'} = options
+  const {
+    text,
+    onclick,
+    className,
+    disabled = false,
+    variant = 'primary',
+  } = options
   return e('button', text, {
     onclick,
+    disabled,
     class: [
       styles.button,
       variant === 'primary' ? styles.primary : styles.secondary,
       className ? className : '',
+      disabled ? styles.disabled : '',
     ].join(' '),
   })
 }
