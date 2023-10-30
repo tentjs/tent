@@ -38,9 +38,7 @@ function ListInput(context) {
         class: styles.input,
       }),
     ],
-    {
-      class: styles.inputLabel,
-    }
+    {class: styles.inputLabel}
   )
 }
 export {ListInput}

@@ -17,21 +17,15 @@ function ListItem(context, item) {
         },
       }),
     ],
-    {
-      class: styles.buttons,
-    }
+    {class: styles.buttons}
   )
 
   return e(
     'li',
     [
       e('div', [
-        e('div', `#${item.id}`, {
-          class: styles.itemId,
-        }),
-        e('strong', item.name, {
-          class: styles.itemName,
-        }),
+        e('div', `#${item.id}`, {class: styles.itemId}),
+        e('strong', item.name, {class: styles.itemName}),
         !item.done
           ? e('div', [e('p', item.description), Buttons], {
               class: styles.itemDescription,
@@ -39,10 +33,7 @@ function ListItem(context, item) {
           : Buttons,
       ]),
     ],
-    {
-      key: item.id,
-      class: `${item.done ? styles.done : ''} ${styles.item}`,
-    }
+    {key: item.id, class: `${item.done ? styles.done : ''} ${styles.item}`}
   )
 }
 

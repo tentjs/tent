@@ -1,5 +1,5 @@
 import {e} from '../../dist/else'
-import {getItems} from '../services/getItems'
+import {getItems} from '../services/get-items'
 import {List, ListInput} from '../components'
 
 function Home() {

@@ -4,7 +4,7 @@ import styles from './list.module.css'
 
 function List(context) {
   if (context.items.length === 0 && !context.isLoading) {
-    return e('div', [e('p', 'Yay! You rock 🎉')])
+    return e('p', 'Yay! You rock 🎉')
   }
   return e(
     'ul',
@@ -16,9 +16,7 @@ function List(context) {
           })
         )
       : context.items.map((item) => ListItem(context, item)),
-    {
-      class: styles.list,
-    }
+    {class: styles.list}
   )
 }
 
