@@ -1,4 +1,5 @@
 import {e} from '../../dist/else'
+import styles from './list.module.css'
 
 function ListItem(context, item) {
   const Buttons = e(
@@ -17,17 +18,7 @@ function ListItem(context, item) {
       }),
     ],
     {
-      styles: {
-        display: 'flex',
-        gap: '6px',
-        margin: '12px 0 0 0',
-        button: {
-          cursor: 'pointer',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-        },
-      },
+      class: styles.buttons,
     }
   )
 
@@ -36,30 +27,21 @@ function ListItem(context, item) {
     [
       e('div', [
         e('div', `#${item.id}`, {
-          styles: {'font-size': '0.8em', margin: '0 0 4px 0'},
+          class: styles.itemId,
         }),
         e('strong', item.name, {
-          styles: {'font-size': '1.2em', margin: '0 0 4px 0', display: 'block'},
+          class: styles.itemName,
         }),
         !item.done
-          ? e(
-              'div',
-              [
-                item.subtitle && e('p', item.subtitle),
-                e('p', item.description),
-                Buttons,
-              ],
-              {styles: {p: {'font-size': '0.85em'}}}
-            )
+          ? e('div', [e('p', item.description), Buttons], {
+              class: styles.itemDescription,
+            })
           : Buttons,
       ]),
     ],
     {
       key: item.id,
-      class: `${item.done ? 'done' : ''}`,
-      styles: {
-        p: {margin: 0},
-      },
+      class: `${item.done ? styles.done : ''} ${styles.item}`,
     }
   )
 }

@@ -1,4 +1,6 @@
 import {e} from '../../dist/else'
+import {Button} from '../ui/Button'
+import styles from './about.module.css'
 
 function About() {
   return e(
@@ -9,20 +11,12 @@ function About() {
         'p',
         `Hello ${context.name} ${
           context.$route.params?.id ? context.$route.params.id : ''
-        }`,
-        {
-          styles: {
-            color: 'purple',
-            background: 'yellow',
-            padding: '8px',
-            'border-radius': '4px',
-          },
-        }
+        }`
       ),
       context.name === 'Seb'
         ? e('div', [e('p', 'test 1')], {
             key: 'test1',
-            styles: {background: 'purple'},
+            class: styles.purple,
           })
         : e(
             'div',
@@ -35,7 +29,7 @@ function About() {
             ],
             {
               key: 'test2',
-              styles: {background: 'green'},
+              class: styles.green,
             }
           ),
       e('button', 'Swap name', {
@@ -43,11 +37,16 @@ function About() {
           context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
         },
       }),
+      Button(context, {
+        text: 'Button',
+        onclick() {
+          console.log('clicked', context)
+        },
+      }),
     ],
     {
       data() {
         return {
-          show: true,
           name: 'Seb',
         }
       },

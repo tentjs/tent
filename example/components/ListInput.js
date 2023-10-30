@@ -1,4 +1,5 @@
 import {e} from '../../dist/else'
+import styles from './list.module.css'
 
 function ListInput(context) {
   const label = 'What is up next?'
@@ -34,28 +35,11 @@ function ListInput(context) {
         'aria-label': label,
         placeholder: label,
         disabled: context.isLoading,
-        styles: {
-          'box-sizing': 'border-box',
-          padding: '16px',
-          width: '100%',
-          'border-radius': '4px',
-          'font-size': '1em',
-          border: 'none',
-        },
+        class: styles.input,
       }),
     ],
     {
-      styles: {
-        display: 'block',
-        'margin-bottom': '24px',
-        width: '350px',
-        span: {
-          display: 'block',
-          margin: '0 0 2px 0',
-          'font-size': '12px',
-          'text-transform': 'uppercase',
-        },
-      },
+      class: styles.inputLabel,
     }
   )
 }

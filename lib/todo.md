@@ -1,5 +1,6 @@
 # To-do
 
+- [x] Remove `styles` and recommend either `style` as attribute or CSS Modules instead.
 - [x] Rename `data` to `context` since it also holds `props` and `route`, and not just data. Data will be on the root of
       the object, to make it easy to use `context.X`, and `context.$route.X` and `context.$props.X`.
 - [x] Create a `$$else` property on the element where the route and props are stored.

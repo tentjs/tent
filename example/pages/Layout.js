@@ -1,5 +1,7 @@
 import {e, Link} from '../../dist/else'
 
+import styles from './layout.module.css'
+
 const Layout = e(
   'div',
   [
@@ -13,47 +15,21 @@ const Layout = e(
             Link({href: '/about-us', text: 'about us'}),
           ],
           {
-            styles: {
-              a: {
-                margin: '0 10px 0 0',
-                'text-decoration': 'none',
-              },
-              'a:hover': {
-                'text-decoration': 'underline',
-              },
-            },
+            class: styles.nav,
           }
         ),
       ],
       {
-        styles: {
-          padding: '60px 0',
-        },
+        class: styles.header,
       }
     ),
-    e('main', [], {view: true, styles: {width: '350px'}}),
+    e('main', [], {view: true, class: styles.main}),
     e('footer', '💛 else.js', {
-      styles: {
-        position: 'fixed',
-        bottom: 0,
-        padding: '4px 6px',
-        'font-size': '0.9em',
-        background: '#222',
-        'border-radius': '4px',
-        'margin-bottom': '24px',
-        opacity: 0.85,
-      },
+      class: styles.footer,
     }),
   ],
   {
-    styles: {
-      display: 'flex',
-      'flex-direction': 'column',
-      'align-items': 'center',
-      h1: {
-        'margin-top': 0,
-      },
-    },
+    class: styles.layout,
   }
 )
 

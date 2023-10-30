@@ -1,5 +1,6 @@
 import {e} from '../../dist/else'
 import {ListItem} from './ListItem'
+import styles from './list.module.css'
 
 function List(context) {
   if (context.items.length === 0 && !context.isLoading) {
@@ -8,33 +9,15 @@ function List(context) {
   return e(
     'ul',
     context.isLoading
-      ? [1, 2, 3].map((v) => e('li', [], {key: v, class: 'skeleton'}))
+      ? [1, 2, 3].map((v) =>
+          e('li', [], {
+            key: v,
+            class: styles.skeleton,
+          })
+        )
       : context.items.map((item) => ListItem(context, item)),
     {
-      styles: {
-        margin: '0 auto',
-        padding: 0,
-        'list-style': 'none',
-        display: 'flex',
-        'flex-direction': 'column',
-        gap: '6px',
-        li: {
-          padding: '8px',
-          color: '#eee',
-          background: '#222',
-          'border-radius': '4px',
-          '> div': {
-            animation: 'fade-in 0.5s ease-in-out',
-          },
-        },
-        'li.done': {
-          opacity: 0.5,
-          background: 'seagreen',
-        },
-        'li.skeleton': {
-          height: '92px',
-        },
-      },
+      class: styles.list,
     }
   )
 }
