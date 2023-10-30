@@ -33,7 +33,6 @@ function About() {
       Button({
         text: 'Toggle show',
         onclick() {
-          console.log('clicked', context)
           context.show = !context.show
         },
         className: styles.button,
