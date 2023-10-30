@@ -15,7 +15,6 @@ function About() {
       ),
       context.name === 'Seb'
         ? e('div', [e('p', 'test 1')], {
-            key: 'test1',
             class: styles.purple,
           })
         : e(
@@ -28,7 +27,6 @@ function About() {
               ]),
             ],
             {
-              key: 'test2',
               class: styles.green,
             }
           ),
