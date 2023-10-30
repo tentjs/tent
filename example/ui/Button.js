@@ -7,7 +7,7 @@ import styles from './button.module.css'
  * @param {string} options.text
  * @param {function} options.onclick
  * @param {string} [options.variant=primary]
- * @param {string} [options.className]
+ * @param {string} [options.classNames]
  * @param {boolean} [options.disabled=false]
  * @returns void
  */
@@ -15,7 +15,7 @@ function Button(options) {
   const {
     text,
     onclick,
-    className,
+    classNames,
     disabled = false,
     variant = 'primary',
   } = options
@@ -25,7 +25,7 @@ function Button(options) {
     class: [
       styles.button,
       variant === 'primary' ? styles.primary : styles.secondary,
-      className ? className : '',
+      classNames ? classNames : '',
       disabled ? styles.disabled : '',
     ]
       .join(' ')
