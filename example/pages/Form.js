@@ -7,7 +7,11 @@ const values = new Map(inputNames.map((x) => [x, '']))
 const errors = new Map()
 
 function Page() {
-  return e('div', [e('h1', 'Form'), Form])
+  return e('div', [
+    e('h1', 'Form'),
+    e('p', 'This is a simple example of building a form with validation.'),
+    Form,
+  ])
 }
 
 function Form() {
@@ -66,13 +70,14 @@ function Errors() {
 
 function handleSubmit(context) {
   values.forEach((value, key) => {
+    // This is where you would do your validation
     if (value === '') {
       errors.set(key, 'This field is required')
     } else {
       errors.delete(key)
     }
   })
-  // triggers a re-render
+  // Triggers a re-render
   context.errors = errors
   if (errors.size) {
     return
