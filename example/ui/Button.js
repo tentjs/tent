@@ -16,9 +16,9 @@ function Button(options) {
     onclick,
     class: [
       styles.button,
-      variant === 'primary' ? styles.primary : '',
+      variant === 'primary' ? styles.primary : styles.secondary,
       className ? className : '',
-    ].join(' ')
+    ].join(' '),
   })
 }
 
