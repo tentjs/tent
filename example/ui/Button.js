@@ -27,7 +27,9 @@ function Button(options) {
       variant === 'primary' ? styles.primary : styles.secondary,
       className ? className : '',
       disabled ? styles.disabled : '',
-    ].join(' '),
+    ]
+      .join(' ')
+      .trim(),
   })
 }
 
