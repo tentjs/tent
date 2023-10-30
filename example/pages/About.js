@@ -35,7 +35,7 @@ function About() {
         onclick() {
           context.show = !context.show
         },
-        classNames: styles.button,
+        classes: styles.button,
       }),
       Button({
         text: 'Swap the name',
