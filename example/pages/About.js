@@ -37,7 +37,7 @@ function About() {
           context.name = context.name === 'Seb' ? 'Sebastian' : 'Seb'
         },
       }),
-      Button(context, {
+      Button({
         text: 'Button',
         onclick() {
           console.log('clicked', context)
