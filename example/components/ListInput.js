@@ -8,13 +8,6 @@ function ListInput(context) {
     'label',
     [
       e('input', [], {
-        onmount({el}) {
-          if (!el.disabled) {
-            setTimeout(() => {
-              el.focus()
-            })
-          }
-        },
         onkeyup(event) {
           if (event.keyCode === 13) {
             const id = context.items.length
