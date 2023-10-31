@@ -7,12 +7,6 @@
   - This is to avoid any clashes with any other properties.
   - And it's easy to do `Object.defineProperty(el, '$$else' { ... })` and then handle both route, props and future
     features in the same go.
-- [ ] Find a way to only append styles if the element is visible.
-  - If component is a function it will append styles when it's called, but if it's not a function it will append styles
-    when component is created.
-    - This means it'll append styles even if the element is not visible. But, that means it'll be ready when the element
-      is put into the DOM, i.e. no flickering.
-    - On the other hand the styles will be added immediately even if the element is never put into the DOM.
 - [ ] Let the user cache elements with 'cache' in options.
   - If 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data
     changes.
