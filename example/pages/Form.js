@@ -20,6 +20,7 @@ function Form() {
       type: 'text',
       placeholder: `Type ${input.toLowerCase()}...`,
       'aria-label': `Type ${input.toLowerCase()}...`,
+      name: `${input.toLowerCase()}-input`,
       class: styles.input,
       oninput(ev) {
         values.set(input, ev.target.value)

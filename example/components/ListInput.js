@@ -9,6 +9,7 @@ function ListInput(context) {
       handleOnKeyup(event, context)
     },
     type: 'text',
+    name: 'add-new-todo',
     'aria-label': label,
     placeholder: label,
     disabled: context.isLoading,
