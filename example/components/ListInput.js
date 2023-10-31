@@ -9,20 +9,7 @@ function ListInput(context) {
     [
       e('input', [], {
         onkeyup(event) {
-          if (event.keyCode === 13) {
-            const id = context.items.length
-              ? context.items[context.items.length - 1].id + 1
-              : 1
-            context.items = [
-              ...context.items,
-              {
-                id,
-                name: event.target.value,
-                description: `${event.target.value} description`,
-              },
-            ]
-            event.target.value = ''
-          }
+          handleOnKeyup(event, context)
         },
         type: 'text',
         'aria-label': label,
@@ -34,4 +21,24 @@ function ListInput(context) {
     {class: styles.inputLabel}
   )
 }
+
+function handleOnKeyup(event, context) {
+  if (event.keyCode !== 13) {
+    return
+  }
+
+  const id = context.items.length
+    ? context.items[context.items.length - 1].id + 1
+    : 1
+  context.items = [
+    ...context.items,
+    {
+      id,
+      name: event.target.value,
+      description: `${event.target.value} description`,
+    },
+  ]
+  event.target.value = ''
+}
+
 export {ListInput}
