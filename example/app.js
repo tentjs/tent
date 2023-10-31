@@ -1,5 +1,5 @@
 import {createRouter} from '../dist/else'
-import {Home, About, Layout, Form} from './pages'
+import {Home, About, Layout, Form, Post} from './pages'
 
 createRouter(
   [
@@ -7,7 +7,7 @@ createRouter(
     {path: '/about-us', component: About},
     {path: '/about-us/:id', component: About},
     {path: '/form', component: Form},
-    {path: '/test/:id', component: About},
+    {path: '/post/:id', component: Post},
     {path: '/some/:param/:id', component: About},
   ],
   {
