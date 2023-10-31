@@ -6,6 +6,11 @@
   }
 }
 
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;

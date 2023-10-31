@@ -31,9 +31,9 @@
   position: fixed;
   bottom: 0;
   padding: 4px 6px;
-  font-size: .9em;
+  font-size: 0.9em;
   background-color: #222;
   border-radius: 4px;
   margin-bottom: 24px;
-  opacity: .85;
+  opacity: 0.85;
 }
