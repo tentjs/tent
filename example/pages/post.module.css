@@ -1,5 +1,9 @@
 .post {
   animation: fadeIn 0.3s ease-in-out;
+
+  h1 {
+    text-transform: capitalize;
+  }
 }
 
 @keyframes fadeIn {

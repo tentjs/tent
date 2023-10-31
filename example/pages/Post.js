@@ -4,12 +4,12 @@ import styles from './post.module.css'
 function Post() {
   return e(
     'div',
-    ({context}) =>
-      context.post
+    ({context: {post}}) =>
+      post
         ? [
-            e('h1', context.post.title),
+            e('h1', post.title),
             e('p', e('em', 'This is a simple example of a post from an API.')),
-            e('p', context.post.body),
+            e('p', post.body),
           ]
         : [],
     {
@@ -21,6 +21,9 @@ function Post() {
           `https://jsonplaceholder.typicode.com/posts/${context.$route.params.id}`
         )
         context.post = await req.json()
+      },
+      data() {
+        return {post: null}
       },
       class: styles.post,
     }
