@@ -14,19 +14,7 @@
   border-radius: 4px;
   font-size: 1em;
   border: none;
-}
-
-.inputLabel {
-  display: block;
   margin-bottom: 24px;
-  width: 350px;
-
-  span {
-    display: block;
-    margin-bottom: 2px;
-    font-size: 12px;
-    text-transform: uppercase;
-  }
 }
 
 .item {
@@ -45,7 +33,7 @@
 }
 
 .itemId {
-  font-size: .8em;
+  font-size: 0.8em;
   margin: 0 0 4px 0;
 }
 
@@ -56,7 +44,7 @@
 }
 
 .itemDescription {
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 .done {

@@ -16,21 +16,15 @@ function Page() {
 
 function Form() {
   const Inputs = inputNames.map((input) =>
-    e(
-      'label',
-      [
-        e('input', [], {
-          type: 'text',
-          placeholder: `Type ${input.toLowerCase()}...`,
-          'aria-label': `Type ${input.toLowerCase()}...`,
-          class: styles.input,
-          oninput(ev) {
-            values.set(input, ev.target.value)
-          },
-        }),
-      ],
-      {class: styles.label}
-    )
+    e('input', [], {
+      type: 'text',
+      placeholder: `Type ${input.toLowerCase()}...`,
+      'aria-label': `Type ${input.toLowerCase()}...`,
+      class: styles.input,
+      oninput(ev) {
+        values.set(input, ev.target.value)
+      },
+    })
   )
 
   return e(

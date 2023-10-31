@@ -4,22 +4,16 @@ import styles from './list.module.css'
 function ListInput(context) {
   const label = 'What is up next?'
 
-  return e(
-    'label',
-    [
-      e('input', [], {
-        onkeyup(event) {
-          handleOnKeyup(event, context)
-        },
-        type: 'text',
-        'aria-label': label,
-        placeholder: label,
-        disabled: context.isLoading,
-        class: styles.input,
-      }),
-    ],
-    {class: styles.inputLabel}
-  )
+  return e('input', [], {
+    onkeyup(event) {
+      handleOnKeyup(event, context)
+    },
+    type: 'text',
+    'aria-label': label,
+    placeholder: label,
+    disabled: context.isLoading,
+    class: [styles.input],
+  })
 }
 
 function handleOnKeyup(event, context) {
