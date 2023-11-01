@@ -3,6 +3,7 @@ import styles from './post.module.css'
 
 function Post() {
   return e('div', ({context: {post}}) => Children(post), {
+    class: styles.post,
     // `onrouteready` is similar to `onmount` but it's called when the route is ready,
     // which means that you have access to the route params, as well as `context` and `el`.
     async onrouteready({context}) {
@@ -19,9 +20,11 @@ function Post() {
 }
 
 function Children(post) {
-  if (!post) {
-    return []
-  }
+  // children should be iterable, hence the array.
+  return [post ? PostContent(post) : PostSkeleton()]
+}
+
+function PostContent(post) {
   return e(
     'div',
     [
@@ -37,7 +40,24 @@ function Children(post) {
         {class: styles.nav}
       ),
     ],
-    {class: styles.post}
+    // `key` is used to tell that a re-render should happen.
+    // In this case it is used because Children() have different return values.
+    // If you don't use `key` here you will get parts of the Skeleton in the final render,
+    // because PostContent() and PostSkeleton() returns different amounts of nodes.
+    {key: post.id, class: styles.post}
+  )
+}
+
+function PostSkeleton() {
+  return e(
+    'div',
+    [
+      e('div', [], {class: styles.skeletonHeader}),
+      e('div', [], {class: styles.skeletonSubheader}),
+      e('div', [], {class: styles.skeletonBody}),
+    ],
+    // `key` is used to tell that a re-render should happen.
+    {key: 'skeleton'}
   )
 }
 

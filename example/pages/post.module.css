@@ -6,6 +6,27 @@
   }
 }
 
+.skeletonHeader {
+  height: 77px;
+  background-color: #222;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
+.skeletonSubheader {
+  height: 39px;
+  background-color: #222;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
+.skeletonBody {
+  height: 60px;
+  background-color: #222;
+  margin-bottom: 1em;
+  border-radius: 4px;
+}
+
 .nav {
   display: flex;
   justify-content: space-between;
