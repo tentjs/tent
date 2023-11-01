@@ -8,10 +8,18 @@ function Post() {
     // which means that you have access to the route params, as well as `context` and `el`.
     async onrouteready({context}) {
       // You should handle errors and loading states as well, this is just a simple example.
-      const req = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${context.$route.params.id}`
-      )
-      context.post = await req.json()
+      try {
+        const req = await fetch(
+          `https://jsonplaceholder.typicode.com/posts/${context.$route.params.id}`
+        )
+        const json = await req.json()
+        if (json?.id) {
+          context.post = json
+        }
+      } catch (e) {
+        console.error(e)
+        context.post = null
+      }
     },
     data() {
       return {post: null}
@@ -21,7 +29,7 @@ function Post() {
 
 function Children(post) {
   // Children should be iterable, hence the array.
-  return [post ? PostContent(post) : PostSkeleton()]
+  return [post != null ? PostContent(post) : PostSkeleton()]
 }
 
 function PostContent(post) {
@@ -35,7 +43,9 @@ function PostContent(post) {
         'div',
         [
           Link({href: `/post/${post.id - 1}`, text: 'Previous'}),
-          Link({href: `/post/${post.id + 1}`, text: 'Next'}),
+          post.id < 100
+            ? Link({href: `/post/${post.id + 1}`, text: 'Next'})
+            : null,
         ],
         {class: styles.nav}
       ),
@@ -58,6 +68,14 @@ function PostSkeleton() {
       e('div', [], {class: styles.skeletonHeader}),
       e('div', [], {class: styles.skeletonSubheader}),
       e('div', [], {class: styles.skeletonBody}),
+      e(
+        'div',
+        [
+          e('div', [], {class: styles.skeletonButton}),
+          e('div', [], {class: styles.skeletonButton}),
+        ],
+        {class: styles.skeletonNav}
+      ),
     ],
     {key: 'skeleton'}
   )

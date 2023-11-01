@@ -8,6 +8,7 @@
 
 .skeletonHeader {
   height: 77px;
+  width: 90%;
   background-color: #222;
   margin-bottom: 1em;
   border-radius: 4px;
@@ -15,16 +16,33 @@
 
 .skeletonSubheader {
   height: 39px;
+  width: 80%;
   background-color: #222;
   margin-bottom: 1em;
   border-radius: 4px;
 }
 
 .skeletonBody {
-  height: 60px;
+  height: 80px;
   background-color: #222;
   margin-bottom: 1em;
   border-radius: 4px;
+}
+
+.skeletonNav {
+  display: flex;
+  align-items: center;
+}
+
+.skeletonButton {
+  height: 20px;
+  background-color: #222;
+  width: 36px;
+  border-radius: 4px;
+  &:first-of-type {
+    margin-right: auto;
+    width: 65px;
+  }
 }
 
 .nav {
