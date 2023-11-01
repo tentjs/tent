@@ -52,14 +52,13 @@ function PostSkeleton() {
   return e(
     // An alternative to `key` is to use a wrapper element,
     // with a different tagName than the other wrapping element.
-    // You could use a `section` and `div` (on PostContent), which would be the same as using `key`.
+    // You could use a `section` on `PostSkeleton` and `div` on PostContent, which would be the same as using `key`.
     'div',
     [
       e('div', [], {class: styles.skeletonHeader}),
       e('div', [], {class: styles.skeletonSubheader}),
       e('div', [], {class: styles.skeletonBody}),
     ],
-    // `key` is used to tell that a re-render should happen.
     {key: 'skeleton'}
   )
 }
