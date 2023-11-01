@@ -20,7 +20,7 @@ function Post() {
 }
 
 function Children(post) {
-  // children should be iterable, hence the array.
+  // Children should be iterable, hence the array.
   return [post ? PostContent(post) : PostSkeleton()]
 }
 

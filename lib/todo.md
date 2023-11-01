@@ -1,5 +1,8 @@
 # To-do
 
+- [ ] Consider if we should add a wrapping custom element around the children,
+      if the component is a named function, i.e `MyComponent()` => `<MyComponent />`.
+  - This way a re-render would happen automatically, because the element would be different to the previous one. And, this way you might not have to use `key` when rendering conditional components.
 - [x] Remove `styles` and recommend either `style` as attribute or CSS Modules instead.
 - [x] Rename `data` to `context` since it also holds `props` and `route`, and not just data. Data will be on the root of
       the object, to make it easy to use `context.X`, and `context.$route.X` and `context.$props.X`.
