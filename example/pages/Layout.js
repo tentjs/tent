@@ -16,9 +16,7 @@ const Layout = e(
             Link({href: '/form', text: 'form'}),
             Link({href: '/post/10', text: 'post'}),
           ],
-          {
-            class: styles.nav,
-          }
+          {class: styles.nav}
         ),
       ],
       {
