@@ -3,7 +3,7 @@ import {Button} from '../ui/Button'
 import styles from './post.module.css'
 
 function Post() {
-  return e('div', ({context: {post}}) => Children(post), {
+  return e('div', ({context}) => Children(context.post), {
     class: styles.post,
     // `onroutechange` is similar to `onmount` but it's called when the route is changed,
     // which means that you have access to route properties, as well as `context`.
