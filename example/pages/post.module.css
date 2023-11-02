@@ -32,22 +32,24 @@
 .skeletonNav {
   display: flex;
   align-items: center;
+  padding-top: 18px;
 }
 
 .skeletonButton {
-  height: 20px;
+  height: 47px;
   background-color: #222;
-  width: 36px;
+  width: 72px;
   border-radius: 4px;
   &:first-of-type {
     margin-right: auto;
-    width: 65px;
+    width: 100px;
   }
 }
 
 .nav {
   display: flex;
   justify-content: space-between;
+  padding-top: 18px;
 }
 
 @keyframes fadeIn {

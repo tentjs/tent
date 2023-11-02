@@ -1,4 +1,5 @@
-import {e, Link} from '../../dist/else'
+import {e, push} from '../../dist/else'
+import {Button} from '../ui/Button'
 import styles from './post.module.css'
 
 function Post() {
@@ -47,10 +48,22 @@ function PostContent(post) {
         'div',
         [
           post.id > 1
-            ? Link({href: `/post/${post.id - 1}`, text: 'Previous'})
+            ? Button({
+                onclick() {
+                  push(`/post/${post.id - 1}`)
+                },
+                text: 'Previous',
+                variant: 'secondary',
+              })
             : null,
           post.id < 100
-            ? Link({href: `/post/${post.id + 1}`, text: 'Next'})
+            ? Button({
+                onclick() {
+                  push(`/post/${post.id + 1}`)
+                },
+                text: 'Next',
+                variant: 'secondary',
+              })
             : null,
         ],
         {class: styles.nav}
