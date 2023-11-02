@@ -15,3 +15,7 @@
 .button {
   margin-right: 12px;
 }
+
+.active {
+  color: plum;
+}

@@ -23,6 +23,10 @@
   }
 }
 
+a.active {
+  text-decoration: underline;
+}
+
 .main {
   width: 350px;
 }

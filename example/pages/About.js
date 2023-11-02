@@ -1,4 +1,4 @@
-import {e} from '../../dist/else'
+import {e, Link} from '../../dist/else'
 import {Button} from '../ui/Button'
 import styles from './about.module.css'
 
@@ -7,7 +7,14 @@ function About() {
     'div',
     ({context}) => [
       e('h1', 'About'),
-      e('p', `Hello ${context.name} ${context.$route.params?.id ?? ''}`),
+      e('p', `Hello ${context.name} ${context.id ?? ''}`),
+      e('p', [
+        Link({
+          href: '/about-us/10',
+          text: 'about us sub',
+          activeClass: styles.active,
+        }),
+      ]),
       context.show
         ? e('div', [e('p', 'test 1')], {class: styles.purple})
         : e(
@@ -41,7 +48,11 @@ function About() {
         return {
           name: 'Seb',
           show: false,
+          id: null,
         }
+      },
+      onroutechange({context, params}) {
+        context.id = params.id
       },
     }
   )

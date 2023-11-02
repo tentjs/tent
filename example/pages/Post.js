@@ -4,13 +4,17 @@ import styles from './post.module.css'
 function Post() {
   return e('div', ({context: {post}}) => Children(post), {
     class: styles.post,
-    // `onrouteready` is similar to `onmount` but it's called when the route is ready,
-    // which means that you have access to the route params, as well as `context` and `el`.
-    async onrouteready({context}) {
-      // You should handle errors and loading states as well, this is just a simple example.
+    // `onroutechange` is similar to `onmount` but it's called when the route is changed,
+    // which means that you have access to route properties, as well as `context`.
+    async onroutechange({context, params}) {
+      if (!params.id) {
+        context.post = null
+        return
+      }
+
       try {
         const req = await fetch(
-          `https://jsonplaceholder.typicode.com/posts/${context.$route.params.id}`
+          `https://jsonplaceholder.typicode.com/posts/${params.id}`
         )
         const json = await req.json()
         if (json?.id) {
@@ -42,7 +46,9 @@ function PostContent(post) {
       e(
         'div',
         [
-          Link({href: `/post/${post.id - 1}`, text: 'Previous'}),
+          post.id > 1
+            ? Link({href: `/post/${post.id - 1}`, text: 'Previous'})
+            : null,
           post.id < 100
             ? Link({href: `/post/${post.id + 1}`, text: 'Next'})
             : null,
