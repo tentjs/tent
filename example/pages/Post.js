@@ -47,24 +47,22 @@ function PostContent(post) {
       e(
         'div',
         [
-          post.id > 1
-            ? Button({
-                onclick() {
-                  push(`/post/${post.id - 1}`)
-                },
-                text: 'Previous',
-                variant: 'secondary',
-              })
-            : null,
-          post.id < 100
-            ? Button({
-                onclick() {
-                  push(`/post/${post.id + 1}`)
-                },
-                text: 'Next',
-                variant: 'secondary',
-              })
-            : null,
+          post.id > 1 &&
+            Button({
+              onclick() {
+                push(`/post/${post.id - 1}`)
+              },
+              text: 'Previous',
+              variant: 'secondary',
+            }),
+          post.id < 100 &&
+            Button({
+              onclick() {
+                push(`/post/${post.id + 1}`)
+              },
+              text: 'Next',
+              variant: 'secondary',
+            }),
         ],
         {class: styles.nav}
       ),
