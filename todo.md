@@ -14,6 +14,8 @@
 - [ ] Let the user cache elements with 'cache' in options.
   - If 'cache' is set (to unique string) the element will be cached. A cached element won't update, not even on data
     changes.
+  - Consider if a component can be cached on the fly?
+  - Consider if a cached component can be updated, and how?
 - [ ] Document differences between `[() => e( ... )]` vs. `[e( ... )]`, and when to use a function returning elements.
       I.e. it'll re-render everytime.
 - [ ] Document `onmount` and mention that it's called when the element is mounted, but before it's rendered if the
