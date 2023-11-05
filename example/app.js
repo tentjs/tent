@@ -1,18 +1,21 @@
-import {createRouter} from '../dist/else'
-import {Home, About, Layout, Form, Post} from './pages'
+import {t, component} from '../dist/else'
 
-createRouter(
-  [
-    {path: '/', component: Home},
-    {path: '/about-us', component: About},
-    {path: '/about-us/:id', component: About},
-    {path: '/form', component: Form},
-    {path: '/post/:id', component: Post},
-    {path: '/some/:param/:id', component: About},
-  ],
-  {
-    fallback: '/',
-    layout: Layout,
-    root: document.querySelector('#app'),
-  }
-)
+let count = 0
+let name = ''
+
+component('my-component', function () {
+  return t('div', [
+    t('p', `Count ${count}`),
+    t('p', `Name ${name}`),
+    t('button', 'Click me', {
+      onclick() {
+        count++
+      },
+    }),
+    t('input', [], {
+      oninput(ev) {
+        name = ev.target.value
+      },
+    }),
+  ])
+})
