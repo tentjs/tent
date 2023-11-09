@@ -13,6 +13,7 @@
   "scripts": {
     "watch": "parcel watch --no-cache",
     "build": "parcel build",
+    "standard": "standard --fix",
     "test": "jest"
   },
   "devDependencies": {
@@ -21,7 +22,8 @@
     "@testing-library/dom": "^9.3.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "parcel": "^2.10.0"
+    "parcel": "^2.10.0",
+    "standard": "*"
   },
   "author": "sebkolind <sks1993@gmail.com>",
   "license": "ISC",
