@@ -3,42 +3,42 @@ import { getItems } from './services/get-items'
 
 const AnotherComponent = {
   name: 'another-component',
-  view({ props }) {
+  view ({ props }) {
     return o('div', [
       o('p', `Hello ${props.name}`),
-      o('p', 'This is another component'),
+      o('p', 'This is another component')
     ], { style: 'background: #333; padding: 10px;' })
-  },
+  }
 }
 
 const Form = {
   name: 'my-form',
-  data() {
+  data () {
     return {
       name: '',
       age: '',
-      errors: [],
+      errors: []
     }
   },
-  view({ data }) {
+  view ({ data }) {
     return o('form', [
       o('div', ['name', 'age'].map((prop) => {
         return o('div', o('input', '', {
           type: 'text',
           name: prop,
           placeholder: prop,
-          oninput(e) {
+          oninput (e) {
             data[prop] = e.target.value
-          },
+          }
         }))
       })),
       o('div', data.errors.map(error => o(
         'p',
         error,
-        { style: 'color: red;' },
+        { style: 'color: red;' }
       ))),
       o('button', 'Submit', {
-        onclick(e) {
+        onclick (e) {
           e.preventDefault()
           const errors = []
           if (!data.name) {
@@ -51,31 +51,31 @@ const Form = {
           if (!errors.length) {
             console.log(data)
           }
-        },
-      }),
+        }
+      })
     ])
-  },
+  }
 }
 
 const Component = {
   name: 'my-component',
-  data() {
+  data () {
     return {
       items: [],
       foo: 'bar',
       bar: 'baz',
-      name: 'John Doe',
+      name: 'John Doe'
     }
   },
-  async onmount({data}) {
+  async onmount ({ data }) {
     console.log('mounted')
     data.items = await getItems()
   },
-  view({ data }) {
+  view ({ data }) {
     if (!data.items.length) {
       return o('div', [
         o('p', 'Loading...'),
-        o('p', 'Some awesome items...'),
+        o('p', 'Some awesome items...')
       ])
     }
 
@@ -88,15 +88,15 @@ const Component = {
       o('div', [o('p', 'This is a paragraph in a nested div')]),
       o(Form),
       o('button', 'Click me', {
-        onclick() {
+        onclick () {
           data.foo = 'something else'
           data.test = 'now i am set'
           data.name = 'Sebastian'
           data.items = [...data.items, { name: 'New item' }]
-        },
-      }),
+        }
+      })
     ])
-  },
+  }
 }
 
 mount(Component, document.body)

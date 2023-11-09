@@ -1,4 +1,4 @@
-import {e} from '../../dist/else'
+import { e } from '../../dist/else'
 import styles from './button.module.css'
 
 /**
@@ -11,13 +11,13 @@ import styles from './button.module.css'
  * @param {boolean} [options.disabled=false]
  * @returns void
  */
-function Button(options) {
+function Button (options) {
   const {
     text,
     onclick,
     classes,
     disabled = false,
-    variant = 'primary',
+    variant = 'primary'
   } = options
   return e('button', text, {
     onclick,
@@ -26,11 +26,11 @@ function Button(options) {
       styles.button,
       styles[variant],
       classes,
-      disabled ? styles.disabled : undefined,
+      disabled ? styles.disabled : undefined
     ]
       .join(' ')
-      .trim(),
+      .trim()
   })
 }
 
-export {Button}
+export { Button }
