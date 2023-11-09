@@ -3,30 +3,79 @@ import { getItems } from './services/get-items'
 
 const AnotherComponent = {
   name: 'another-component',
-  data: {
-    name: 'Poul',
-  },
   view({ props }) {
-    return t('p', `My name is ${props.prop1}`)
+    return t('div', [
+      t('p', `Hello ${props.name}`),
+      t('p', 'This is another component'),
+    ], { style: 'background: #333; padding: 10px;' })
+  },
+}
+
+const Form = {
+  name: 'my-form',
+  data() {
+    return {
+      name: '',
+      age: '',
+      errors: [],
+    }
+  },
+  view({ data }) {
+    return t('form', [
+      ...['name', 'age'].map((prop) => {
+        return t('div', t('input', '', {
+          type: 'text',
+          name: prop,
+          placeholder: prop,
+          oninput(e) {
+            data[prop] = e.target.value
+          },
+        }))
+      }),
+      ...data.errors.map(error => t(
+        'p',
+        error,
+        { style: 'color: red;' },
+      )),
+      t('button', 'Submit', {
+        onclick(e) {
+          e.preventDefault()
+          const errors = []
+          if (!data.name) {
+            errors.push('Please fill out the name field')
+          }
+          if (!data.age) {
+            errors.push('Please fill out the age field')
+          }
+          data.errors = errors
+          if (!errors.length) {
+            console.log(data)
+          }
+        },
+      }),
+    ])
   },
 }
 
 const Component = {
   name: 'my-component',
-  data: {
-    items: [],
-    foo: 'bar',
-    bar: 'baz',
+  data() {
+    return {
+      items: [],
+      foo: 'bar',
+      bar: 'baz',
+      name: 'John Doe',
+    }
   },
-  before() {
+  prepare() {
     return {
       items: getItems(),
     }
   },
-  view({ data }) {
-    // This won't "persist" on re-renders
-    // but can be used to process data or props
-    const reverse = data.bar.split('').reverse().join('')
+  view({ data, errors }) {
+    if (errors.length) {
+      return t('ul', errors.map(error => t('li', error)))
+    }
 
     if (!data.items.length) {
       return t('div', [
@@ -36,16 +85,18 @@ const Component = {
     }
 
     return t('div', [
-      t('p', `This is ${data.foo} and ${reverse}`),
+      t('p', `This is ${data.foo}`),
       t('div', `Amount of items ${data.items.length}`),
       t('ul', data.items.map(item => t('li', `${item.name}`))),
-      t(AnotherComponent, { prop1: data.bar }),
+      t(AnotherComponent, { name: data.name }),
       data.test ? t('p', 'Hey') : t('p', 'Hi'),
       t('div', [t('p', 'This is a paragraph in a nested div')]),
+      t(Form),
       t('button', 'Click me', {
         onclick() {
           data.foo = 'something else'
           data.test = 'now i am set'
+          data.name = 'Sebastian'
         },
       }),
     ])

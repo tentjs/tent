@@ -1,6 +1,7 @@
 export async function getItems() {
-  return await new Promise((resolve) => {
+  return await new Promise((resolve, reject) => {
     setTimeout(() => {
+      // reject(new Error('Something went wrong'))
       resolve([
         {
           id: 1,
@@ -22,5 +23,17 @@ export async function getItems() {
         },
       ])
     }, 1000)
+  })
+}
+
+export async function getList() {
+  return await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // reject(new Error('Something went wrong 2'))
+      resolve([
+        { id: 1, title: 'Some item #1' },
+        { id: 2, title: 'Some item #2' },
+      ])
+    }, 3000)
   })
 }
