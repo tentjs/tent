@@ -1,12 +1,12 @@
-import { t, mount } from '../dist/else'
+import { o, mount } from '../dist/else'
 import { getItems } from './services/get-items'
 
 const AnotherComponent = {
   name: 'another-component',
   view({ props }) {
-    return t('div', [
-      t('p', `Hello ${props.name}`),
-      t('p', 'This is another component'),
+    return o('div', [
+      o('p', `Hello ${props.name}`),
+      o('p', 'This is another component'),
     ], { style: 'background: #333; padding: 10px;' })
   },
 }
@@ -21,9 +21,9 @@ const Form = {
     }
   },
   view({ data }) {
-    return t('form', [
-      t('div', ['name', 'age'].map((prop) => {
-        return t('div', t('input', '', {
+    return o('form', [
+      o('div', ['name', 'age'].map((prop) => {
+        return o('div', o('input', '', {
           type: 'text',
           name: prop,
           placeholder: prop,
@@ -32,12 +32,12 @@ const Form = {
           },
         }))
       })),
-      t('div', data.errors.map(error => t(
+      o('div', data.errors.map(error => o(
         'p',
         error,
         { style: 'color: red;' },
       ))),
-      t('button', 'Submit', {
+      o('button', 'Submit', {
         onclick(e) {
           e.preventDefault()
           const errors = []
@@ -67,32 +67,27 @@ const Component = {
       name: 'John Doe',
     }
   },
-  prepare() {
-    return {
-      items: getItems(),
-    }
+  async onmount({data}) {
+    console.log('mounted')
+    data.items = await getItems()
   },
-  view({ data, errors }) {
-    if (errors.length) {
-      return t('ul', errors.map(error => t('li', error)))
-    }
-
+  view({ data }) {
     if (!data.items.length) {
-      return t('div', [
-        t('p', 'Loading...'),
-        t('p', 'Some awesome items...'),
+      return o('div', [
+        o('p', 'Loading...'),
+        o('p', 'Some awesome items...'),
       ])
     }
 
-    return t('div', [
-      t('p', `This is ${data.foo}`),
-      t('div', `Amount of items ${data.items.length}`),
-      t('ul', data.items.map(item => t('li', `${item.name}`))),
-      t(AnotherComponent, { name: data.name }),
-      data.test ? t('p', 'Hey') : t('p', 'Hi'),
-      t('div', [t('p', 'This is a paragraph in a nested div')]),
-      t(Form),
-      t('button', 'Click me', {
+    return o('div', [
+      o('p', `This is ${data.foo}`),
+      o('div', `Amount of items ${data.items.length}`),
+      o('ul', data.items.map(item => o('li', `${item.name}`))),
+      o(AnotherComponent, { name: data.name }),
+      data.test ? o('p', 'Hey') : o('p', 'Hi'),
+      o('div', [o('p', 'This is a paragraph in a nested div')]),
+      o(Form),
+      o('button', 'Click me', {
         onclick() {
           data.foo = 'something else'
           data.test = 'now i am set'
