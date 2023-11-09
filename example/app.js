@@ -22,7 +22,7 @@ const Form = {
   },
   view({ data }) {
     return t('form', [
-      ...['name', 'age'].map((prop) => {
+      t('div', ['name', 'age'].map((prop) => {
         return t('div', t('input', '', {
           type: 'text',
           name: prop,
@@ -31,12 +31,12 @@ const Form = {
             data[prop] = e.target.value
           },
         }))
-      }),
-      ...data.errors.map(error => t(
+      })),
+      t('div', data.errors.map(error => t(
         'p',
         error,
         { style: 'color: red;' },
-      )),
+      ))),
       t('button', 'Submit', {
         onclick(e) {
           e.preventDefault()
@@ -97,6 +97,7 @@ const Component = {
           data.foo = 'something else'
           data.test = 'now i am set'
           data.name = 'Sebastian'
+          data.items = [...data.items, { name: 'New item' }]
         },
       }),
     ])
