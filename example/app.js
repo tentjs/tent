@@ -1,4 +1,4 @@
-import { o, mount } from '../dist/else'
+import { o, mount } from '../dist/one'
 import { getItems } from './services/get-items'
 
 const AnotherComponent = {
@@ -23,7 +23,7 @@ const Form = {
       errors: []
     }
   },
-  view ({ data }) {
+  view ({ data, props }) {
     return o('form', [
       div(['name', 'age'].map((prop) => {
         return div(
@@ -41,6 +41,7 @@ const Form = {
         error,
         { style: 'color: red;' }
       ))),
+      div(`Prop: ${props.name}`),
       button('Submit', {
         onclick (e) {
           e.preventDefault()
@@ -90,7 +91,7 @@ const Component = {
       o(AnotherComponent, { name: data.name }),
       data.test ? p('Hey') : p('Hi'),
       div(p('This is a paragraph in a nested div')),
-      o(Form),
+      o(Form, { name: data.name }),
       button('Click me', {
         onclick () {
           data.foo = 'something else'
@@ -124,3 +125,4 @@ function input (attrs) {
 }
 
 mount(Component, document.body)
+
