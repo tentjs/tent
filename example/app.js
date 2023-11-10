@@ -3,10 +3,13 @@ import { getItems } from './services/get-items'
 
 const AnotherComponent = {
   name: 'another-component',
+  onmount({data, props}) {
+    console.log('mounted another-component', data, props)
+  },
   view ({ props }) {
-    return o('div', [
-      o('p', `Hello ${props.name}`),
-      o('p', 'This is another component')
+    return div([
+      p(`Hello ${props.name}`),
+      p('This is another component')
     ], { style: 'background: #333; padding: 10px;' })
   }
 }
@@ -22,22 +25,23 @@ const Form = {
   },
   view ({ data }) {
     return o('form', [
-      o('div', ['name', 'age'].map((prop) => {
-        return o('div', o('input', '', {
-          type: 'text',
-          name: prop,
-          placeholder: prop,
-          oninput (e) {
-            data[prop] = e.target.value
-          }
-        }))
+      div(['name', 'age'].map((prop) => {
+        return div(
+          input({
+            type: 'text',
+            name: prop,
+            placeholder: prop,
+            oninput (e) {
+              data[prop] = e.target.value
+            }
+          })
+        )
       })),
-      o('div', data.errors.map(error => o(
-        'p',
+      div(data.errors.map(error => p(
         error,
         { style: 'color: red;' }
       ))),
-      o('button', 'Submit', {
+      button('Submit', {
         onclick (e) {
           e.preventDefault()
           const errors = []
@@ -67,27 +71,27 @@ const Component = {
       name: 'John Doe'
     }
   },
-  async onmount ({ data }) {
-    console.log('mounted')
+  async onmount ({ data, props }) {
+    console.log('mounted', data, props)
     data.items = await getItems()
   },
   view ({ data }) {
     if (!data.items.length) {
-      return o('div', [
-        o('p', 'Loading...'),
-        o('p', 'Some awesome items...')
+      return div([
+        p('Loading...'),
+        p('Some awesome items...')
       ])
     }
 
-    return o('div', [
-      o('p', `This is ${data.foo}`),
-      o('div', `Amount of items ${data.items.length}`),
+    return div([
+      p(`This is ${data.foo}`),
+      div(`Amount of items ${data.items.length}`),
       o('ul', data.items.map(item => o('li', `${item.name}`))),
       o(AnotherComponent, { name: data.name }),
-      data.test ? o('p', 'Hey') : o('p', 'Hi'),
-      o('div', [o('p', 'This is a paragraph in a nested div')]),
+      data.test ? p('Hey') : p('Hi'),
+      div(p('This is a paragraph in a nested div')),
       o(Form),
-      o('button', 'Click me', {
+      button('Click me', {
         onclick () {
           data.foo = 'something else'
           data.test = 'now i am set'
@@ -97,6 +101,26 @@ const Component = {
       })
     ])
   }
+}
+
+// TODO: Is this cool, or is it just clutter?
+// Maybe it should be moved to a separate @one/components package or something
+// This way it would be possible to create Flutter-like widgets
+// and use them in the same way as the built in elements
+function div (children, attrs) {
+  return o('div', children, attrs)
+}
+
+function p (children, attrs) {
+  return o('p', children, attrs)
+}
+
+function button (children, attrs) {
+  return o('button', children, attrs)
+}
+
+function input (attrs) {
+  return o('input', '', attrs)
 }
 
 mount(Component, document.body)
