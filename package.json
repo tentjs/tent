@@ -1,10 +1,10 @@
 {
-  "name": "else.js",
+  "name": "one.js",
   "version": "0.0.1-alpha",
   "description": "Build web apps with atomic components.",
   "source": "lib/index.js",
-  "main": "dist/else.cjs",
-  "module": "dist/else.mjs",
+  "main": "dist/one.cjs",
+  "module": "dist/one.mjs",
   "directories": {
     "example": "example",
     "lib": "lib",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
     "@parcel/config-default": "^2.10.0",
+    "@parcel/reporter-bundle-analyzer": "^2.10.2",
     "@testing-library/dom": "^9.3.3",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
