@@ -3,7 +3,7 @@ import { getItems } from './services/get-items'
 
 const AnotherComponent = {
   name: 'another-component',
-  onmount({data, props}) {
+  onmount ({ data, props }) {
     console.log('mounted another-component', data, props)
   },
   view ({ props }) {
@@ -30,6 +30,7 @@ const Form = {
           input({
             type: 'text',
             name: prop,
+            disabled: data[prop].length >= 3,
             placeholder: prop,
             oninput (e) {
               data[prop] = e.target.value
@@ -42,6 +43,12 @@ const Form = {
         { style: 'color: red;' }
       ))),
       div(`Prop: ${props.name}`),
+      button('Reset name', {
+        onclick (e) {
+          e.preventDefault()
+          data.name = ''
+        }
+      }),
       button('Submit', {
         onclick (e) {
           e.preventDefault()
@@ -125,4 +132,3 @@ function input (attrs) {
 }
 
 mount(Component, document.body)
-
