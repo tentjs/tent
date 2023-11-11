@@ -25,7 +25,7 @@ const Form = {
   },
   view ({ data, props }) {
     return o('form', [
-      div(['name', 'age'].map((prop) => {
+      div(['name', 'age'].map((prop, i) => {
         return div(
           input({
             type: 'text',
@@ -38,9 +38,9 @@ const Form = {
           })
         )
       })),
-      div(data.errors.map(error => p(
+      div(data.errors.map((error, i) => p(
         error,
-        { style: 'color: red;' }
+        { style: 'color: red;', key: i }
       ))),
       div(`Prop: ${props.name}`),
       button('Reset name', {
@@ -94,7 +94,7 @@ const Component = {
     return div([
       p(`This is ${data.foo}`),
       div(`Amount of items ${data.items.length}`),
-      o('ul', data.items.map(item => o('li', `${item.name}`))),
+      o('ul', data.items.map(item => o('li', `${item.name}`, { key: item.id }))),
       o(AnotherComponent, { name: data.name }),
       data.test ? p('Hey') : p('Hi'),
       div(p('This is a paragraph in a nested div')),
