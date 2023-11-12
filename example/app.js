@@ -25,7 +25,7 @@ const Form = {
   },
   view ({ data, props }) {
     return o('form', [
-      div(['name', 'age'].map((prop, i) => {
+      div(['name', 'age'].map((prop) => {
         return div(
           input({
             type: 'text',
@@ -38,9 +38,9 @@ const Form = {
           })
         )
       })),
-      div(data.errors.map((error, i) => p(
+      div(data.errors.map((error) => p(
         error,
-        { style: 'color: red;', key: i }
+        { style: 'color: red;' }
       ))),
       div(`Prop: ${props.name}`),
       button('Reset name', {
@@ -94,7 +94,7 @@ const Component = {
     return div([
       p(`This is ${data.foo}`),
       div(`Amount of items ${data.items.length}`),
-      o('ul', data.items.map(item => o('li', `${item.name}`, { key: item.id }))),
+      o('ul', data.items.map(item => o('li', `${item.name}`))),
       o(AnotherComponent, { name: data.name }),
       data.test ? p('Hey') : p('Hi'),
       div(p('This is a paragraph in a nested div')),
@@ -105,6 +105,11 @@ const Component = {
           data.test = 'now i am set'
           data.name = 'Sebastian'
           data.items = [...data.items, { name: 'New item' }]
+        }
+      }),
+      button('Reset list', {
+        onclick () {
+          data.items = data.items.slice(0, 1)
         }
       })
     ])
