@@ -116,6 +116,29 @@ const Component = {
   }
 }
 
+const SmallComponent = {
+  name: 'small-component',
+  data () {
+    return {
+      name: 'John Doe'
+    }
+  },
+  view ({ data }) {
+    return div([
+      p(`Hello ${data.name}`),
+      input({
+        type: 'text',
+        name: 'name',
+        placeholder: 'Enter your name',
+        value: data.name,
+        oninput ({ target }) {
+          data.name = target.value
+        }
+      })
+    ])
+  }
+}
+
 // TODO: Is this cool, or is it just clutter?
 // Maybe it should be moved to a separate @one/components package or something
 // This way it would be possible to create Flutter-like widgets
@@ -136,4 +159,5 @@ function input (attrs) {
   return o('input', '', attrs)
 }
 
+mount(SmallComponent, document.body)
 mount(Component, document.body)
