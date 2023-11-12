@@ -126,6 +126,7 @@ const SmallComponent = {
   view ({ data }) {
     return div([
       p(`Hello ${data.name}`),
+      o(AnotherComponent, { name: data.name }),
       input({
         type: 'text',
         name: 'name',
@@ -135,6 +136,16 @@ const SmallComponent = {
           data.name = target.value
         }
       })
+    ])
+  }
+}
+
+const View = {
+  name: 'view',
+  view () {
+    return div([
+      o(SmallComponent),
+      o(Component)
     ])
   }
 }
@@ -159,5 +170,4 @@ function input (attrs) {
   return o('input', '', attrs)
 }
 
-mount(SmallComponent, document.body)
-mount(Component, document.body)
+mount(View, document.body)
