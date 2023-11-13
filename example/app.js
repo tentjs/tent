@@ -1,21 +1,8 @@
 import { o, mount } from '../dist/one'
 import { getItems } from './services/get-items'
 
-const AnotherComponent = {
-  name: 'another-component',
-  onmount ({ data, props }) {
-    console.log('mounted another-component', data, props)
-  },
-  view ({ props }) {
-    return div([
-      p(`Hello ${props.name}`),
-      p('This is another component')
-    ], { style: 'background: #333; padding: 10px;' })
-  }
-}
-
 const Form = {
-  name: 'my-form',
+  name: 'form',
   data () {
     return {
       name: '',
@@ -52,6 +39,7 @@ const Form = {
       button('Submit', {
         onclick (e) {
           e.preventDefault()
+          console.log('submit form')
           const errors = []
           if (!data.name) {
             errors.push('Please fill out the name field')
@@ -70,70 +58,32 @@ const Form = {
 }
 
 const Component = {
-  name: 'my-component',
   data () {
     return {
       items: [],
       foo: 'bar',
       bar: 'baz',
-      name: 'John Doe'
+      name: 'Torben Hunter'
     }
   },
-  async onmount ({ data, props }) {
-    console.log('mounted', data, props)
+  async onmount ({ data }) {
     data.items = await getItems()
   },
   view ({ data }) {
-    if (!data.items.length) {
-      return div([
-        p('Loading...'),
-        p('Some awesome items...')
-      ])
+    if (data.items.length === 0) {
+      // TODO: `if` is needed here, because otherwise the
+      // rendering engine won't know that this is a conditional rendering
+      return div('Loading...', { if: true })
     }
 
     return div([
-      p(`This is ${data.foo}`),
       div(`Amount of items ${data.items.length}`),
       o('ul', data.items.map(item => o('li', `${item.name}`))),
-      o(AnotherComponent, { name: data.name }),
-      data.test ? p('Hey') : p('Hi'),
-      div(p('This is a paragraph in a nested div')),
       o(Form, { name: data.name }),
       button('Click me', {
         onclick () {
-          data.foo = 'something else'
-          data.test = 'now i am set'
-          data.name = 'Sebastian'
+          data.name = 'Jane Doe'
           data.items = [...data.items, { name: 'New item' }]
-        }
-      }),
-      button('Reset list', {
-        onclick () {
-          data.items = data.items.slice(0, 1)
-        }
-      })
-    ])
-  }
-}
-
-const SmallComponent = {
-  name: 'small-component',
-  data () {
-    return {
-      name: 'John Doe'
-    }
-  },
-  view ({ data }) {
-    return div([
-      p(`Hello ${data.name}`),
-      o(AnotherComponent, { name: data.name }),
-      input({
-        type: 'text',
-        name: 'name',
-        placeholder: 'Enter your name',
-        value: data.name,
-        oninput ({ target }) {
-          data.name = target.value
         }
       })
     ])
@@ -141,10 +91,9 @@ const SmallComponent = {
 }
 
 const View = {
-  name: 'view',
   view () {
     return div([
-      o(SmallComponent),
+      // o(SmallComponent),
       o(Component)
     ])
   }
