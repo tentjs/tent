@@ -8,7 +8,6 @@ A lightweight library to build reactive web apps without all the fuzz.
 import {o, mount} from 'one'
 
 const MyComponent = {
-  name: 'my-component',
   data() {
     return {
       name: 'John Doe',
