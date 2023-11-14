@@ -39,6 +39,9 @@ const If = {
       count: 0
     }
   },
+  onmount () {
+    console.log('If mounted')
+  },
   view ({ data }) {
     return o('div', [
       o('h1', 'If'),
