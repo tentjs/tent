@@ -14,7 +14,8 @@
     "watch": "parcel watch --no-cache",
     "build": "parcel build",
     "standard": "standard --fix",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "example": "parcel example/index.html -p 1337 --no-cache"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.2",
