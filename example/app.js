@@ -1,18 +1,41 @@
-import {createRouter} from '../dist/else'
-import {Home, About, Layout, Form, Post} from './pages'
+import { o, mount } from '../dist/one'
+import { getItems } from './services/get-items'
 
-createRouter(
-  [
-    {path: '/', component: Home},
-    {path: '/about-us', component: About},
-    {path: '/about-us/:id', component: About},
-    {path: '/form', component: Form},
-    {path: '/post/:id', component: Post},
-    {path: '/some/:param/:id', component: About},
-  ],
-  {
-    fallback: '/',
-    layout: Layout,
-    root: document.querySelector('#app'),
+const Component = {
+  data () {
+    return {
+      items: []
+    }
+  },
+  async onmount ({ data }) {
+    data.items = await getItems()
+  },
+  view ({ data }) {
+    return o('div', [
+      o('h1', 'Items'),
+      o(List, { items: data.items })
+    ])
   }
-)
+}
+
+const List = {
+  view ({ props }) {
+    return o('div', [
+      o('ul',
+        props.items.length
+          ? props.items.map(item => o('li', `${item.name}`))
+          : o('li', 'Loading')
+      )
+    ])
+  }
+}
+
+const View = {
+  view () {
+    return o('div', [
+      o(Component)
+    ])
+  }
+}
+
+mount(View, document.body)
