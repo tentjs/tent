@@ -76,6 +76,14 @@ const View = {
     return o('div', [
       o(Component),
       o('p', `Hello ${data.name}`),
+      o('input', [], {
+        value: data.name,
+        name: 'input',
+        type: 'text',
+        oninput (e) {
+          data.name = e.target.value
+        }
+      }),
       data.show
         ? o(If, null, { redraw: true })
         : o(Else, { name: data.name }, { redraw: true }),
