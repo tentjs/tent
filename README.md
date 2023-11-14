@@ -1,4 +1,4 @@
-# one.js
+# One.js
 
 A lightweight library to build reactive web apps &mdash; fast.
 
