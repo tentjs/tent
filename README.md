@@ -36,8 +36,24 @@ However, these are gotchas, and can easily be avoided.
 When using conditional rendering in a components `view` function, you should 
 structure your view in such a way, that you don't break the natural render tree.
 
+The recommended way to have conditional rendering is to use 2 components and the `redraw` attribute set to `true`.
+If you don't use the `redraw` attribute, the component will return a cached version from last render.
+See the first example below.
+
 ```js
 // ok
+const Component = {
+  // Recommended!
+  view({ data }) {
+    return o('div', [
+      data.bool ? 
+        // Can have props, but if not, set second argument to `null`
+        o(Component1, null, {redraw: true}) :
+        o(Component2, null, {redraw: true})
+    ])
+  }
+}
+
 const Component = {
   view({ data }) {
     return o('div', [
