@@ -36,17 +36,17 @@ const If = {
   name: 'if',
   data () {
     return {
-      name: 'John Doe'
+      count: 0
     }
   },
   view ({ data }) {
     return o('div', [
       o('h1', 'If'),
       o('p', 'Paragraph inside If'),
-      o('button', `Click ${data.name}`, {
+      o('button', data.count ? `Clicked ${data.count} times` : 'Click', {
         onclick () {
           console.log('clicked')
-          data.name = 'Jane Doe'
+          data.count = data.count + 1
         }
       })
     ])
@@ -77,8 +77,8 @@ const View = {
       o(Component),
       o('p', `Hello ${data.name}`),
       data.show
-        ? o(If, null)
-        : o(Else, { name: data.name }),
+        ? o(If, null, { redraw: true })
+        : o(Else, { name: data.name }, { redraw: true }),
       o('button', 'Click to toggle', {
         onclick () {
           data.show = !data.show
