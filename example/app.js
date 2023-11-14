@@ -70,25 +70,32 @@ const Component = {
     data.items = await getItems()
   },
   view ({ data }) {
-    console.log('data.items', data.items.length)
-    if (data.items.length === 0) {
-      // TODO: `if` is needed here, because otherwise the
-      // rendering engine won't know that this is a conditional rendering
-      console.log('loading should show now')
-      return div('Loading...', { if: true })
-    }
+    return ifElse(
+      data.items.length === 0,
+      o(Loader),
+      div([
+        div(`Amount of items ${data.items.length}`),
+        o('ul', data.items.map(item => o('li', `${item.name}`))),
+        o(Form, { name: data.name }),
+        button('Click me', {
+          onclick () {
+            data.name = 'Jane Doe'
+          }
+        }),
+        button('Re-fetch items', {
+          async onclick () {
+            data.items = []
+            data.items = await getItems()
+          }
+        })
+      ])
+    )
+  }
+}
 
-    return div([
-      div(`Amount of items ${data.items.length}`),
-      o('ul', data.items.map(item => o('li', `${item.name}`))),
-      o(Form, { name: data.name }),
-      button('Click me', {
-        onclick () {
-          data.name = 'Jane Doe'
-          data.items = []
-        }
-      })
-    ], { else: true })
+const Loader = {
+  view () {
+    return div('Loading...')
   }
 }
 
@@ -107,6 +114,14 @@ const View = {
 // and use them in the same way as the built in elements
 function div (children, attrs) {
   return o('div', children, attrs)
+}
+
+function ifElse (condition, ifChildren, elseChildren, attrs) {
+  if (condition) {
+    return o('div', ifChildren, { ...attrs, if: true })
+  }
+
+  return o('div', elseChildren, { ...attrs, else: true })
 }
 
 function p (children, attrs) {
