@@ -70,9 +70,11 @@ const Component = {
     data.items = await getItems()
   },
   view ({ data }) {
+    console.log('data.items', data.items.length)
     if (data.items.length === 0) {
       // TODO: `if` is needed here, because otherwise the
       // rendering engine won't know that this is a conditional rendering
+      console.log('loading should show now')
       return div('Loading...', { if: true })
     }
 
@@ -83,10 +85,10 @@ const Component = {
       button('Click me', {
         onclick () {
           data.name = 'Jane Doe'
-          data.items = [...data.items, { name: 'New item' }]
+          data.items = []
         }
       })
-    ])
+    ], { else: true })
   }
 }
 
