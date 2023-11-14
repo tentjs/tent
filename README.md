@@ -28,7 +28,7 @@ mount(document.body, MyComponent)
 ## Gotchas
 
 Since One is as lightweight as it is, there are a couple of gotchas that you should
-be aware of. Feel free to submit a PR if you've found a lightweight way of fixing these.
+be aware of. Feel free to submit a PR, if you can't live with the workarounds 😉
 
 However, these are gotchas, and can easily be avoided.
 
