@@ -38,6 +38,9 @@ structure your view in such a way, that you don't break the natural render tree.
 
 The recommended way to have conditional rendering is to use 2 components and the `redraw` attribute set to `true`.
 If you don't use the `redraw` attribute, the component will return a cached version from last render.
+
+Keep in mind that using `redraw` will redraw the component *every time* the parent component re-renders.
+
 See the first example below.
 
 ```js
