@@ -22,7 +22,7 @@ const MyComponent = {
   },
 }
 
-mount(document.body, MyComponent)
+mount(MyComponent, document.body)
 ```
 
 ## Gotchas
