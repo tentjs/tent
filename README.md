@@ -46,6 +46,7 @@ See the first example below.
 ```js
 // ok
 const Component = {
+  name: 'component',
   // Recommended!
   view({ data }) {
     return o('div', [
@@ -58,6 +59,7 @@ const Component = {
 }
 
 const Component = {
+  name: 'component',
   view({ data }) {
     return o('div', [
       o('ul',
@@ -70,17 +72,18 @@ const Component = {
 }
 
 const Component = {
+  name: 'component',
   view({ data }) {
     return o('div', 
       data.items.length
         ? o('nav', data.items.map(item => o('a', `${item.name}`)))
-        // Notice that both ternaries return same root element.
         : o('nav', o('div', 'Loading...'))
     )
   }
 }
 
 const Component = {
+  name: 'component',
   view ({ data }) {
     return o(
       'ul',
@@ -89,8 +92,21 @@ const Component = {
   }
 }
 
+const Component = {
+  name: 'component',
+  view ({ props }) {
+    return o('div', [
+      !props.items.length
+        // `p` will be replaced with `ul` since the tagNames differ
+        ? o('p', 'Loading')
+        : o('ul', props.items.map(item => o('li', `${item.name}`)))
+    ])
+  }
+}
+
 // not ok
 const Component = {
+  name: 'component',
   view({ data }) {
     return data.items.length
       ? o('ul', data.items.map(item => o('li', `${item.name}`)))
@@ -99,6 +115,7 @@ const Component = {
 }
 
 const Component = {
+  name: 'component',
   view({ data }) {
     return o('div', 
       data.items.length
@@ -109,6 +126,7 @@ const Component = {
 }
 
 const Component = {
+  name: 'component',
   view({ data }) {
     if (!data.items.length) {
       return o('div', 'Loading')
