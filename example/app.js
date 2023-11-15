@@ -4,7 +4,11 @@ const Component = new O('[hello-world]', function () {
   this.setState({
     name: 'John Doe',
     count: 0,
-    text: 'Click me'
+    text: 'Click me',
+    items: [
+      { title: 'Item 1' },
+      { title: 'Item 2' }
+    ]
   })
 })
 
@@ -16,7 +20,12 @@ const Button = new O('button', function () {
 
     this.setState({
       count,
-      text: `Clicked ${count}`
+      text: `Clicked ${count}`,
+      items: [
+        { title: 'Item 1' },
+        { title: 'Item 2' },
+        { title: 'Item 3' }
+      ]
     })
   })
 })
