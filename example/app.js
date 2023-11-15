@@ -1,7 +1,6 @@
 import { O } from '../dist/one'
 
-const Component = new O(function () {
-  this.el = '[hello-world]'
+const Component = new O('[hello-world]', function () {
   this.setState({
     name: 'John Doe',
     count: 0,
@@ -9,8 +8,7 @@ const Component = new O(function () {
   })
 })
 
-const Button = new O(function () {
-  this.el = 'button'
+const Button = new O('button', function () {
   this.setScope(Component)
 
   this.on('click', function (data) {
