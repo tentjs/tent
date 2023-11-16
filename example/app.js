@@ -7,7 +7,8 @@ const Component = new O('[hello-world]', function () {
     text: 'Click me',
     items: [
       { title: 'Item 1' },
-      { title: 'Item 2' }
+      { title: 'Item 2' },
+      { title: 'Item 3' }
     ]
   })
 })
@@ -22,9 +23,7 @@ const Button = new O('button', function () {
       count,
       text: `Clicked ${count}`,
       items: [
-        { title: 'Item 1' },
-        { title: 'Item 2' },
-        { title: 'Item 3' }
+        { title: 'Item 1' }
       ]
     })
   })
