@@ -18,10 +18,24 @@ const Component = new One('[hello-world]', async function () {
     checked: false
   }
 
+  this.methods = {
+    test: () => {
+      this.state = {
+        name: 'Jane Doe'
+      }
+    },
+    test2: (e) => {
+      this.state = {
+        name: e.target.value,
+        checked: true
+      }
+    }
+  }
+
   this.register([Button])
 })
 
-const Button = new One('button', function () {
+const Button = new One('[o-text="buttonText"]', function () {
   this.on('click', function ({ state }) {
     const count = state.count + 1
     const items = state.items.filter(i => i.id === 1)
