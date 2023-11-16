@@ -1,32 +1,47 @@
-import { O } from '../dist/one'
+import { One } from '../dist/one'
+import { getItems } from './services/get-items'
 
-const Component = new O('[hello-world]', function () {
-  this.setState({
+const Component = new One('[hello-world]', async function () {
+  this.state = {
     name: 'John Doe',
     count: 0,
-    text: 'Click me',
-    items: [
-      { title: 'Item 1' },
-      { title: 'Item 2' },
-      { title: 'Item 3' }
-    ]
-  })
+    bool: false,
+    selected: 'two',
+    buttonText: 'Click me',
+    items: [],
+    checked: false
+  }
+
+  const items = await getItems()
+
+  this.state = {
+    items,
+    subtitle: getSubtitle(items.length)
+  }
+
+  this.register([Button])
 })
 
-const Button = new O('button', function () {
-  this.setScope(Component)
+const Button = new One('button', function () {
+  this.on('click', function ({ state }) {
+    const count = state.count + 1
+    const items = state.items.filter(i => i.id === 1)
 
-  this.on('click', function (data) {
-    const count = data.count + 1
-
-    this.setState({
+    this.state = {
+      buttonText: `Clicked ${count} times`,
       count,
-      text: `Clicked ${count}`,
-      items: [
-        { title: 'Item 1' }
-      ]
-    })
+      bool: !state.bool,
+      items,
+      subtitle: getSubtitle(items.length)
+    }
   })
 })
 
-console.log('Component', Component, 'Button', Button)
+Component.mount()
+
+function getSubtitle (count) {
+  const start = count < 2 ? 'is' : 'are'
+  const end = count > 1 ? 'items' : 'item'
+
+  return `There ${start} ${count} ${end}`
+}
