@@ -1,22 +1,21 @@
 import { One } from '../dist/one'
-import { getItems } from './services/get-items'
 
 const Component = new One('[hello-world]', async function () {
+  const items = [
+    { id: 1, title: 'one' },
+    { id: 2, title: 'two' },
+    { id: 3, title: 'three' }
+  ]
+
   this.state = {
     name: 'John Doe',
     count: 0,
     bool: false,
     selected: 'two',
     buttonText: 'Click me',
-    items: [],
-    checked: false
-  }
-
-  const items = await getItems()
-
-  this.state = {
     items,
-    subtitle: getSubtitle(items.length)
+    subtitle: getSubtitle(items.length),
+    checked: false
   }
 
   this.register([Button])
