@@ -10,9 +10,7 @@ const Component = new One('[hello-world]', async function () {
   this.state = {
     name: 'John Doe',
     count: 0,
-    bool: false,
     selected: 'two',
-    buttonText: 'Click me',
     items,
     subtitle: getSubtitle(items.length),
     checked: false
@@ -26,16 +24,25 @@ const Component = new One('[hello-world]', async function () {
     },
     test2: (e) => {
       this.state = {
-        name: e.target.value,
-        checked: true
+        name: e.target.value
       }
     }
   }
 
-  this.register([Button])
+  // Registering a component inside another component
+  // will make the inner component(s) inehrit state, methods, etc.
+  this.register([Button, Test1])
 })
 
-const Button = new One('[o-text="buttonText"]', function () {
+const Test1 = new One('[test-1]', function () {
+  this.state = {
+    title: this.state.name
+  }
+})
+
+const Button = new One('#btn', function () {
+  console.log('Button', this.scope.state)
+
   this.on('click', function ({ state }) {
     const count = state.count + 1
     const items = state.items.filter(i => i.id === 1)
@@ -43,7 +50,6 @@ const Button = new One('[o-text="buttonText"]', function () {
     this.state = {
       buttonText: `Clicked ${count} times`,
       count,
-      bool: !state.bool,
       items,
       subtitle: getSubtitle(items.length)
     }

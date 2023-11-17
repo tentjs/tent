@@ -36,7 +36,7 @@
       <li o-text="title">Loading...</li>
     </ul>
     <span o-text="name">Jane Doe</span>
-    <button o-text="buttonText">Click me</button>
+    <button id="btn" o-text="buttonText">Click me</button>
     <button o-on:click="test">Trigger test()</button>
     <input type="text" o-on:input="test2" />
     <div>Clicked <span o-text="count">0</span> times</div>
@@ -50,6 +50,10 @@
     <div o-if="checked">
       <p>Checked</p>
     </div>
+  </div>
+  <div test-1>
+    <h3 o-text="title"></h3>
+    <p>test-1</p>
   </div>
   <script type="module" src="app.js"></script>
 </body>
