@@ -13,6 +13,11 @@ const Test1 = new One(function () {
         { id: 5, name: 'Five' }
       ]
     },
+    computed: {
+      uppercaseMsg: () => {
+        return this.state.msg.toUpperCase()
+      }
+    },
     methods: {
       handleClick: () => {
         this.state = {
