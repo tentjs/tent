@@ -26,36 +26,12 @@
 
 <body>
   <a href="./robots.txt" aria-label="robots.txt"></a>
-  <div hello-world>
-    <p>one.js 💛</p>
-    <div o-if="items.length">
-      <p>It's true!</p>
-    </div>
-    <p o-text="subtitle">There are 0 items</p>
-    <p o-text="test3"></p>
-    <ul o-for="items">
-      <li o-text="title">Loading...</li>
-    </ul>
-    <span o-text="name">Jane Doe</span>
-    <button id="btn" o-text="buttonText">Click me</button>
-    <button o-on:click="test">Trigger test()</button>
-    <input type="text" o-on:input="test2" />
-    <div>Clicked <span o-text="count">0</span> times</div>
-    <input o-model="name" type="text" />
-    <div>The selected value: <span o-text="selected"></span></div>
-    <select o-model="selected">
-      <option value="one">One</option>
-      <option value="two">Two</option>
-    </select>
-    <input type="checkbox" o-model="checked" />
-    <div o-if="checked">
-      <p>Checked</p>
-    </div>
-  </div>
-  <div test-1>
-    <h3 o-text="title"></h3>
-    <p>test-1</p>
-  </div>
+  <p o-text="msg"></p>
+  <p o-text="count"></p>
+  <ul o-for="list">
+    <li o-text="name"></li>
+  </ul>
+  <button o-on:click="handleClick">Click me</button>
   <script type="module" src="app.js"></script>
 </body>
 
