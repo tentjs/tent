@@ -26,12 +26,17 @@
 
 <body>
   <a href="./robots.txt" aria-label="robots.txt"></a>
-  <p o-text="uppercaseMsg"></p>
-  <p o-text="count"></p>
-  <ul o-for="list">
-    <li o-text="name"></li>
-  </ul>
-  <button o-on:click="handleClick">Click me</button>
+  <div id="app">
+    <p o-text="uppercaseMsg"></p>
+    <p o-text="count"></p>
+    <ul o-for="list">
+      <li o-text="name"></li>
+    </ul>
+    <div o-if="show">
+      <p>Showing</p>
+    </div>
+    <button o-on:click="handleClick">Click me</button>
+  </div>
   <script type="module" src="app.js"></script>
 </body>
 

@@ -2,6 +2,7 @@ import { One } from '../dist/one'
 
 const Test1 = new One(function () {
   return {
+    el: document.getElementById('app'),
     state: {
       msg: 'Hello, World!',
       count: 0,
@@ -16,6 +17,9 @@ const Test1 = new One(function () {
     computed: {
       uppercaseMsg: () => {
         return this.state.msg.toUpperCase()
+      },
+      show: () => {
+        return this.state.count > 2
       }
     },
     methods: {
