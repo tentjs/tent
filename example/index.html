@@ -26,9 +26,12 @@
 
 <body>
   <a href="./robots.txt" aria-label="robots.txt"></a>
-  <div id="app">
+  <div o-scope="app">
     <p o-text="uppercaseMsg"></p>
     <p o-text="count"></p>
+    <div o-scope="app2">
+      <p o-text="msg"></p>
+    </div>
     <ul o-for="list">
       <li o-text="name"></li>
     </ul>

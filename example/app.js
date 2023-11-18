@@ -2,7 +2,7 @@ import { One } from '../dist/one'
 
 const Test1 = new One(function () {
   return {
-    el: document.getElementById('app'),
+    scope: 'app',
     state: {
       msg: 'Hello, World!',
       count: 0,
@@ -34,3 +34,14 @@ const Test1 = new One(function () {
 })
 
 Test1.mount()
+
+const Test2 = new One(function () {
+  return {
+    scope: 'app2',
+    state: {
+      msg: 'Hello, World #2!'
+    }
+  }
+})
+
+Test2.mount()
