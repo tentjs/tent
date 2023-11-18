@@ -1,18 +1,18 @@
 import { One } from '../dist/one'
+import { getItems } from './services/get-items'
 
 const Test1 = new One(function () {
   return {
-    scope: 'app',
+    scope: 'scope1',
+    onmount: async () => {
+      this.state = {
+        list: await getItems()
+      }
+    },
     state: {
       msg: 'Hello, World!',
       count: 0,
-      list: [
-        { id: 1, name: 'One' },
-        { id: 2, name: 'Two' },
-        { id: 3, name: 'Three' },
-        { id: 4, name: 'Four' },
-        { id: 5, name: 'Five' }
-      ]
+      list: []
     },
     computed: {
       uppercaseMsg: () => {
@@ -37,7 +37,7 @@ Test1.mount()
 
 const Test2 = new One(function () {
   return {
-    scope: 'app2',
+    scope: 'scope2',
     state: {
       msg: 'Hello, World #2!'
     }
