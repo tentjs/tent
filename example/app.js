@@ -20,6 +20,9 @@ const Test1 = new One(function () {
       },
       show: () => {
         return this.state.count > 2
+      },
+      classNames: () => {
+        return this.state.count > 2 ? 'text-blue-500' : 'text-red-500'
       }
     },
     methods: {

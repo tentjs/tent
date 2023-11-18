@@ -21,6 +21,13 @@
     a {
       color: #a1a1a1;
     }
+
+    .text-red-500 {
+      color: #f56565;
+    }
+    .text-blue-500 {
+      color: #4299e1;
+    }
   </style>
 </head>
 
@@ -28,7 +35,7 @@
   <a href="./robots.txt" aria-label="robots.txt"></a>
   <div o-scope="scope1">
     <p o-text="uppercaseMsg"></p>
-    <p o-text="count"></p>
+    <p o-text="count" o-class="classNames"></p>
     <div o-scope="scope2">
       <p o-text="msg"></p>
     </div>
