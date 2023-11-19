@@ -32,23 +32,10 @@
       }
     </style>
   </head>
-
   <body>
     <a href="./robots.txt" aria-label="robots.txt"></a>
-    <div o-name="instance1">
-      <p o-text="uppercaseMsg"></p>
-      <p o-text="count" o-class="classNames"></p>
-      <div o-name="instance2">
-        <p o-text="msg"></p>
-      </div>
-      <ul o-for="list">
-        <li o-text="title">Loading...</li>
-      </ul>
-      <div o-if="show">
-        <p>Showing</p>
-      </div>
-      <button o-on:click="handleClick" o-disabled="disabled">Click me</button>
-    </div>
+    <my-component msg="Hello World"></my-component>
+    <my-component></my-component>
     <script type="module" src="app.js"></script>
   </body>
 </html>
