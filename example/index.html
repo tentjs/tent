@@ -1,53 +1,54 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <title>One.js 💛</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Showcasing how cool this library is" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #000;
+        color: #fff;
+        font-family: Onest, sans-serif;
+        font-size: 1.2rem;
+      }
 
-<head>
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-  <meta content="utf-8" http-equiv="encoding" />
-  <title>One.js 💛</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Showcasing how cool this library is" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Onest&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Onest, sans-serif;
-      font-size: 1.2rem;
-    }
+      a {
+        color: #a1a1a1;
+      }
 
-    a {
-      color: #a1a1a1;
-    }
+      .text-red-500 {
+        color: #f56565;
+      }
+      .text-blue-500 {
+        color: #4299e1;
+      }
+    </style>
+  </head>
 
-    .text-red-500 {
-      color: #f56565;
-    }
-    .text-blue-500 {
-      color: #4299e1;
-    }
-  </style>
-</head>
-
-<body>
-  <a href="./robots.txt" aria-label="robots.txt"></a>
-  <div o-scope="scope1">
-    <p o-text="uppercaseMsg"></p>
-    <p o-text="count" o-class="classNames"></p>
-    <div o-scope="scope2">
-      <p o-text="msg"></p>
+  <body>
+    <a href="./robots.txt" aria-label="robots.txt"></a>
+    <div o-name="instance1">
+      <p o-text="uppercaseMsg"></p>
+      <p o-text="count" o-class="classNames"></p>
+      <div o-name="instance2">
+        <p o-text="msg"></p>
+      </div>
+      <ul o-for="list">
+        <li o-text="title">Loading...</li>
+      </ul>
+      <div o-if="show">
+        <p>Showing</p>
+      </div>
+      <button o-on:click="handleClick" o-disabled="disabled">Click me</button>
     </div>
-    <ul o-for="list">
-      <li o-text="title">Loading...</li>
-    </ul>
-    <div o-if="show">
-      <p>Showing</p>
-    </div>
-    <button o-on:click="handleClick" o-disabled="disabled">Click me</button>
-  </div>
-  <script type="module" src="app.js"></script>
-</body>
-
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
