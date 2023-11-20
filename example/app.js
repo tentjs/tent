@@ -10,16 +10,18 @@ const store = createStore(function () {
 one({
   name: 'my-component',
   props: ['msg'],
+  state: { msg: '' },
   template: `
+    <p o-text="$props.msg">Text</p>
     <p o-text="msg">Text</p>
     <my-button text="My button"></my-button>
     <button>Click me</button>
   `,
-  setup ({ query, click }) {
+  setup ({ query }) {
     const btn = query('button')
 
-    click(btn, function ({ state }) {
-      state.msg = 'Hello World #2'
+    btn.on('click', function ({ state }) {
+      state.msg = 'Hello World #3'
     })
   }
 })
