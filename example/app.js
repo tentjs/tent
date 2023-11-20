@@ -1,7 +1,7 @@
 import { one, createStore } from '../dist/one'
 import { getItems } from './services/get-items'
 
-const store = createStore(function () {
+createStore(function () {
   return {
     foo: 'bar'
   }
@@ -10,10 +10,10 @@ const store = createStore(function () {
 one({
   name: 'my-component',
   props: ['msg'],
-  state: { msg: '' },
+  state: { msg: 'Initial msg' },
   template: `
     <p o-text="$props.msg">Text</p>
-    <p o-text="msg">Text</p>
+    <p o-text="msg"></p>
     <my-button text="My button"></my-button>
     <button>Click me</button>
   `,
@@ -27,16 +27,15 @@ one({
 })
 
 one({
-  store,
   name: 'my-button',
   props: ['text'],
   template: `
     <button o-text="$store.foo"></button>
   `,
-  setup ({ click, query }) {
+  setup ({ query }) {
     const btn = query('button')
 
-    click(btn, async function ({ store }) {
+    btn.on('click', async function ({ store }) {
       const items = await getItems()
 
       store.set('foo', items[0].title)
