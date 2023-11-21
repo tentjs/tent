@@ -24,16 +24,36 @@ const Test = {
   }
 }
 
+const List = {
+  name: 'my-list',
+  props: ['items', 'msg'],
+  state: { items: [], msg: 'List msg' },
+  template: html`
+    <ul>
+      <li o-text="msg"></li>
+    </ul>
+  `,
+  setup ({ parent, store, state }) {
+    state.items = parent.state.items
+    state.msg = state.items[0].title
+    console.log('setup run', state, store.state.foo)
+  }
+}
+
 one({
   name: 'my-component',
-  components: [Test],
+  components: [Test, List],
   props: ['msg', 'variant'],
-  state: { msg: 'Initial msg' },
+  state: {
+    msg: 'Initial msg',
+    items: [{ id: 1, title: 'List item #1' }]
+  },
   template: html`
     <p o-text="$props.msg">Text</p>
     <p o-text="msg"></p>
     <my-button text="My button"></my-button>
     <button id="change-msg">Click me</button>
+    <my-list></my-list>
   `,
   setup ({ query, state, props }) {
     const btn = query('#change-msg')
@@ -42,7 +62,7 @@ one({
       ? 'Hello World #1'
       : 'Hello World #2'
 
-    btn.on('click', function ({ state }) {
+    btn.on('click', function ({ state, store }) {
       state.msg = 'Hello World #3'
     })
   }
