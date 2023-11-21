@@ -13,6 +13,7 @@ const Test = {
   template: html`
     <button o-text="$store.foo"></button>
   `,
+  replace: true,
   setup ({ query }) {
     const btn = query('button')
 
@@ -48,11 +49,13 @@ one({
     items: [{ id: 1, title: 'List item #1' }]
   },
   template: html`
-    <p o-text="$props.msg">Text</p>
-    <p o-text="msg"></p>
-    <my-button text="My button"></my-button>
-    <button id="change-msg">Click me</button>
-    <my-list></my-list>
+    <div>
+      <p o-text="$props.msg">Text</p>
+      <p o-text="msg"></p>
+      <my-button text="My button"></my-button>
+      <button id="change-msg">Click me</button>
+      <my-list></my-list>
+    </div>
   `,
   setup ({ query, state, props }) {
     const btn = query('#change-msg')
