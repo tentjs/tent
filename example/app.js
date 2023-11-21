@@ -36,7 +36,7 @@ const List = {
   setup ({ parent, store, state }) {
     state.items = parent.state.items
     state.msg = state.items[0].title
-    console.log('setup run', state, store.state.foo)
+    console.log('setup run', state, store.get('foo'))
   }
 }
 
@@ -62,7 +62,7 @@ one({
       ? 'Hello World #1'
       : 'Hello World #2'
 
-    btn.on('click', function ({ state, store }) {
+    btn.on('click', function ({ state }) {
       state.msg = 'Hello World #3'
     })
   }
