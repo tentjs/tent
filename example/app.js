@@ -1,4 +1,4 @@
-import { one, createStore } from '../dist/one'
+import { one, createStore, html } from '../dist/one'
 import { getItems } from './services/get-items'
 
 createStore(function () {
@@ -7,29 +7,10 @@ createStore(function () {
   }
 })
 
-one({
-  name: 'my-component',
-  props: ['msg'],
-  state: { msg: 'Initial msg' },
-  template: `
-    <p o-text="$props.msg">Text</p>
-    <p o-text="msg"></p>
-    <my-button text="My button"></my-button>
-    <button>Click me</button>
-  `,
-  setup ({ query }) {
-    const btn = query('button')
-
-    btn.on('click', function ({ state }) {
-      state.msg = 'Hello World #3'
-    })
-  }
-})
-
-one({
+const Test = {
   name: 'my-button',
   props: ['text'],
-  template: `
+  template: html`
     <button o-text="$store.foo"></button>
   `,
   setup ({ query }) {
@@ -39,6 +20,30 @@ one({
       const items = await getItems()
 
       store.set('foo', items[0].title)
+    })
+  }
+}
+
+one({
+  name: 'my-component',
+  components: [Test],
+  props: ['msg', 'variant'],
+  state: { msg: 'Initial msg' },
+  template: html`
+    <p o-text="$props.msg">Text</p>
+    <p o-text="msg"></p>
+    <my-button text="My button"></my-button>
+    <button id="change-msg">Click me</button>
+  `,
+  setup ({ query, state, props }) {
+    const btn = query('#change-msg')
+
+    state.msg = props.variant === 'sec'
+      ? 'Hello World #1'
+      : 'Hello World #2'
+
+    btn.on('click', function ({ state }) {
+      state.msg = 'Hello World #3'
     })
   }
 })
