@@ -33,10 +33,9 @@ const List = {
       <li o-text="msg"></li>
     </ul>
   `,
-  setup ({ parent, store, state }) {
+  setup ({ parent, state }) {
     state.items = parent.state.items
     state.msg = state.items[0].title
-    console.log('setup run', state, store.get('foo'))
   }
 }
 
