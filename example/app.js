@@ -13,7 +13,6 @@ const Test = {
   template: html`
     <button o-text="$store.foo"></button>
   `,
-  replace: true,
   setup ({ query }) {
     const btn = query('button')
 
