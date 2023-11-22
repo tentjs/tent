@@ -26,16 +26,22 @@ const Test = {
 
 const List = {
   name: 'my-list',
-  props: ['items', 'msg'],
-  state: { items: [], msg: 'List msg' },
+  state: { items: [] },
   template: html`
     <ul>
-      <li o-text="msg"></li>
+      <li>
+        <span o-text="id"></span>: <span o-text="title"></span>
+      </li>
     </ul>
   `,
-  setup ({ parent, state }) {
-    state.items = parent.state.items
-    state.msg = state.items[0].title
+  setup ({ parent, query }) {
+    const li = query('li')
+
+    li.for(parent.state.items, function ({ el, item }) {
+      if (item.id % 2 === 0) {
+        el.remove()
+      }
+    })
   }
 }
 
@@ -45,7 +51,14 @@ one({
   props: ['msg', 'variant'],
   state: {
     msg: 'Initial msg',
-    items: [{ id: 1, title: 'List item #1' }]
+    items: [
+      { id: 1, title: 'List item #1' },
+      { id: 2, title: 'List item #2' },
+      { id: 3, title: 'List item #3' },
+      { id: 4, title: 'List item #4' },
+      { id: 5, title: 'List item #5' },
+      { id: 6, title: 'List item #6' }
+    ]
   },
   template: html`
     <div>
