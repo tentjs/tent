@@ -68,3 +68,25 @@ one({
     })
   }
 })
+
+one({
+  name: 'test',
+  setup ({ query }) {
+    const conditional1 = query('p')
+    const conditional2 = query('div')
+    const btn = query('button')
+    const btn2 = query('button#show')
+
+    const cond1 = conditional1.if()
+    const cond2 = conditional2.if()
+
+    btn.on('click', () => {
+      cond1.hide()
+      cond2.hide()
+    })
+    btn2.on('click', () => {
+      cond1.show()
+      cond2.show()
+    })
+  }
+})
