@@ -28,19 +28,32 @@ const List = {
   name: 'my-list',
   state: { items: [] },
   template: html`
-    <ul>
-      <li>
-        <span o-text="id"></span>: <span o-text="title"></span>
-      </li>
-    </ul>
+    <div>
+      <ul>
+        <li>
+          <span o-text="id"></span>: <span o-text="title"></span>
+          <span o-text="$store.foo"></span>
+        </li>
+      </ul>
+      <button>Click me</button>
+    </div>
   `,
   setup ({ parent, query }) {
     const li = query('li')
+    const btn = query('button')
+
+    btn.on('click', function ({ store }) {
+      store.set('foo', 'baz')
+    })
 
     li.for(parent.state.items, function ({ el, item }) {
       if (item.id % 2 === 0) {
         el.remove()
       }
+
+      el.on('click', function () {
+        console.log('item', item)
+      })
     })
   }
 }
