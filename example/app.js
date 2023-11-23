@@ -35,15 +35,21 @@ const List = {
           <span o-text="$store.foo"></span>
         </li>
       </ul>
+      <p>len: <span o-text="len"></span></p>
       <button>Click me</button>
     </div>
   `,
-  setup ({ parent, query }) {
+  setup ({ parent, query, computed }) {
+    computed('len', ({ state }) => state.items.length)
+
     const li = query('li')
     const btn = query('button')
 
-    btn.on('click', function ({ store }) {
+    btn.on('click', function ({ store, state }) {
+      const id = state.items.length + 1
+
       store.set('foo', 'baz')
+      state.items = [...state.items, { id, title: 'foo' }]
     })
 
     li.for(parent.state.items, function ({ el, item }) {
