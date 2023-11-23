@@ -54,12 +54,9 @@ const List = {
 
     li.for(parent.state.items, function ({ el, item }) {
       if (item.id % 2 === 0) {
-        el.remove()
+        el.style.fontWeight = 'bold'
+        el.style.color = 'coral'
       }
-
-      el.on('click', function () {
-        console.log('item', item)
-      })
     })
   }
 }
