@@ -27,15 +27,16 @@ const Test = {
 const List = {
   name: 'my-list',
   state: {
-    items: []
+    items: [
+      { id: 1, title: 'List item #1' }
+    ]
   },
   template: html`
     <div>
       <ul>
         <li>
           <span o-text="id"></span>: <span o-text="title"></span>
-          <!-- TODO: Fix the use of $store with re-rendering loop() -->
-          <!-- <span o-text="$store.foo"></span> -->
+          <span o-text="$store.foo"></span>
         </li>
       </ul>
       <p>len: <span o-text="len"></span></p>
