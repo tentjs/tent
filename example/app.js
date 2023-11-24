@@ -26,6 +26,9 @@ const Test = {
 
 const List = {
   name: 'my-list',
+  async created () {
+    this.state.items = await getItems()
+  },
   state: {
     items: [
       { id: 1, title: 'List item #1' }
@@ -87,7 +90,11 @@ one({
       <p o-text="msg"></p>
       <my-button text="My button"></my-button>
       <button id="change-msg">Click me</button>
-      <my-list></my-list>
+      <my-list>
+        <ul>
+          <li>Loading</li>
+        </ul>
+      </my-list>
     </div>
   `,
   setup ({ query, state, props }) {
