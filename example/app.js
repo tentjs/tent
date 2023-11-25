@@ -107,17 +107,7 @@ one({
   name: 'my-component',
   components: [Test, List],
   props: ['msg', 'variant'],
-  state: {
-    msg: 'Initial msg',
-    items: [
-      { id: 1, title: 'List item #1' },
-      { id: 2, title: 'List item #2' },
-      { id: 3, title: 'List item #3' },
-      { id: 4, title: 'List item #4' },
-      { id: 5, title: 'List item #5' },
-      { id: 6, title: 'List item #6' }
-    ]
-  },
+  state: { msg: 'Initial msg' },
   template: html`
     <div>
       <p o-text="$props.msg">Text</p>
