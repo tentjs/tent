@@ -26,9 +26,6 @@ const Test = {
 
 const List = {
   name: 'my-list',
-  async created () {
-    this.state.items = await getItems()
-  },
   state: {
     items: [
       { id: 1, title: 'List item #1' }
@@ -46,6 +43,9 @@ const List = {
       <button>Click me</button>
     </div>
   `,
+  async created () {
+    this.state.items = await getItems()
+  },
   setup ({ parent, query, computed, state }) {
     computed('len', ({ state }) => state.items.length)
 
