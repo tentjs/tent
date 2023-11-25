@@ -70,6 +70,40 @@ const List = {
 }
 
 one({
+  name: 'simple-list',
+  state: {
+    items: ['Item #1', 'Item #2', 'Item #3']
+  },
+  template: html`
+    <div>
+      <ul>
+        <li o-text></li>
+      </ul>
+      <button id="add">Add item</button>
+      <button id="reset">Reset</button>
+    </div>
+  `,
+  setup ({ query, state }) {
+    const li = query('li')
+    const add = query('#add')
+    const reset = query('#reset')
+
+    add.on('click', function ({ state }) {
+      state.items = [...state.items, `Item #${state.items.length + 1}`]
+    })
+
+    reset.on('click', function ({ state }) {
+      state.items.splice(1, 1)
+    })
+
+    li.for(['items'], function ({ el, item }) {
+      el.style.color = 'coral'
+      el.style.fontWeight = 'bold'
+    })
+  }
+})
+
+one({
   name: 'my-component',
   components: [Test, List],
   props: ['msg', 'variant'],
