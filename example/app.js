@@ -1,5 +1,5 @@
 import { one, createStore, html } from '../dist/one'
-import { SimpleList } from './components'
+import { TodoList } from './components/todo/list'
 
 createStore(function () {
   return {
@@ -9,11 +9,11 @@ createStore(function () {
 
 one({
   name: 'app',
-  components: [SimpleList],
+  components: [TodoList],
   template: html`
     <div>
       <h1>Hello world</h1>
-      <simple-list></simple-list>
+      <todo-list></todo-list>
     </div>
   `,
 })
