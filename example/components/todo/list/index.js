@@ -16,6 +16,11 @@ const TodoList = {
       <todo-item></todo-item>
     </ul>
   `,
+  events: {
+    delete(id, { state }) {
+      state.items = state.items.filter(item => item.id !== id)
+    },
+  },
   setup({ query, state }) {
     const item = query('todo-item')
 
