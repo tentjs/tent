@@ -1,4 +1,4 @@
-import { TodoItem, TodoInput } from '.'
+import { TodoInput, TodoItem } from '.'
 import { html } from '../../../lib/one'
 
 const TodoList = {
@@ -30,9 +30,7 @@ const TodoList = {
     },
   },
   setup({ query, state }) {
-    const item = query('todo-item')
-
-    item.for(['items', 'id'])
+    query('todo-item').for(['items', 'id'])
   }
 }
 
