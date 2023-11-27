@@ -24,8 +24,6 @@ const TodoList = {
       const id = Math.random().toString(36).substring(2, 7)
 
       state.items.push({ id, text, done: false })
-
-      console.log('add todo', state.items)
     },
     delete(id, { state }) {
       state.items = state.items.filter(item => item.id !== id)
