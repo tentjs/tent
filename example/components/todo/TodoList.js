@@ -1,6 +1,5 @@
-import { TodoItem } from '../item'
-import { html } from '../../../../lib/one'
-import { TodoInput } from '../input'
+import { TodoItem, TodoInput } from '.'
+import { html } from '../../../lib/one'
 
 const TodoList = {
   name: 'todo-list',

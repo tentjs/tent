@@ -1,4 +1,4 @@
-import { html } from '../../../../lib/one'
+import { html } from '../../../lib/one'
 
 const TodoItem = {
   name: 'todo-item',

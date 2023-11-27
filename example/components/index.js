@@ -1,4 +1,4 @@
-import { TodoList } from './todo/list'
+import { TodoList } from './todo'
 
 export {
   TodoList,
