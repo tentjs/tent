@@ -19,14 +19,6 @@ const TodoItem = {
 
     const {show, hide} = done.if({ initial: state.done })
 
-    function toggleDone() {
-      if (state.done) {
-        show()
-      } else {
-        hide()
-      }
-    }
-
     remove.on('click', function () {
       parent.events.delete(state.id)
     })
@@ -34,7 +26,11 @@ const TodoItem = {
     toggle.on('click', function () {
       state.done = !state.done
 
-      toggleDone()
+      if (state.done) {
+        show()
+      } else {
+        hide()
+      }
     })
   }
 }
