@@ -1,5 +1,5 @@
-import { SimpleList } from './simple-list'
+import { TodoList } from './todo/list'
 
 export {
-  SimpleList,
+  TodoList,
 }

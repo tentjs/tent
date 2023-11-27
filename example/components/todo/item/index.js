@@ -17,7 +17,7 @@ const TodoItem = {
     const toggleBtn = query('.toggleBtn')
     const done = query('.done')
 
-    const {show, hide, toggle} = done.if({ initial: state.done })
+    const { toggle } = done.if({ initial: state.done })
 
     removeBtn.on('click', function () {
       parent.events.delete(state.id)
