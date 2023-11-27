@@ -5,32 +5,28 @@ const TodoItem = {
   template: html`
     <li>
       <span o-text="text"></span>
-      <span id="done">Done</span>
+      <span class="done">Done</span>
       <div>
-        <button id="toggle">Toggle</button>
-        <button id="remove">Remove</button>
+        <button class="toggleBtn">Toggle</button>
+        <button class="removeBtn">Remove</button>
       </div>
     </li>
   `,
   setup({ query, state, parent }) {
-    const remove = query('#remove')
-    const toggle = query('#toggle')
-    const done = query('#done')
+    const removeBtn = query('.removeBtn')
+    const toggleBtn = query('.toggleBtn')
+    const done = query('.done')
 
-    const {show, hide} = done.if({ initial: state.done })
+    const {show, hide, toggle} = done.if({ initial: state.done })
 
-    remove.on('click', function () {
+    removeBtn.on('click', function () {
       parent.events.delete(state.id)
     })
 
-    toggle.on('click', function () {
+    toggleBtn.on('click', function () {
       state.done = !state.done
 
-      if (state.done) {
-        show()
-      } else {
-        hide()
-      }
+      toggle()
     })
   }
 }
