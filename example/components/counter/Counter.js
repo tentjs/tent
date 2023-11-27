@@ -12,9 +12,9 @@ const Counter = {
   state: {
     count: 0,
   },
-  setup({ query }) {
-    query('#dec').on('click', ({ state }) => state.count--)
-    query('#inc').on('click', ({ state }) => state.count++)
+  setup({ query, state }) {
+    query('#dec').on('click', () => state.count--)
+    query('#inc').on('click', () => state.count++)
   }
 }
 
