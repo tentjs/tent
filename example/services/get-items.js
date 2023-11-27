@@ -5,19 +5,19 @@ export async function getItems () {
       resolve([
         {
           id: 1,
-          name: 'Grocery shopping',
+          title: 'Grocery shopping',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false
         },
         {
           id: 2,
-          name: 'Clean the house',
+          title: 'Clean the house',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false
         },
         {
           id: 3,
-          name: 'Go to the gym',
+          title: 'Go to the gym',
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
           done: false
         }

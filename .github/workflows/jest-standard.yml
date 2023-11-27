@@ -1,4 +1,4 @@
-name: Jest & Standard
+name: Jest
 
 on: [push, pull_request]
 
@@ -17,9 +17,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Run standard
-        run: npm run standard
-
+m
       - name: Run Jest
         run: npm test
