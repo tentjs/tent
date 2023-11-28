@@ -1,5 +1,6 @@
 import { createStore, html, one } from '../dist/one'
-import { Counter, HelloWorld, TodoList } from './components'
+import { Counter, HelloWorld, Navbar, TodoList } from './components'
+import * as styles from './app.module.css'
 
 createStore(function () {
   return {
@@ -9,12 +10,20 @@ createStore(function () {
 
 one({
   name: 'app',
-  components: [TodoList, Counter, HelloWorld],
+  components: [
+    TodoList,
+    Counter,
+    HelloWorld,
+    Navbar,
+  ],
   template: html`
-    <div>
-      <hello-world></hello-world>
-      <todo-list></todo-list>
-      <counter></counter>
+    <div class="${styles.page}">
+      <navbar></navbar>
+      <main class="${styles.main}">
+        <hello-world></hello-world>
+        <todo-list></todo-list>
+        <counter></counter>
+      </main>
     </div>
   `,
 })
