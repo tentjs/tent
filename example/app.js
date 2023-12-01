@@ -1,7 +1,7 @@
-import { mount, Input, Button, Text, Container } from '../lib/two'
+import { mount, watch, Input, Button, Text, Container } from '../lib/two'
 
 function view({ el, state }) {
-  return Container([
+  return PageLayout([
     ["form", [
       UserInput('firstname', state),
       UserInput('lastname', state, { disabled: state.firstname === '' }),
@@ -42,22 +42,40 @@ function view({ el, state }) {
         state.count++
 
         if (state.count > 5) {
-          state.list = [...state.list, { id: 4, title: "Title #4" }]
+          state.list = [
+            ...state.list,
+            { id: 4, title: "Title #4" }
+          ]
         }
       }
     }),
     UserInput("msg", state, {
       oninput(ev) {
         state.msg = ev.target.value
-      }
+      },
     }),
     Button("Add to list", {
       onclick() {
-        state.list = [...state.list, { id: state.list.length + 1, title: state.msg }]
+        state.list = [
+          ...state.list,
+          { id: state.list.length + 1, title: state.msg }
+        ]
       }
     }),
     ["ul", state.list.map((item) => ["li", item.title])],
   ])
+}
+
+function PageLayout(children) {
+  return Container([
+    ["header", [
+      ["h1", "Hello, world!"],
+    ]],
+    ["main", children],
+    ["footer", [
+      ["p", "This is the footer!"],
+    ]],
+  ], { className: 'page-layout' })
 }
 
 function UserInput(type, state, props) {
@@ -67,6 +85,15 @@ function UserInput(type, state, props) {
       oninput(ev) {
         state[type] = ev.target.value
       },
+      onblur(ev) {
+        if (!ev.target.checkValidity()) {
+          ev.target.classList.add('error')
+        } else {
+          ev.target.classList.remove('error')
+        }
+      },
+      pattern: type === 'phone' ? '[0-9]{3}-[0-9]{3}-[0-9]{4}' : '',
+      required: true,
       placeholder: `Type your ${type}...`,
       ...props,
     })
