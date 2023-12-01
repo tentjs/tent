@@ -2,7 +2,7 @@
   "name": "one.js",
   "version": "0.0.1-alpha",
   "description": "Build web apps with atomic components.",
-  "source": "lib/one.js",
+  "source": "lib/two.js",
   "main": "dist/one.cjs",
   "module": "dist/one.mjs",
   "directories": {
