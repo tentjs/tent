@@ -1,4 +1,4 @@
-import { mount, watch, Input, Button, Text, Container } from '../lib/two'
+import { mount, Input, Button, Text, Container } from '../lib/two'
 
 function view({ el, state }) {
   return PageLayout([
