@@ -1,8 +1,8 @@
-import { mount, Input, Button, Text, Container } from '../lib/two'
+import { mount, Form, Input, Button, Text, Container } from '../lib/two'
 
 function view({ el, state }) {
   return PageLayout([
-    Form(state),
+    UserForm(state),
     Counter(state),
     Todos(state),
   ])
@@ -35,7 +35,7 @@ function Todos(state) {
   ], { className: 'todos' })
 }
 
-function Form(state) {
+function UserForm(state) {
   const inputs = [
     'firstname',
     'lastname',
@@ -61,11 +61,11 @@ function Form(state) {
     }
   }
 
-  return ["form", [
+  return Form([
     ...inputs.map(type => UserInput(state, type)),
     Button("Submit", { onclick }),
     ["ul", state.errors.map((error) => ["li", error])],
-  ]]
+  ])
 }
 
 function Counter(state) {
