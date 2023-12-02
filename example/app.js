@@ -1,8 +1,8 @@
-import { mount, form, input, button, text, container } from '../lib/two'
+import { mount, form, input, button, text, div } from '../lib/two'
 
 function view({ el, state }) {
   return pageLayout([
-    ["h1", "Hello, world!"],
+    ['h1', 'Hello, world!'],
     userForm(state),
     counter(state),
     todos(state),
@@ -10,18 +10,18 @@ function view({ el, state }) {
 }
 
 function pageLayout(children) {
-  return container([
-    container([
-      container([
-        ["nav", [
-          ["a", "Home", { href: '/' }],
-          ["a", "About", { href: '/about' }],
-          ["a", "Contact", { href: '/contact' }],
+  return div([
+    div([
+      div([
+        ['nav', [
+          ['a', 'Home', { href: '/' }],
+          ['a', 'About', { href: '/about' }],
+          ['a', 'Contact', { href: '/contact' }],
         ]],
       ], { className: 'sidebar' }),
-      container([
-        ["main", children],
-        ["footer", ["This is the footer!"]],
+      div([
+        ['main', children],
+        ['footer', 'This is the footer!'],
       ], { className: 'content' })
     ], { className: 'page-container' }),
   ], { className: 'page-layout' })
@@ -41,10 +41,10 @@ function todos(state) {
     state.msg = ev.target.value
   }
 
-  return container([
-    userInput(state, "msg", { oninput }),
-    button("Add to list", { onclick }),
-    ["ul", state.list.map((item) => ["li", item.title])]
+  return div([
+    userInput(state, 'msg', { oninput }),
+    button('Add to list', { onclick }),
+    ['ul', state.list.map((item) => ['li', item.title])]
   ], { className: 'todos' })
 }
 
@@ -70,34 +70,34 @@ function userForm(state) {
     state.errors = errors
 
     if (errors.length === 0) {
-      console.info("form submitted!")
+      console.info('form submitted!')
     }
   }
 
   return form([
     ...inputs.map(type => userInput(state, type)),
-    button("Submit", { onclick }),
-    ["ul", state.errors.map((error) => ["li", error])],
+    button('Submit', { onclick }),
+    ['ul', state.errors.map((error) => ['li', error])],
   ])
 }
 
 function counter(state) {
-  return container([
+  return div([
     text(`Count: ${state.count}`),
-    button("Decrement", { onclick() { state.count-- } }),
-    button("Increment", { onclick() { state.count++ } })
+    button('Decrement', { onclick() { state.count-- } }),
+    button('Increment', { onclick() { state.count++ } })
   ])
 }
 
 function userInput(state, type, props) {
-  return container([
+  return div([
     input({
       type,
       oninput(ev) {
         state[type] = ev.target.value
       },
       onblur(ev) {
-        if (ev.target.value === "") {
+        if (ev.target.value === '') {
           ev.target.classList.add('error')
         } else {
           ev.target.classList.remove('error')
@@ -113,16 +113,16 @@ mount({
   el: document.querySelector('#app'),
   state: {
     count: 0,
-    firstname: "",
-    lastname: "",
-    phone: "",
-    email: "",
-    msg: "",
+    firstname: '',
+    lastname: '',
+    phone: '',
+    email: '',
+    msg: '',
     errors: [],
     list: [
-      { id: 1, title: "Title #1" },
-      { id: 2, title: "Title #2" },
-      { id: 3, title: "Title #3" }
+      { id: 1, title: 'Title #1' },
+      { id: 2, title: 'Title #2' },
+      { id: 3, title: 'Title #3' }
     ],
   },
   view
