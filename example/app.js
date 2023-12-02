@@ -17,7 +17,7 @@ function PageLayout(children) {
 }
 
 function Todos(state) {
-  function handleOnClick(ev) {
+  function onclick(ev) {
     if (!state.msg) {
       return
     }
@@ -30,7 +30,7 @@ function Todos(state) {
 
   return Container([
     UserInput(state, "msg", { oninput(ev) { state.msg = ev.target.value } }),
-    Button("Add to list", { onclick: handleOnClick }),
+    Button("Add to list", { onclick }),
     ["ul", state.list.map((item) => ["li", item.title])]
   ], { className: 'todos' })
 }
@@ -43,7 +43,7 @@ function Form(state) {
     'email',
   ]
 
-  function handleOnClick(ev) {
+  function onclick(ev) {
     ev.preventDefault()
 
     const errors = []
@@ -63,7 +63,7 @@ function Form(state) {
 
   return ["form", [
     ...inputs.map(type => UserInput(state, type)),
-    Button("Submit", { onclick: handleOnClick }),
+    Button("Submit", { onclick }),
     ["ul", state.errors.map((error) => ["li", error])],
   ]]
 }
@@ -97,7 +97,7 @@ function UserInput(state, type, props) {
 }
 
 mount({
-  el: document.body,
+  el: document.querySelector('#app'),
   state: {
     count: 0,
     firstname: "",
