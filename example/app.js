@@ -21,31 +21,10 @@ function pageLayout(children) {
       ], { className: 'sidebar' }),
       div([
         ['main', children],
-        ['footer', 'This is the footer!'],
+        ['footer', 'This is the footer'],
       ], { className: 'content' })
     ], { className: 'page-container' }),
   ], { className: 'page-layout' })
-}
-
-function todos(state) {
-  function onclick(ev) {
-    if (!state.msg) { return }
-
-    state.list = [
-      ...state.list,
-      { id: state.list.length + 1, title: state.msg }
-    ]
-  }
-
-  function oninput(ev) {
-    state.msg = ev.target.value
-  }
-
-  return div([
-    userInput(state, 'msg', { oninput }),
-    button('Add to list', { onclick }),
-    ['ul', state.list.map((item) => ['li', item.title])]
-  ], { className: 'todos' })
 }
 
 function userForm(state) {
@@ -87,6 +66,27 @@ function counter(state) {
     button('Decrement', { onclick() { state.count-- } }),
     button('Increment', { onclick() { state.count++ } })
   ])
+}
+
+function todos(state) {
+  function onclick(ev) {
+    if (!state.msg) { return }
+
+    state.list = [
+      ...state.list,
+      { id: state.list.length + 1, title: state.msg }
+    ]
+  }
+
+  function oninput(ev) {
+    state.msg = ev.target.value
+  }
+
+  return div([
+    userInput(state, 'msg', { oninput }),
+    button('Add to list', { onclick }),
+    ['ul', state.list.map((item) => ['li', item.title])]
+  ], { className: 'todos' })
 }
 
 function userInput(state, type, props) {
