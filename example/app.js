@@ -1,26 +1,35 @@
-import { mount, Form, Input, Button, Text, Container } from '../lib/two'
+import { mount, form, input, button, text, container } from '../lib/two'
 
 function view({ el, state }) {
-  return PageLayout([
-    UserForm(state),
-    Counter(state),
-    Todos(state),
+  return pageLayout([
+    ["h1", "Hello, world!"],
+    userForm(state),
+    counter(state),
+    todos(state),
   ])
 }
 
-function PageLayout(children) {
-  return Container([
-    ["header", [["h1", "Hello, world!"]]],
-    ["main", children],
-    ["footer", [Text("This is the footer!")]],
+function pageLayout(children) {
+  return container([
+    container([
+      container([
+        ["nav", [
+          ["a", "Home", { href: '/' }],
+          ["a", "About", { href: '/about' }],
+          ["a", "Contact", { href: '/contact' }],
+        ]],
+      ], { className: 'sidebar' }),
+      container([
+        ["main", children],
+        ["footer", ["This is the footer!"]],
+      ], { className: 'content' })
+    ], { className: 'page-container' }),
   ], { className: 'page-layout' })
 }
 
-function Todos(state) {
+function todos(state) {
   function onclick(ev) {
-    if (!state.msg) {
-      return
-    }
+    if (!state.msg) { return }
 
     state.list = [
       ...state.list,
@@ -28,14 +37,18 @@ function Todos(state) {
     ]
   }
 
-  return Container([
-    UserInput(state, "msg", { oninput(ev) { state.msg = ev.target.value } }),
-    Button("Add to list", { onclick }),
+  function oninput(ev) {
+    state.msg = ev.target.value
+  }
+
+  return container([
+    userInput(state, "msg", { oninput }),
+    button("Add to list", { onclick }),
     ["ul", state.list.map((item) => ["li", item.title])]
   ], { className: 'todos' })
 }
 
-function UserForm(state) {
+function userForm(state) {
   const inputs = [
     'firstname',
     'lastname',
@@ -57,28 +70,28 @@ function UserForm(state) {
     state.errors = errors
 
     if (errors.length === 0) {
-      console.info("Form submitted!")
+      console.info("form submitted!")
     }
   }
 
-  return Form([
-    ...inputs.map(type => UserInput(state, type)),
-    Button("Submit", { onclick }),
+  return form([
+    ...inputs.map(type => userInput(state, type)),
+    button("Submit", { onclick }),
     ["ul", state.errors.map((error) => ["li", error])],
   ])
 }
 
-function Counter(state) {
-  return Container([
-    Text(`Count: ${state.count}`),
-    Button("Decrement", { onclick() { state.count-- } }),
-    Button("Increment", { onclick() { state.count++ } })
+function counter(state) {
+  return container([
+    text(`Count: ${state.count}`),
+    button("Decrement", { onclick() { state.count-- } }),
+    button("Increment", { onclick() { state.count++ } })
   ])
 }
 
-function UserInput(state, type, props) {
-  return Container([
-    Input({
+function userInput(state, type, props) {
+  return container([
+    input({
       type,
       oninput(ev) {
         state[type] = ev.target.value

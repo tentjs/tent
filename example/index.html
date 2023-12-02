@@ -19,6 +19,7 @@
         color: #fff;
         font-family: Onest, sans-serif;
         font-size: 16px;
+        margin: 0;
       }
 
       a {
@@ -28,6 +29,39 @@
       .error {
         color: #ff0000;
         border: 1px solid #ff0000;
+      }
+
+      .page-container {
+        display: flex;
+      }
+
+      .sidebar {
+        width: 300px;
+        height: 100vh;
+        background-color: #1a1a1a;
+        padding: 20px;
+      }
+
+      .sidebar nav {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar nav a {
+        text-decoration: none;
+        margin-bottom: 8px;
+      }
+
+      .content {
+        padding-left: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      footer {
+        margin-top: auto;
+        padding: 20px 0;
       }
     </style>
   </head>
