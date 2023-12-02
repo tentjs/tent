@@ -1,6 +1,6 @@
 import { mount, form, input, button, text, div } from '../lib/two'
 
-function view({ el, state }) {
+function view({ state }) {
   return pageLayout([
     ['h1', 'Hello, world!'],
     userForm(state),
