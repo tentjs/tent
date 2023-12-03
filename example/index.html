@@ -59,6 +59,35 @@
         flex-direction: column;
       }
 
+      .todos {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 0;
+      }
+
+      .todo {
+        display: flex;
+        margin-bottom: 16px;
+      }
+
+      .todo button {
+        margin-right: 10px;
+        background: #fff;
+        cursor: pointer;
+        border: none;
+        color: #000;
+        padding: 0 8px;
+        height: 20px;
+        border-radius: 4px;
+      }
+
+      .todo-title {
+        &.done {
+          text-decoration: line-through;
+        }
+      }
+
       footer {
         margin-top: auto;
         padding: 20px 0;
