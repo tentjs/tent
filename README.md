@@ -7,21 +7,20 @@ One is in alpha and is under heavy development. There might be breaking changes 
 ## Usage
 
 ```js
-import { one, html } from 'one'
+import { mount, div, button } from 'one'
 
-one({
-  name: 'counter',
-  template: html`
-    <div>
-      <button id="dec">-</button>
-      <span o-text="count"></span>
-      <button id="inc">+</button>
-    </div>
-  `,
-  state: { count: 0 },
-  setup({ query, state }) {
-    query('#dec').on('click', () => state.count--)
-    query('#inc').on('click', () => state.count++)
-  }
+const state = { count: 0 }
+const view = function ({ state }) {
+  return div([
+    p(`Count: ${state.count}`),
+    button('Dec', { onclick() { state.count-- } }),
+    button('Inc', { onclick() { state.count++ } }),
+  ])
+}
+
+mount({
+  state,
+  view,
+  el: document.querySelector('#counter'),
 })
 ```
