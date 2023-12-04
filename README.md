@@ -9,7 +9,7 @@ One is in alpha and is under heavy development. There might be breaking changes 
 ```js
 import { mount, div, button } from 'one'
 
-const view = function ({ state }) {
+function view({ state }) {
   return div([
     p(`Count: ${state.count}`),
     button('Dec', { onclick() { state.count-- } }),
