@@ -9,7 +9,6 @@ One is in alpha and is under heavy development. There might be breaking changes 
 ```js
 import { mount, div, button } from 'one'
 
-const state = { count: 0 }
 const view = function ({ state }) {
   return div([
     p(`Count: ${state.count}`),
@@ -17,6 +16,8 @@ const view = function ({ state }) {
     button('Inc', { onclick() { state.count++ } }),
   ])
 }
+
+const state = { count: 0 }
 
 mount({
   state,
