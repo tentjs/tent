@@ -1,4 +1,4 @@
-import { mount, router, form, input, button, p, div, span, h1, ul, li, h3 } from '../lib/two'
+import { router, form, input, button, p, div, span, h1, ul, li, h3 } from '../lib/two'
 
 router(
   document.querySelector('#app'),
