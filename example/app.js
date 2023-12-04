@@ -1,4 +1,4 @@
-import { mount, router, form, input, button, text, div, span, h1, ul, li, h3 } from '../lib/two'
+import { mount, router, form, input, button, p, div, span, h1, ul, li, h3 } from '../lib/two'
 
 router(
   document.querySelector('#app'),
@@ -11,8 +11,8 @@ router(
           view({ state, anchor }) {
             return pageLayout([
               h1(state.title),
-              text('Welcome home!'),
-              text(`Count: ${state.count}`),
+              p('Welcome home!'),
+              p(`Count: ${state.count}`),
               button('Decrement', { onclick() { state.count-- } }),
               button('Increment', { onclick() { state.count++ } }),
             ], { state, anchor })
@@ -28,8 +28,8 @@ router(
           view({ state, anchor }) {
             return pageLayout([
               h1(state.title),
-              text('This is the about page.'),
-              text(`Count: ${state.count}`),
+              p('This is the about page.'),
+              p(`Count: ${state.count}`),
               button('Decrement', { onclick() { state.count-- } }),
               button('Increment', { onclick() { state.count++ } }),
             ], { anchor })
@@ -57,7 +57,7 @@ router(
 
             return pageLayout([
               h1(state.title),
-              text('This is the contact page.'),
+              p('This is the contact page.'),
               h3('Todos'),
               ul(
                 state.todos.map(todo => li([
@@ -140,7 +140,7 @@ function userForm(state) {
 
 function counter(state) {
   return div([
-    text(`Count: ${state.count}`),
+    p(`Count: ${state.count}`),
     button('Decrement', { onclick() { state.count-- } }),
     button('Increment', { onclick() { state.count++ } })
   ])
