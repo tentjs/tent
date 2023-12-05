@@ -23,14 +23,14 @@
 .paragraph {
   transition: background-color 0.3s ease;
 
-  &.high {
+  &.low {
     background-color: #f44336;
     &:hover {
       background-color: #da190b;
     }
   }
 
-  &.low {
+  &.high {
     background-color: #2196F3;
     &:hover {
       background-color: #0b7dda;
