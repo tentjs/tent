@@ -1,0 +1,40 @@
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: #fff;
+  padding: 4px 6px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  margin-right: 4px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background-color: #3e8e41;
+  }
+}
+
+.paragraph {
+  transition: background-color 0.3s ease;
+
+  &.high {
+    background-color: #f44336;
+    &:hover {
+      background-color: #da190b;
+    }
+  }
+
+  &.low {
+    background-color: #2196F3;
+    &:hover {
+      background-color: #0b7dda;
+    }
+  }
+}
+
