@@ -25,3 +25,42 @@ mount({
   el: document.querySelector('#counter'),
 })
 ```
+
+### Router
+
+```js
+import { router, h1, p, div } from 'one'
+
+router(
+  document.querySelector('#app'),
+  [{
+    path: '/',
+    handler() {
+      return {
+        state: { title: 'Home' },
+        view({ state, anchor }) {
+          return div([
+            h1(state.title),
+            p('Welcome to the home page.'),
+            anchor('About', { href: '/about' }),
+          ])
+        },
+      }
+    }
+  },
+  {
+    path: '/about',
+    handler() {
+      return {
+        view({ anchor }) {
+          return div([
+            h1('About'),
+            p('This is the about page.'),
+            anchor('Home', { href: '/' }),
+          ])
+        },
+      }
+    }
+  }],
+)
+```
