@@ -1,7 +1,6 @@
 import { mount, button, p, div, classNames } from '../lib/one'
-import * as styles from './styles.module.css'
+import styles from './styles.module.css'
 
-const state = { count: 0 }
 function view({ state }) {
   return div([
     p(`Count: ${state.count}`, {
@@ -15,6 +14,8 @@ function view({ state }) {
     button('Inc', { onclick() { state.count++ }, className: styles.button }),
   ])
 }
+
+const state = { count: 0 }
 
 document.querySelectorAll('.counter').forEach(el => {
   mount({ el, view, state })
