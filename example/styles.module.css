@@ -38,3 +38,32 @@
   }
 }
 
+.profile {
+  width: 240px;
+
+  .warning {
+    margin-bottom: 8px;
+  }
+}
+
+.skeleton {
+  background-color: #333;
+  border-radius: 4px;
+  width: 120px;
+  height: 20px;
+  margin-bottom: 1em;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.warning {
+  border-radius: 4px;
+  background-color: #ffeb3b;
+  color: #333;
+  padding: 4px 6px;
+  font-size: 80%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
