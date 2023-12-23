@@ -8,7 +8,7 @@
   "types": "dist/tent.d.ts",
   "repository": {
     "type": "git",
-    "url": "git@github.com:tentjs/Tent.git"
+    "url": "git+ssh://git@github.com/tentjs/tent.git"
   },
   "directories": {
     "src": "src"
