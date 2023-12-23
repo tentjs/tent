@@ -12,12 +12,12 @@ type CustomNode = Node & Element & HTMLElement & {
   children: CustomNode[];
 };
 
-function mount(el: Element, component: Component) {
+function mount(el: HTMLElement | null, component: Component) {
   const {state, view, mounted} = component;
   let node: CustomNode;
 
-  if (!(el instanceof HTMLElement)) {
-    throw new Error("The element passed to mount is not an HTMLElement.");
+  if (el == null) {
+    return;
   }
 
   const proxy = state
