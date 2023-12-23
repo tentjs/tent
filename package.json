@@ -6,6 +6,7 @@
   "main": "dist/tent.cjs",
   "module": "dist/tent.mjs",
   "types": "dist/tent.d.ts",
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/tentjs/tent.git"
