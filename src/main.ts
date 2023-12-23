@@ -1,20 +1,20 @@
 type Component = {
-  view: (context: {state: object}) => OneNode;
+  view: (context: {state: object}) => CustomNode;
   state?: object;
   mounted?: (context: {state: object}) => void;
 };
 
-type OneNode = Node & Element & HTMLElement & {
-  $one: {
+type CustomNode = Node & Element & HTMLElement & {
+  $tent: {
     attributes: object;
     isComponent: boolean;
   };
-  children: OneNode[];
+  children: CustomNode[];
 };
 
 function mount(el: Element, component: Component) {
   const {state, view, mounted} = component;
-  let node: OneNode;
+  let node: CustomNode;
 
   if (!(el instanceof HTMLElement)) {
     throw new Error("The element passed to mount is not an HTMLElement.");
@@ -44,7 +44,7 @@ function mount(el: Element, component: Component) {
     : {};
 
   node = view({state: proxy});
-  node.$one = {
+  node.$tent = {
     attributes: {},
     isComponent: true,
   };
@@ -58,9 +58,9 @@ type Context = [string, string | (Node | Context)[], object];
 
 function createElement(context: Context) {
   const [tag, children, attributes] = context;
-  const elm = document.createElement(tag) as OneNode;
+  const elm = document.createElement(tag) as CustomNode;
 
-  elm.$one = {
+  elm.$tent = {
     attributes: {},
     isComponent: false,
   };
@@ -77,7 +77,7 @@ function createElement(context: Context) {
   }
 
   for (const key in attributes) {
-    elm.$one.attributes[key] = attributes[key];
+    elm.$tent.attributes[key] = attributes[key];
 
     if (key.startsWith("on") || /[A-Z]/.test(key)) {
       elm[key] = attributes[key];
@@ -89,8 +89,8 @@ function createElement(context: Context) {
   return elm;
 }
 
-function walker(oldNode: OneNode, newNode: OneNode) {
-  const lc = Array.from<OneNode>(newNode.children);
+function walker(oldNode: CustomNode, newNode: CustomNode) {
+  const lc = Array.from<CustomNode>(newNode.children);
 
   if (oldNode.children.length < lc.length) {
     lc.forEach((x, index) => {
@@ -100,10 +100,10 @@ function walker(oldNode: OneNode, newNode: OneNode) {
     });
   }
 
-  Array.from<OneNode>(oldNode.children).forEach((sChild, index) => {
+  Array.from<CustomNode>(oldNode.children).forEach((sChild, index) => {
     const lChild = lc[index];
 
-    if (lChild?.$one?.isComponent || sChild?.$one?.isComponent) {
+    if (lChild?.$tent?.isComponent || sChild?.$tent?.isComponent) {
       return;
     }
 
@@ -120,13 +120,13 @@ function walker(oldNode: OneNode, newNode: OneNode) {
     if (sChild.children.length < lChild.children.length) {
       const scc = Array.from(sChild.children);
 
-      Array.from<OneNode>(lChild.children).forEach((lcc, index) => {
+      Array.from<CustomNode>(lChild.children).forEach((lcc, index) => {
         if (!scc[index]) {
           const clone = lcc.cloneNode(true);
 
           // Add attributes to the clone
-          Object.keys(lcc.$one.attributes).forEach(
-            (key) => clone[key] = lcc.$one.attributes[key],
+          Object.keys(lcc.$tent.attributes).forEach(
+            (key) => clone[key] = lcc.$tent.attributes[key],
           );
 
           sChild.append(clone);
