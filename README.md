@@ -1,4 +1,4 @@
-# ⛺ Tent.js
+# ⛺ Tent
 
 A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web &mdash; without all the nonsense.
 
@@ -7,7 +7,7 @@ Tent is in alpha and is under heavy development. There might be breaking changes
 ## Usage
 
 ```js
-import {mount, tags} from 'tent'
+import {mount, tags} from '@tentjs/tent'
 
 const {p, button, div} = tags
 
