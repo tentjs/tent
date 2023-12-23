@@ -1,6 +1,6 @@
 {
   "name": "@tentjs/tent",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A lightweight library to build reactive web apps — fast.",
   "source": "src/main.ts",
   "main": "dist/tent.cjs",
