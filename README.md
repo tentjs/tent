@@ -2,7 +2,7 @@
 
 A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web &mdash; without all the nonsense.
 
-Tent is in alpha and is under heavy development. There might be breaking changes in the future - use at your own risk. All discussions, questions, ideas and PR's are welcome!
+**Note**: The library is under heavy development. There might (unlikely) be breaking changes in the future - use at your own risk. All discussions, questions, ideas and PR's are welcome!
 
 ## Install
 
