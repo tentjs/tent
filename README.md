@@ -4,6 +4,16 @@ A jsx-free, super-lightweight and zero-dependency library to add interactivity t
 
 Tent is in alpha and is under heavy development. There might be breaking changes in the future - use at your own risk. All discussions, questions, ideas and PR's are welcome!
 
+## Install
+
+```bash
+npm install @tentjs/tent
+```
+or
+```html
+<script defer src="//unpkg.com/@tentjs/tent"></script>
+```
+
 ## Usage
 
 ```js
