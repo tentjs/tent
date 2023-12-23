@@ -54,7 +54,8 @@ function mount(el: HTMLElement | null, component: Component) {
   mounted?.({state: proxy});
 }
 
-type Context = [string, string | (Node | Context)[], object];
+type Children = string | (Node | Context)[]
+type Context = [string, Children, object | undefined];
 
 function createElement(context: Context) {
   const [tag, children, attributes] = context;
@@ -256,10 +257,10 @@ const t = [
   "rt",
   "rp",
 ];
-const tags = {};
+const tags: Record<string, (children: Children, attrs?: object) => CustomNode> = {};
 t.forEach(
   (tag) =>
-    tags[tag] = (children = [], attrs = {}) =>
+    tags[tag] = (children, attrs) =>
       createElement([tag, children, attrs]),
 );
 
