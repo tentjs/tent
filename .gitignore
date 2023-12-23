@@ -1,0 +1,11 @@
+node_modules/
+example/node_modules
+example/dist
+.parcel-cache/
+.npmrc
+dist/
+.fleet
+.zed
+project.*
+scratch.js
+.vscode/
