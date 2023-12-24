@@ -23,17 +23,15 @@ const {p, button, div} = tags
 
 const Counter = {
   state: {count: 0},
-  view({state}) {
-    return div([
-      p(`Count: ${state.count}`),
-      button('Dec', {
-        onclick: () => state.count--
-      }),
-      button('Inc', {
-        onclick: () => state.count++
-      }),
-    ])
-  },
+  view: ({state}) => div([
+    p(`Count: ${state.count}`),
+    button('Dec', {
+      onclick: () => state.count--
+    }),
+    button('Inc', {
+      onclick: () => state.count++
+    }),
+  ]),
 }
 
 mount(document.body, Counter)
