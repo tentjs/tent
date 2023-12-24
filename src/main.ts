@@ -83,7 +83,16 @@ function createTag(context: Context) {
     if (key.startsWith("on") || /[A-Z]/.test(key)) {
       elm[key] = attributes[key];
     } else {
-      elm.setAttribute(key, attributes[key]);
+      const val = attributes[key]
+      if (typeof val === 'boolean') {
+        if (val) {
+          elm.setAttribute(key, '')
+        } else {
+          elm.removeAttribute(key)
+        }
+      } else {
+        elm.setAttribute(key, attributes[key]);
+      }
     }
   }
 
