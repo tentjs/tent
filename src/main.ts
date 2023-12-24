@@ -57,7 +57,7 @@ function mount(el: HTMLElement | null, component: Component) {
 type Children = string | (Node | Context)[]
 type Context = [string, Children, object | undefined];
 
-function createElement(context: Context) {
+function createTag(context: Context) {
   const [tag, children, attributes] = context;
   const elm = document.createElement(tag) as CustomNode;
 
@@ -70,7 +70,7 @@ function createElement(context: Context) {
     children.forEach(
       (c) =>
         elm.append(
-          Array.isArray(c) ? createElement(c) : c,
+          Array.isArray(c) ? createTag(c) : c,
         ),
     );
   } else {
@@ -223,7 +223,7 @@ const tags: Record<string, (children: Children, attrs?: object) => CustomNode> =
 t.forEach(
   (tag) =>
     tags[tag] = (children, attrs) =>
-      createElement([tag, children, attrs]),
+      createTag([tag, children, attrs]),
 );
 
 export {mount, tags};
