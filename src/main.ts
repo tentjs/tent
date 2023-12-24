@@ -91,84 +91,84 @@ function createElement(context: Context) {
 }
 
 function walker(oldNode: CustomNode, newNode: CustomNode) {
-  const lc = Array.from<CustomNode>(newNode.children);
+  const nc = Array.from<CustomNode>(newNode.children);
 
-  if (oldNode.children.length < lc.length) {
-    lc.forEach((x, index) => {
+  if (oldNode.children.length < nc.length) {
+    nc.forEach((x, index) => {
       if (!oldNode.children[index]) {
         oldNode.append(x.cloneNode(true));
       }
     });
   }
 
-  Array.from<CustomNode>(oldNode.children).forEach((sChild, index) => {
-    const lChild = lc[index];
+  Array.from<CustomNode>(oldNode.children).forEach((oChild, index) => {
+    const nChild = nc[index];
 
-    if (lChild?.$tent?.isComponent || sChild?.$tent?.isComponent) {
+    if (nChild?.$tent?.isComponent || oChild?.$tent?.isComponent) {
       return;
     }
 
-    if (!lChild) {
-      sChild.remove();
+    if (!nChild) {
+      oChild.remove();
       return;
     }
 
-    if (sChild.tagName !== lChild.tagName) {
-      sChild.replaceWith(lChild);
+    if (oChild.tagName !== nChild.tagName) {
+      oChild.replaceWith(nChild);
     }
 
     // Add children that are not present in the shadow
-    if (sChild.children.length < lChild.children.length) {
-      const scc = Array.from(sChild.children);
+    if (oChild.children.length < nChild.children.length) {
+      const occ = Array.from(oChild.children);
 
-      Array.from<CustomNode>(lChild.children).forEach((lcc, index) => {
-        if (!scc[index]) {
-          const clone = lcc.cloneNode(true);
+      Array.from<CustomNode>(nChild.children).forEach((ncc, index) => {
+        if (!occ[index]) {
+          const clone = ncc.cloneNode(true);
 
           // Add attributes to the clone
-          Object.keys(lcc.$tent.attributes).forEach(
-            (key) => clone[key] = lcc.$tent.attributes[key],
+          Object.keys(ncc.$tent.attributes).forEach(
+            (key) => clone[key] = ncc.$tent.attributes[key],
           );
 
-          sChild.append(clone);
+          oChild.append(clone);
         }
       });
     }
 
     // Remove children that are not present in the live
-    if (sChild.children.length > lChild.children.length) {
-      const lcc = Array.from(lChild.children);
+    if (oChild.children.length > nChild.children.length) {
+      const ncc = Array.from(nChild.children);
 
-      Array.from(sChild.children).forEach((x, index) => {
-        if (!lcc[index]) {
+      Array.from(oChild.children).forEach((x, index) => {
+        if (!ncc[index]) {
           x.remove();
         }
       });
     }
 
     // Add attributes that are not present in the shadow
-    Array.from(lChild.attributes).forEach((attr) => {
-      if (sChild.getAttribute(attr.name) !== attr.value) {
-        sChild.setAttribute(attr.name, attr.value);
+    Array.from(nChild.attributes).forEach((attr) => {
+      if (oChild.getAttribute(attr.name) !== attr.value) {
+        oChild.setAttribute(attr.name, attr.value);
       }
     });
     // Remove attributes that are not present in the live
-    Array.from(sChild.attributes).forEach((attr) => {
-      if (!lChild.hasAttribute(attr.name)) {
-        sChild.removeAttribute(attr.name);
+    Array.from(oChild.attributes).forEach((attr) => {
+      if (!nChild.hasAttribute(attr.name)) {
+        oChild.removeAttribute(attr.name);
       }
     });
 
     // Replace text content if it's different and the element has no children
     if (
-      sChild.textContent !== lChild.textContent &&
-      lChild.children.length === 0 &&
-      sChild.children.length === 0
+      oChild.textContent !== nChild.textContent &&
+      nChild.children.length === 0 &&
+      oChild.children.length === 0
     ) {
-      sChild.textContent = lChild.textContent;
+      oChild.textContent = nChild.textContent;
     }
 
-    walker(sChild, lChild);
+    walker(oChild, nChild);
   });
 }
 
