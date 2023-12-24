@@ -19,19 +19,19 @@ or
 ```js
 import {mount, tags} from '@tentjs/tent'
 
-const {p, button, div} = tags
+const {button, div} = tags
 
 const Counter = {
   state: {count: 0},
   view: ({state}) => div([
-    p(`Count: ${state.count}`),
-    button('Dec', {
-      onclick: () => state.count--
-    }),
-    button('Inc', {
+    button('+', {
       onclick: () => state.count++
     }),
-  ]),
+    div(state.count),
+    button('-', {
+      onclick: () => state.count--
+    }),
+  ])
 }
 
 mount(document.body, Counter)
