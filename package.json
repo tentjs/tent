@@ -17,8 +17,7 @@
   },
   "scripts": {
     "watch": "parcel watch",
-    "build": "rm -rf dist && parcel build",
-    "publish": "npm publish --access public"
+    "build": "rm -rf dist && parcel build"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.10.3",
