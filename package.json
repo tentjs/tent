@@ -26,5 +26,5 @@
     "typescript": "^5.3.3"
   },
   "author": "sebkolind <sks1993@gmail.com>",
-  "license": "ISC"
+  "license": "MIT"
 }
