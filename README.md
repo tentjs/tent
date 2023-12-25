@@ -9,10 +9,6 @@ A jsx-free, super-lightweight and zero-dependency library to add interactivity t
 ```bash
 npm install @tentjs/tent
 ```
-or
-```html
-<script defer src="//unpkg.com/@tentjs/tent"></script>
-```
 
 ## Usage
 
