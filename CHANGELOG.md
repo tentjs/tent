@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Remove unpkg link from README
 - Set `license` in package.json to `MIT`
 
 ## [0.0.9] - 2023-12-24
