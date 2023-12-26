@@ -7,8 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.10] - 2023-12-26
+
+### Added
+
+- Ability to type `state`
+- Remove `.parcel-cache` on `npm run build`
+
 ### Fixed
 
+- Add attributes recursively when cloning elements
 - Remove unpkg link from README
 - Set `license` in package.json to `MIT`
 
