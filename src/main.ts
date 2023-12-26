@@ -83,12 +83,12 @@ function createTag(context: Context) {
     if (key.startsWith("on") || /[A-Z]/.test(key)) {
       elm[key] = attributes[key];
     } else {
-      const val = attributes[key]
+      const val = attributes[key];
       if (typeof val === 'boolean') {
         if (val) {
-          elm.setAttribute(key, '')
+          elm.setAttribute(key, '');
         } else {
-          elm.removeAttribute(key)
+          elm.removeAttribute(key);
         }
       } else {
         elm.setAttribute(key, attributes[key]);
@@ -105,7 +105,9 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
   if (oldNode.children.length < nc.length) {
     nc.forEach((x, index) => {
       if (!oldNode.children[index]) {
-        oldNode.append(x.cloneNode(true));
+        oldNode.append(
+          addAttributes(x.cloneNode(true) as CustomNode, x)
+        );
       }
     });
   }
@@ -126,25 +128,20 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       oChild.replaceWith(nChild);
     }
 
-    // Add children that are not present in the shadow
+    // Add children that are not present in the old node
     if (oChild.children.length < nChild.children.length) {
       const occ = Array.from(oChild.children);
 
       Array.from<CustomNode>(nChild.children).forEach((ncc, index) => {
         if (!occ[index]) {
-          const clone = ncc.cloneNode(true);
-
-          // Add attributes to the clone
-          Object.keys(ncc.$tent.attributes).forEach(
-            (key) => clone[key] = ncc.$tent.attributes[key],
+          oChild.append(
+            addAttributes(ncc.cloneNode(true) as CustomNode, ncc)
           );
-
-          oChild.append(clone);
         }
       });
     }
 
-    // Remove children that are not present in the live
+    // Remove children that are not present in the new node
     if (oChild.children.length > nChild.children.length) {
       const ncc = Array.from(nChild.children);
 
@@ -155,13 +152,13 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       });
     }
 
-    // Add attributes that are not present in the shadow
+    // Add attributes that are not present in the old node
     Array.from(nChild.attributes).forEach((attr) => {
       if (oChild.getAttribute(attr.name) !== attr.value) {
         oChild.setAttribute(attr.name, attr.value);
       }
     });
-    // Remove attributes that are not present in the live
+    // Remove attributes that are not present in the new node
     Array.from(oChild.attributes).forEach((attr) => {
       if (!nChild.hasAttribute(attr.name)) {
         oChild.removeAttribute(attr.name);
@@ -179,6 +176,22 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
 
     walker(oChild, nChild);
   });
+}
+
+function addAttributes(clone: CustomNode, node: CustomNode) {
+  if (!clone.$tent && !node.$tent) return clone;
+
+  Object.keys(node.$tent.attributes).forEach(
+    (key) => clone[key] = node.$tent.attributes[key],
+  );
+
+  if (clone.hasChildNodes()) {
+    for (const [index, entry] of clone.childNodes.entries()) {
+      addAttributes(entry as CustomNode, node.childNodes[index] as CustomNode);
+    }
+  }
+
+  return clone;
 }
 
 const t = [
