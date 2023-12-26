@@ -1,7 +1,7 @@
-type Component = {
-  view: (context: {state: object}) => CustomNode;
-  state?: object;
-  mounted?: (context: {state: object}) => void;
+type Component<S = object> = {
+  view: (context: {state: S}) => CustomNode;
+  state: S;
+  mounted?: (context: {state: S}) => void;
 };
 
 type CustomNode = Node & Element & HTMLElement & {
@@ -12,7 +12,7 @@ type CustomNode = Node & Element & HTMLElement & {
   children: CustomNode[];
 };
 
-function mount(el: HTMLElement | null, component: Component) {
+function mount<S = object>(el: HTMLElement | null, component: Component<S>) {
   const {state, view, mounted} = component;
   let node: CustomNode;
 
@@ -41,7 +41,7 @@ function mount(el: HTMLElement | null, component: Component) {
         return s;
       },
     })
-    : {};
+    : {} as S;
 
   node = view({state: proxy});
   node.$tent = {
@@ -235,4 +235,4 @@ t.forEach(
       createTag([tag, children, attrs]),
 );
 
-export {mount, tags};
+export {mount, tags, type Component};
