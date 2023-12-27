@@ -54,7 +54,7 @@ function mount<S = object>(el: HTMLElement | null, component: Component<S>) {
   mounted?.({state: proxy});
 }
 
-type Children = string | (Node | Context)[]
+type Children = string | number | (Node | Context)[]
 type Context = [string, Children, object | undefined];
 
 function createTag(context: Context) {
@@ -74,7 +74,7 @@ function createTag(context: Context) {
         ),
     );
   } else {
-    elm.append(children);
+    elm.append(typeof children === 'number' ? children.toString() : children);
   }
 
   for (const key in attributes) {
