@@ -12,12 +12,16 @@ npm install @tentjs/tent
 
 ## Usage
 
-```js
-import {mount, tags} from '@tentjs/tent'
+```typescript
+import {mount, tags, type Component} from '@tentjs/tent'
 
 const {button, div} = tags
 
-const Counter = {
+type State = {
+  count: number
+}
+
+const Counter: Component<State> = {
   state: {count: 0},
   view: ({state}) => div([
     button('+', {
