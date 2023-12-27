@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 2023-12-27
+
+### Fixed
+
+- Children can be a number. A number will be converted to string with `.toString()`
+
 ## [0.0.11] - 2023-12-27
 
 ### Fixed
