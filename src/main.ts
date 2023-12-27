@@ -1,6 +1,6 @@
 type Component<S = object> = {
   view: (context: {state: S}) => CustomNode;
-  state: S;
+  state?: S;
   mounted?: (context: {state: S}) => void;
 };
 
