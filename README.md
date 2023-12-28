@@ -4,6 +4,12 @@ A jsx-free, super-lightweight and zero-dependency library to add interactivity t
 
 **Note**: The library is under heavy development. There might (unlikely) be breaking changes in the future - use at your own risk. All discussions, questions, ideas and PR's are welcome!
 
+## Principles
+
+1. No JSX.
+2. No SSR.
+3. No HTML syntax.
+
 ## Install
 
 ```bash
