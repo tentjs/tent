@@ -1,4 +1,4 @@
-type Component<S = object> = {
+type Component<S> = {
   view: (context: {state: S}) => CustomNode;
   state?: S;
   mounted?: (context: {state: S}) => void;
@@ -12,36 +12,46 @@ type CustomNode = Node & Element & HTMLElement & {
   children: CustomNode[];
 };
 
-function mount<S = object>(el: HTMLElement | null, component: Component<S>) {
-  const {state, view, mounted} = component;
+function mount<S extends object>(el: HTMLElement | null, component: Component<S>) {
+  const {state = {} as S, view, mounted} = component;
   let node: CustomNode;
 
   if (el == null) {
     return;
   }
 
-  const proxy = state
-    ? new Proxy({...state}, {
-      set(obj, prop, value) {
-        if (!obj.hasOwnProperty(prop)) {
-          throw new Error(
-            `The property "${String(prop)
-            }" does not exist on the state object.`,
-          );
-        }
-        if (obj[prop] === value) return true;
-
-        const s = Reflect.set(obj, prop, value);
-
-        walker(
-          node,
-          view({state: proxy}),
+  const handler = {
+    get(obj: S, key: string) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        return new Proxy(obj[key], handler);
+      } else {
+        return obj[key];
+      }
+    },
+    set(obj: S, prop: string, value: unknown) {
+      if (!obj.hasOwnProperty(prop)) {
+        throw new Error(
+          `The property "${String(prop)
+          }" does not exist on the state object.`,
         );
+      }
+      if (obj[prop] === value) return true;
 
-        return s;
-      },
-    })
-    : {} as S;
+      const s = Reflect.set(obj, prop, value);
+
+      walker(
+        node,
+        view({state: proxy}),
+      );
+
+      return s;
+    },
+  }
+
+  const proxy = new Proxy<S>(
+    {...state},
+    handler,
+  );
 
   node = view({state: proxy});
   node.$tent = {
