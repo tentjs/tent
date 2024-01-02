@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.14] - 2024-01-02
+
+### Fixed
+
+- Nested assignments will now trigger re-renders [#28](https://github.com/tentjs/tent/pull/28)
+
 ## [0.0.13] - 2024-01-02
 
 ### Added
 
-- Export `createTag` for creating custom tags, as well as `Component`, `Children` and `Context` types.
+- Export `createTag` for creating custom tags, as well as `Component`, `Children` and `Context` types
 
 ## [0.0.12] - 2023-12-27
 
