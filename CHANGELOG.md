@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Export `createTag` for creating custom tags, as well as `Component`, `Children` and `Context` types.
+
 ## [0.0.12] - 2023-12-27
 
 ### Fixed

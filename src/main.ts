@@ -248,4 +248,11 @@ t.forEach(
       createTag([tag, children, attrs]),
 );
 
-export {mount, tags, type Component};
+export {
+  mount,
+  tags,
+  createTag,
+  type Component,
+  type Children,
+  type Context,
+};
