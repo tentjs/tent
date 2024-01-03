@@ -1,4 +1,4 @@
-# ⛺ tent
+# ⛺ Tent
 
 A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web &mdash; without all the nonsense.
 
