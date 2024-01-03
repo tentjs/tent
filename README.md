@@ -2,13 +2,11 @@
 
 A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web &mdash; without all the nonsense.
 
-**Note**: The library is under heavy development. There might (unlikely) be breaking changes in the future - use at your own risk. All discussions, questions, ideas and PR's are welcome!
+Read [this blog post](https://www.itsmeseb.dev/2024/01/03/tent.html) to get a better understanding of what this library is and why it exists.
 
 ## Principles
 
-1. No JSX.
-2. No SSR.
-3. No HTML syntax.
+The core principles of Tent are: No JSX, no SSR and no obscure HTML syntax to learn. Tent is built to be used with the [Islands Architecture](https://www.patterns.dev/vanilla/islands-architecture) in mind, meaning that most of the web page is server-rendered, and the job of this library is to add chunks of interactivity where it is needed.
 
 ## Install
 
@@ -37,3 +35,7 @@ const Counter: Component<State> = {
 
 mount(document.body, Counter)
 ```
+
+## Contributing
+
+Feel free to get involved in the [discussions](https://github.com/tentjs/tent/discussions), submit a pull request or send me an [email](mailto:artiste_avid_0z@icloud.com).
