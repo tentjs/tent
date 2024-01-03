@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.15] - 2024-01-03
+
+### Fixed
+
+- The root node of a component is now also updated [#29](https://github.com/tentjs/tent/pull/29)
+
 ## [0.0.14] - 2024-01-02
 
 ### Fixed
