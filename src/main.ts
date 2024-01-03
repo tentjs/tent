@@ -112,6 +112,8 @@ function createTag(context: Context) {
 function walker(oldNode: CustomNode, newNode: CustomNode) {
   const nc = Array.from<CustomNode>(newNode.children);
 
+  syncNodes(oldNode, newNode);
+
   if (oldNode.children.length < nc.length) {
     nc.forEach((x, index) => {
       if (!oldNode.children[index]) {
@@ -162,30 +164,34 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       });
     }
 
-    // Add attributes that are not present in the old node
-    Array.from(nChild.attributes).forEach((attr) => {
-      if (oChild.getAttribute(attr.name) !== attr.value) {
-        oChild.setAttribute(attr.name, attr.value);
-      }
-    });
-    // Remove attributes that are not present in the new node
-    Array.from(oChild.attributes).forEach((attr) => {
-      if (!nChild.hasAttribute(attr.name)) {
-        oChild.removeAttribute(attr.name);
-      }
-    });
-
-    // Replace text content if it's different and the element has no children
-    if (
-      oChild.textContent !== nChild.textContent &&
-      nChild.children.length === 0 &&
-      oChild.children.length === 0
-    ) {
-      oChild.textContent = nChild.textContent;
-    }
+    syncNodes(oChild, nChild);
 
     walker(oChild, nChild);
   });
+}
+
+function syncNodes(oldNode: CustomNode, newNode: CustomNode) {
+  // Add attributes that are not present in the old node
+  Array.from(newNode.attributes).forEach((attr) => {
+    if (oldNode.getAttribute(attr.name) !== attr.value) {
+      oldNode.setAttribute(attr.name, attr.value);
+    }
+  });
+  // Remove attributes that are not present in the new node
+  Array.from(oldNode.attributes).forEach((attr) => {
+    if (!newNode.hasAttribute(attr.name)) {
+      oldNode.removeAttribute(attr.name);
+    }
+  });
+
+  // Replace text content if it's different and the element has no children
+  if (
+    oldNode.textContent !== newNode.textContent &&
+    newNode.children.length === 0 &&
+    oldNode.children.length === 0
+  ) {
+    oldNode.textContent = newNode.textContent;
+  }
 }
 
 function addAttributes(clone: CustomNode, node: CustomNode) {
