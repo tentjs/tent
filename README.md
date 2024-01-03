@@ -21,7 +21,7 @@ npm install @tentjs/tent
 ```typescript
 import {mount, tags, type Component} from '@tentjs/tent'
 
-const {button, div} = tags
+const {button} = tags
 
 type State = {
   count: number
@@ -29,15 +29,10 @@ type State = {
 
 const Counter: Component<State> = {
   state: {count: 0},
-  view: ({state}) => div([
-    button('+', {
-      onclick: () => state.count++
-    }),
-    div(state.count),
-    button('-', {
-      onclick: () => state.count--
-    }),
-  ])
+  view: ({state}) => button(
+    `Clicked ${state.count} times`,
+    { onclick: () => state.count++ },
+  ),
 }
 
 mount(document.body, Counter)
