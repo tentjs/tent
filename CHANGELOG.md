@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.17] - 2024-01-09
+
+### Fixed
+
+- `Children` now rightfully accepts `CustomNode`
+  - E.g. you can now, without Typescript complaining, nest nodes: `p(span('my cool span'))`
+
 ## [0.0.16] - 2024-01-03
 
 ### Added
