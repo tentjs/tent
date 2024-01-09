@@ -64,7 +64,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
   mounted?.({state: proxy});
 }
 
-type Children = string | number | (Node | Context)[]
+type Children = string | number | CustomNode | (Node | Context)[]
 type Context = [string, Children, object | undefined];
 
 function createTag(context: Context) {
