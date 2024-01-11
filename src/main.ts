@@ -22,7 +22,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
 
   const handler = {
     get(obj: S, key: string) {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
+      if (typeof obj[key] === 'object' && obj[key] != null) {
         return new Proxy(obj[key], handler);
       } else {
         return obj[key];
@@ -116,7 +116,7 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
 
   if (oldNode.children.length < nc.length) {
     nc.forEach((x, index) => {
-      if (!oldNode.children[index]) {
+      if (oldNode.children[index] == null) {
         oldNode.append(
           addAttributes(x.cloneNode(true) as CustomNode, x)
         );
@@ -131,7 +131,7 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       return;
     }
 
-    if (!nChild) {
+    if (nChild == null) {
       oChild.remove();
       return;
     }
@@ -145,7 +145,7 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       const occ = Array.from(oChild.children);
 
       Array.from<CustomNode>(nChild.children).forEach((ncc, index) => {
-        if (!occ[index]) {
+        if (occ[index] == null) {
           oChild.append(
             addAttributes(ncc.cloneNode(true) as CustomNode, ncc)
           );
@@ -158,7 +158,7 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       const ncc = Array.from(nChild.children);
 
       Array.from(oChild.children).forEach((x, index) => {
-        if (!ncc[index]) {
+        if (ncc[index] == null) {
           x.remove();
         }
       });
