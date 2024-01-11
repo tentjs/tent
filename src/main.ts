@@ -77,12 +77,11 @@ function createTag(context: Context) {
   };
 
   if (Array.isArray(children)) {
-    children.forEach(
-      (c) =>
-        elm.append(
-          Array.isArray(c) ? createTag(c) : c,
-        ),
-    );
+    children.forEach((c) => {
+      elm.append(
+        Array.isArray(c) ? createTag(c) : c
+      );
+    });
   } else {
     elm.append(typeof children === 'number' ? children.toString() : children);
   }
@@ -90,7 +89,7 @@ function createTag(context: Context) {
   for (const key in attributes) {
     elm.$tent.attributes[key] = attributes[key];
 
-    if (key.startsWith("on") || /[A-Z]/.test(key)) {
+    if (key.startsWith('on') || /[A-Z]/.test(key)) {
       elm[key] = attributes[key];
     } else {
       const val = attributes[key];
@@ -167,7 +166,7 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
     syncNodes(oChild, nChild);
 
     if (oChild.children.length && nChild.children.length) {
-    walker(oChild, nChild);
+      walker(oChild, nChild);
     }
   });
 }
