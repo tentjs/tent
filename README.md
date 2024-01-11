@@ -29,7 +29,7 @@ const Counter: Component<State> = {
   state: {count: 0},
   view: ({state}) => button(
     `Clicked ${state.count} times`,
-    { onclick: () => state.count++ },
+    {onclick: () => state.count++},
   ),
 }
 
