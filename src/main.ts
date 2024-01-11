@@ -166,7 +166,9 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
 
     syncNodes(oChild, nChild);
 
+    if (oChild.children.length && nChild.children.length) {
     walker(oChild, nChild);
+    }
   });
 }
 
