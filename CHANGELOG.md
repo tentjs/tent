@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.18] - 2024-01-11
+
+### Changed
+
+- Check if a node have children before running nested diffs
+- Use `!= null` instead of `!foo` for stability
+
 ## [0.0.17] - 2024-01-09
 
 ### Fixed
