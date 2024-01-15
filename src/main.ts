@@ -1,20 +1,14 @@
-type Component<S> = {
-  view: (context: {state: S}) => CustomNode;
-  state?: S;
-  mounted?: (context: {state: S}) => void;
-};
-
-type CustomNode = Node & Element & HTMLElement & {
-  $tent: {
-    attributes: object;
-    isComponent: boolean;
-  };
-  children: CustomNode[];
-};
+import {
+  type Children,
+  type Context,
+  type Component,
+  type TentNode,
+  type TentNodeList
+} from './types';
 
 function mount<S extends object>(el: HTMLElement | null, component: Component<S>) {
   const {state = {} as S, view, mounted} = component;
-  let node: CustomNode;
+  let node: TentNode;
 
   if (el == null) {
     return;
@@ -30,10 +24,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
     },
     set(obj: S, prop: string, value: unknown) {
       if (!obj.hasOwnProperty(prop)) {
-        throw new Error(
-          `The property "${String(prop)
-          }" does not exist on the state object.`,
-        );
+        throw new Error(`The property "${String(prop)}" does not exist on the state object.`);
       }
       if (obj[prop] === value) return true;
 
@@ -64,12 +55,9 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
   mounted?.({state: proxy});
 }
 
-type Children = string | number | CustomNode | (Node | Context)[]
-type Context = [string, Children, object | undefined];
-
 function createTag(context: Context) {
   const [tag, children, attributes] = context;
-  const elm = document.createElement(tag) as CustomNode;
+  const elm = document.createElement(tag) as TentNode;
 
   elm.$tent = {
     attributes: {},
@@ -108,30 +96,42 @@ function createTag(context: Context) {
   return elm;
 }
 
-function walker(oldNode: CustomNode, newNode: CustomNode) {
-  const nc = Array.from<CustomNode>(newNode.children);
+function walker(oldNode: TentNode, newNode: TentNode) {
+  const nc = Array.from(newNode.childNodes) as TentNode[];
+  const oc = Array.from(oldNode.childNodes) as TentNode[];
+
+  if (oc.length === 0 && nc.length === 0) {
+    return;
+  }
 
   syncNodes(oldNode, newNode);
 
-  if (oldNode.children.length < nc.length) {
+  if (oldNode.nodeType === Node.TEXT_NODE) {
+    return
+  }
+
+  if (oc.length < nc.length) {
     nc.forEach((x, index) => {
-      if (oldNode.children[index] == null) {
+      if (oc[index] == null) {
         oldNode.append(
-          addAttributes(x.cloneNode(true) as CustomNode, x)
+          addAttributes(x.cloneNode(true) as TentNode, x)
         );
       }
     });
   }
 
-  Array.from<CustomNode>(oldNode.children).forEach((oChild, index) => {
+  if (oc.length > nc.length) {
+    oc.forEach((c, i) => {
+      if (nc[i] == null) {
+        c.remove();
+      }
+    })
+  }
+
+  oc.forEach((oChild, index) => {
     const nChild = nc[index];
 
-    if (nChild?.$tent?.isComponent || oChild?.$tent?.isComponent) {
-      return;
-    }
-
     if (nChild == null) {
-      oChild.remove();
       return;
     }
 
@@ -139,63 +139,40 @@ function walker(oldNode: CustomNode, newNode: CustomNode) {
       oChild.replaceWith(nChild);
     }
 
-    // Add children that are not present in the old node
-    if (oChild.children.length < nChild.children.length) {
-      const occ = Array.from(oChild.children);
-
-      Array.from<CustomNode>(nChild.children).forEach((ncc, index) => {
-        if (occ[index] == null) {
-          oChild.append(
-            addAttributes(ncc.cloneNode(true) as CustomNode, ncc)
-          );
-        }
-      });
-    }
-
-    // Remove children that are not present in the new node
-    if (oChild.children.length > nChild.children.length) {
-      const ncc = Array.from(nChild.children);
-
-      Array.from(oChild.children).forEach((x, index) => {
-        if (ncc[index] == null) {
-          x.remove();
-        }
-      });
-    }
-
     syncNodes(oChild, nChild);
 
-    if (oChild.children.length && nChild.children.length) {
-      walker(oChild, nChild);
-    }
+    walker(oChild, nChild);
   });
 }
 
-function syncNodes(oldNode: CustomNode, newNode: CustomNode) {
-  // Add attributes that are not present in the old node
-  Array.from(newNode.attributes).forEach((attr) => {
-    if (oldNode.getAttribute(attr.name) !== attr.value) {
-      oldNode.setAttribute(attr.name, attr.value);
+function syncNodes(oldNode: TentNode, newNode: TentNode) {
+  if (oldNode.nodeType === Node.TEXT_NODE) {
+    if (oldNode.nodeValue !== newNode.nodeValue) {
+      oldNode.nodeValue = newNode.nodeValue
     }
-  });
-  // Remove attributes that are not present in the new node
-  Array.from(oldNode.attributes).forEach((attr) => {
-    if (!newNode.hasAttribute(attr.name)) {
-      oldNode.removeAttribute(attr.name);
-    }
-  });
 
-  // Replace text content if it's different and the element has no children
-  if (
-    oldNode.textContent !== newNode.textContent &&
-    newNode.children.length === 0 &&
-    oldNode.children.length === 0
-  ) {
-    oldNode.textContent = newNode.textContent;
+    return
+  }
+
+  // Add attributes that are not present in the old node
+  if (newNode.attributes?.length) {
+    Array.from(newNode.attributes).forEach((attr) => {
+      if (oldNode.getAttribute(attr.name) !== attr.value) {
+        oldNode.setAttribute(attr.name, attr.value);
+      }
+    });
+  }
+  // Remove attributes that are not present in the new node
+  if (oldNode.attributes?.length) {
+    Array.from(oldNode.attributes).forEach((attr) => {
+      if (!newNode.hasAttribute(attr.name)) {
+        oldNode.removeAttribute(attr.name);
+      }
+    });
   }
 }
 
-function addAttributes(clone: CustomNode, node: CustomNode) {
+function addAttributes(clone: TentNode, node: TentNode) {
   if (!clone.$tent && !node.$tent) return clone;
 
   Object.keys(node.$tent.attributes).forEach(
@@ -204,7 +181,7 @@ function addAttributes(clone: CustomNode, node: CustomNode) {
 
   if (clone.hasChildNodes()) {
     for (const [index, entry] of clone.childNodes.entries()) {
-      addAttributes(entry as CustomNode, node.childNodes[index] as CustomNode);
+      addAttributes(entry as TentNode, node.childNodes[index] as TentNode);
     }
   }
 
@@ -258,7 +235,7 @@ const t = [
   "small",
   "b",
 ];
-const tags: Record<string, (children: Children, attrs?: object) => CustomNode> = {};
+const tags: Record<string, (children: Children, attrs?: object) => TentNode> = {};
 t.forEach(
   (tag) =>
     tags[tag] = (children, attrs) =>
@@ -272,4 +249,5 @@ export {
   type Component,
   type Children,
   type Context,
+  type TentNode,
 };
