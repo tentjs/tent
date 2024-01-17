@@ -36,6 +36,8 @@ const Counter: Component<State> = {
 mount(document.body, Counter)
 ```
 
+If you're interested in more examples you can take a look at the [Cookbook](https://tentjs.github.io/cookbook/).
+
 ## Contributing
 
 Feel free to get involved in the [discussions](https://github.com/tentjs/tent/discussions), submit a pull request or send me an [email](mailto:artiste_avid_0z@icloud.com).
