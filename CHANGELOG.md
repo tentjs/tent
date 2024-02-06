@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.19] - 2024-02-06
+
 ### Added
 
 - Allow a mix of text nodes and html nodes
