@@ -3,7 +3,6 @@ import {
   type Context,
   type Component,
   type TentNode,
-  type TentNodeList
 } from './types';
 
 function mount<S extends object>(el: HTMLElement | null, component: Component<S>) {
