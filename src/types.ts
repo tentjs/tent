@@ -12,7 +12,5 @@ export type TentNode = Node & Element & HTMLElement & {
   children: TentNode[];
 };
 
-export type TentNodeList = NodeListOf<TentNode>;
-
 export type Children = string | number | TentNode | (Node | string | Context)[]
 export type Context = [string, Children, object | undefined];
