@@ -9,3 +9,4 @@ dist/
 project.*
 scratch.js
 .vscode/
+.idea/
