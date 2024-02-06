@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove unused `TentNodeList` type 
+
 ## [0.0.19] - 2024-02-06
 
 ### Added
