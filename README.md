@@ -6,7 +6,7 @@ Read [this blog post](https://www.itsmeseb.dev/2024/01/03/tent.html) to get a be
 
 ## Principles
 
-The core principles of Tent are: No JSX, no SSR and no obscure HTML syntax to learn. Tent is built to be used with the [Islands Architecture](https://www.patterns.dev/vanilla/islands-architecture) in mind, meaning that most of the web page is server-rendered, and the job of this library is to add chunks of interactivity where it is needed.
+The core principles of Tent are: No JSX, no SSR and no obscure HTML syntax to learn. Tent is built to be used with the [Islands Architecture](https://www.patterns.dev/vanilla/islands-architecture) in mind, meaning that most of the web page is server-rendered, and the job of Tent is to add chunks of interactivity where it is needed.
 
 ## Install
 
