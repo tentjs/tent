@@ -1,7 +1,7 @@
 export type Component<S> = {
-  view: (context: {state: S}) => TentNode;
+  view: (context: {state: S, el: HTMLElement | Element}) => TentNode;
   state?: S;
-  mounted?: (context: {state: S}) => void;
+  mounted?: (context: {state: S, el: HTMLElement | Element}) => void;
 };
 
 export type TentNode = Node & Element & HTMLElement & {

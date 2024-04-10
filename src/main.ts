@@ -5,7 +5,7 @@ import {
   type TentNode,
 } from './types';
 
-function mount<S extends object>(el: HTMLElement | null, component: Component<S>) {
+function mount<S extends object>(el: HTMLElement | Element | null, component: Component<S>) {
   const {state = {} as S, view, mounted} = component;
   let node: TentNode;
 
@@ -31,7 +31,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
 
       walker(
         node,
-        view({state: proxy}),
+        view({state: proxy, el}),
       );
 
       return s;
@@ -43,7 +43,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
     handler,
   );
 
-  node = view({state: proxy});
+  node = view({state: proxy, el});
   node.$tent = {
     attributes: {},
     isComponent: true,
@@ -51,7 +51,7 @@ function mount<S extends object>(el: HTMLElement | null, component: Component<S>
 
   el.append(node);
 
-  mounted?.({state: proxy});
+  mounted?.({state: proxy, el});
 }
 
 function createTag(context: Context) {
