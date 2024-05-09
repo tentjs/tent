@@ -4,7 +4,7 @@ type ComponentContext<S> = {
   attr: (name: string) => string | undefined;
 };
 
-export type Component<S> = {
+export type Component<S = {}> = {
   view: (context: ComponentContext<S>) => TentNode;
   state?: S;
   mounted?: (context: ComponentContext<S>) => void;

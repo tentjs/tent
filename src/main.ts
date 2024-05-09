@@ -5,7 +5,7 @@ import {
   type TentNode,
 } from './types';
 
-function mount<S extends object>(
+function mount<S extends {} = {}>(
   el: HTMLElement | Element | null,
   component: Component<S>,
 ) {
