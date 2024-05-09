@@ -34,7 +34,7 @@ function mount<S extends object>(
 
       const s = Reflect.set(obj, prop, value);
 
-      walker(node, view({ state: proxy, el }));
+      walker(node, view({ state: proxy, el, attr: getAttribute(el) }));
 
       return s;
     },
@@ -42,7 +42,7 @@ function mount<S extends object>(
 
   const proxy = new Proxy<S>({ ...state }, handler);
 
-  node = view({ state: proxy, el });
+  node = view({ state: proxy, el, attr: getAttribute(el) });
   node.$tent = {
     attributes: {},
     isComponent: true,
@@ -50,7 +50,19 @@ function mount<S extends object>(
 
   el.append(node);
 
-  mounted?.({ state: proxy, el });
+  mounted?.({ state: proxy, el, attr: getAttribute(el) });
+}
+
+function getAttribute(el: HTMLElement | Element) {
+  return (name: string) => {
+    const attr = el.attributes.getNamedItem(name);
+
+    if (!attr) {
+      return;
+    }
+
+    return attr.value;
+  };
 }
 
 function createTag(context: Context) {

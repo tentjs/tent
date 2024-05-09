@@ -1,7 +1,13 @@
+type ComponentContext<S> = {
+  state: S;
+  el: HTMLElement | Element;
+  attr: (name: string) => string | undefined;
+};
+
 export type Component<S> = {
-  view: (context: { state: S; el: HTMLElement | Element }) => TentNode;
+  view: (context: ComponentContext<S>) => TentNode;
   state?: S;
-  mounted?: (context: { state: S; el: HTMLElement | Element }) => void;
+  mounted?: (context: ComponentContext<S>) => void;
 };
 
 export type TentNode = Node &
