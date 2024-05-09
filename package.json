@@ -1,6 +1,6 @@
 {
   "name": "@tentjs/tent",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web - without all the nonsense.",
   "source": "src/main.ts",
   "main": "dist/main.js",
