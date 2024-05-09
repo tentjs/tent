@@ -5,8 +5,11 @@ import {
   type TentNode,
 } from './types';
 
-function mount<S extends object>(el: HTMLElement | Element | null, component: Component<S>) {
-  const {state = {} as S, view, mounted} = component;
+function mount<S extends object>(
+  el: HTMLElement | Element | null,
+  component: Component<S>,
+) {
+  const { state = {} as S, view, mounted } = component;
   let node: TentNode;
 
   if (el == null) {
@@ -23,27 +26,23 @@ function mount<S extends object>(el: HTMLElement | Element | null, component: Co
     },
     set(obj: S, prop: string, value: unknown) {
       if (!obj.hasOwnProperty(prop)) {
-        throw new Error(`The property "${String(prop)}" does not exist on the state object.`);
+        throw new Error(
+          `The property "${String(prop)}" does not exist on the state object.`,
+        );
       }
       if (obj[prop] === value) return true;
 
       const s = Reflect.set(obj, prop, value);
 
-      walker(
-        node,
-        view({state: proxy, el}),
-      );
+      walker(node, view({ state: proxy, el }));
 
       return s;
     },
-  }
+  };
 
-  const proxy = new Proxy<S>(
-    {...state},
-    handler,
-  );
+  const proxy = new Proxy<S>({ ...state }, handler);
 
-  node = view({state: proxy, el});
+  node = view({ state: proxy, el });
   node.$tent = {
     attributes: {},
     isComponent: true,
@@ -51,7 +50,7 @@ function mount<S extends object>(el: HTMLElement | Element | null, component: Co
 
   el.append(node);
 
-  mounted?.({state: proxy, el});
+  mounted?.({ state: proxy, el });
 }
 
 function createTag(context: Context) {
@@ -65,9 +64,7 @@ function createTag(context: Context) {
 
   if (Array.isArray(children)) {
     children.forEach((c) => {
-      elm.append(
-        Array.isArray(c) ? createTag(c) : c
-      );
+      elm.append(Array.isArray(c) ? createTag(c) : c);
     });
   } else {
     elm.append(typeof children === 'number' ? children.toString() : children);
@@ -106,15 +103,13 @@ function walker(oldNode: TentNode, newNode: TentNode) {
   syncNodes(oldNode, newNode);
 
   if (oldNode.nodeType === Node.TEXT_NODE) {
-    return
+    return;
   }
 
   if (oc.length < nc.length) {
     nc.forEach((x, index) => {
       if (oc[index] == null) {
-        oldNode.append(
-          addAttributes(x.cloneNode(true) as TentNode, x)
-        );
+        oldNode.append(addAttributes(x.cloneNode(true) as TentNode, x));
       }
     });
   }
@@ -124,7 +119,7 @@ function walker(oldNode: TentNode, newNode: TentNode) {
       if (nc[i] == null) {
         c.remove();
       }
-    })
+    });
   }
 
   oc.forEach((oChild, index) => {
@@ -147,10 +142,10 @@ function walker(oldNode: TentNode, newNode: TentNode) {
 function syncNodes(oldNode: TentNode, newNode: TentNode) {
   if (oldNode.nodeType === Node.TEXT_NODE) {
     if (oldNode.nodeValue !== newNode.nodeValue) {
-      oldNode.nodeValue = newNode.nodeValue
+      oldNode.nodeValue = newNode.nodeValue;
     }
 
-    return
+    return;
   }
 
   // Add attributes that are not present in the old node
@@ -175,7 +170,7 @@ function addAttributes(clone: TentNode, node: TentNode) {
   if (!clone.$tent && !node.$tent) return clone;
 
   Object.keys(node.$tent.attributes).forEach(
-    (key) => clone[key] = node.$tent.attributes[key],
+    (key) => (clone[key] = node.$tent.attributes[key]),
   );
 
   if (clone.hasChildNodes()) {
@@ -188,57 +183,56 @@ function addAttributes(clone: TentNode, node: TentNode) {
 }
 
 const t = [
-  "div",
-  "p",
-  "ul",
-  "li",
-  "button",
-  "input",
-  "label",
-  "form",
-  "span",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
-  "a",
-  "img",
-  "video",
-  "audio",
-  "canvas",
-  "table",
-  "tr",
-  "td",
-  "th",
-  "thead",
-  "tbody",
-  "tfoot",
-  "select",
-  "option",
-  "textarea",
-  "pre",
-  "code",
-  "blockquote",
-  "hr",
-  "br",
-  "iframe",
-  "nav",
-  "header",
-  "footer",
-  "main",
-  "section",
-  "article",
-  "aside",
-  "small",
-  "b",
+  'div',
+  'p',
+  'ul',
+  'li',
+  'button',
+  'input',
+  'label',
+  'form',
+  'span',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'a',
+  'img',
+  'video',
+  'audio',
+  'canvas',
+  'table',
+  'tr',
+  'td',
+  'th',
+  'thead',
+  'tbody',
+  'tfoot',
+  'select',
+  'option',
+  'textarea',
+  'pre',
+  'code',
+  'blockquote',
+  'hr',
+  'br',
+  'iframe',
+  'nav',
+  'header',
+  'footer',
+  'main',
+  'section',
+  'article',
+  'aside',
+  'small',
+  'b',
 ];
-const tags: Record<string, (children: Children, attrs?: object) => TentNode> = {};
+const tags: Record<string, (children: Children, attrs?: object) => TentNode> =
+  {};
 t.forEach(
-  (tag) =>
-    tags[tag] = (children, attrs) =>
-      createTag([tag, children, attrs]),
+  (tag) => (tags[tag] = (children, attrs) => createTag([tag, children, attrs])),
 );
 
 export {

@@ -6,9 +6,7 @@
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/main.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/tentjs/tent.git"
@@ -18,13 +16,19 @@
   },
   "scripts": {
     "watch": "parcel watch",
-    "build": "rm -rf dist .parcel-cache && parcel build"
+    "build": "rm -rf dist .parcel-cache && parcel build",
+    "lint:fix": "prettier --write src/**/*.ts"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.10.3",
     "@parcel/transformer-typescript-types": "^2.10.3",
     "parcel": "^2.10.3",
     "typescript": "^5.3.3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 80
   },
   "author": "sebkolind <sks1993@gmail.com>",
   "license": "MIT"
