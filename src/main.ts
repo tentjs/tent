@@ -67,14 +67,20 @@ function mount<S extends {} = {}>(
 }
 
 function getAttribute(el: HTMLElement | Element) {
-  return (name: string) => {
+  return <T = string>(name: string) => {
     const attr = el.attributes.getNamedItem(name);
 
     if (!attr) {
       return;
     }
 
-    return attr.value === '' ? 'true' : attr.value;
+    const value = attr.value;
+
+    if (value === '') {
+      return 'true' as T;
+    }
+
+    return value as T;
   };
 }
 

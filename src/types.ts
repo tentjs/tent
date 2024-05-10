@@ -1,7 +1,7 @@
 type ComponentContext<S> = {
   state: S;
   el: HTMLElement | Element;
-  attr: (name: string) => string | undefined;
+  attr: <T = string>(name: string) => T | undefined;
 };
 
 export type Component<S = {}> = {
