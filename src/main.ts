@@ -6,15 +6,26 @@ import {
 } from './types';
 
 function mount<S extends {} = {}>(
-  el: HTMLElement | Element | null,
+  element: HTMLElement | Element | TentNode | null,
   component: Component<S>,
 ) {
+  if (element == null) {
+    return tags.div([]);
+  }
+
   const { state = {} as S, view, mounted } = component;
   let node: TentNode;
 
-  if (el == null) {
-    return;
+  const el = element as TentNode;
+
+  if (el.$tent?.isComponent) {
+    return el;
   }
+
+  el.$tent = {
+    attributes: {},
+    isComponent: true,
+  };
 
   const handler = {
     get(obj: S, key: string) {
@@ -45,12 +56,14 @@ function mount<S extends {} = {}>(
   node = view({ state: proxy, el, attr: getAttribute(el) });
   node.$tent = {
     attributes: {},
-    isComponent: true,
+    isComponent: false,
   };
 
   el.append(node);
 
   mounted?.({ state: proxy, el, attr: getAttribute(el) });
+
+  return el;
 }
 
 function getAttribute(el: HTMLElement | Element) {
@@ -121,7 +134,7 @@ function walker(oldNode: TentNode, newNode: TentNode) {
   if (oc.length < nc.length) {
     nc.forEach((x, index) => {
       if (oc[index] == null) {
-        oldNode.append(addAttributes(x.cloneNode(true) as TentNode, x));
+        oldNode.append(x);
       }
     });
   }
@@ -176,22 +189,6 @@ function syncNodes(oldNode: TentNode, newNode: TentNode) {
       }
     });
   }
-}
-
-function addAttributes(clone: TentNode, node: TentNode) {
-  if (!clone.$tent && !node.$tent) return clone;
-
-  Object.keys(node.$tent.attributes).forEach(
-    (key) => (clone[key] = node.$tent.attributes[key]),
-  );
-
-  if (clone.hasChildNodes()) {
-    for (const [index, entry] of clone.childNodes.entries()) {
-      addAttributes(entry as TentNode, node.childNodes[index] as TentNode);
-    }
-  }
-
-  return clone;
 }
 
 const t = [
