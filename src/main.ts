@@ -61,7 +61,7 @@ function getAttribute(el: HTMLElement | Element) {
       return;
     }
 
-    return attr.value;
+    return attr.value === '' ? 'true' : attr.value;
   };
 }
 
