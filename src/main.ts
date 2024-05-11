@@ -78,7 +78,7 @@ function getAttribute(el: HTMLElement | Element) {
 
     if (value === '') {
       // TODO: This might not be the desired behavior.
-      // We should find a better way to handle this,
+      // I should find a better way to handle this,
       // what I want to avoid is returning `T | undefined | 'true'`
       return 'true' as T;
     }
