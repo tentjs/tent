@@ -19,7 +19,7 @@ npm install
 npm run watch
 ```
 
-To get started you can read the [official and friendly documentation](https://tentjs.github.io/docs/).
+To get started you can read the [official and friendly documentation](https://tentjs.github.io/docs/). Or, you might be interested in some of the [examples](https://tentjs.github.io/cookbook/).
 
 ## Contributing
 
