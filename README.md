@@ -12,4 +12,4 @@ npm install @tentjs/tent
 
 ## Contributing
 
-Feel free to get involved in the [discussions](https://github.com/tentjs/tent/discussions), submit a pull request or send me an [email](mailto:artiste_avid_0z@icloud.com).
+Feel free to get involved in the [discussions](https://github.com/tentjs/tent/discussions), submit a pull request or send me an [email](mailto:sks1993@gmail.com).
