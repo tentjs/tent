@@ -2,7 +2,7 @@
 
 A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web &mdash; without all the nonsense.
 
-Read [this blog post](https://www.itsmeseb.dev/2024/01/03/tent.html) to get a better understanding of what Tent is and why it exists.
+Read [this blog post](https://www.itsmeseb.dev/2024/01/03/tent.html) to get a better understanding of what Tent is and why it exists. You might also be interested in "[What is Tent?](https://tentjs.github.io/docs/what-is-it.html)".
 
 ## Installation
 
