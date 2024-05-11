@@ -13,7 +13,7 @@ npm install @tentjs/tent
 or, the official starter template
 
 ```bash
-npm install @tentjs/starter my-app
+git clone @tentjs/starter my-app
 cd my-app
 npm install
 npm run watch
