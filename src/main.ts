@@ -96,14 +96,6 @@ function createTag(context: Context) {
     isComponent: false,
   };
 
-  if (Array.isArray(children)) {
-    children.forEach((c) => {
-      elm.append(Array.isArray(c) ? createTag(c) : c);
-    });
-  } else {
-    elm.append(typeof children === 'number' ? children.toString() : children);
-  }
-
   for (const key in attributes) {
     elm.$tent.attributes[key] = attributes[key];
 
@@ -121,6 +113,16 @@ function createTag(context: Context) {
         elm.setAttribute(key, attributes[key]);
       }
     }
+  }
+
+  if (Array.isArray(children)) {
+    children.forEach((c) => {
+      elm.append(Array.isArray(c) ? createTag(c) : c);
+    });
+  } else if (typeof children === 'object' && 'view' in children) {
+    mount(elm, children);
+  } else {
+    elm.append(typeof children === 'number' ? children.toString() : children);
   }
 
   return elm;
@@ -247,8 +249,10 @@ const t = [
   'small',
   'b',
 ];
-const tags: Record<string, (children: Children, attrs?: object) => TentNode> =
-  {};
+const tags: Record<
+  string,
+  (children: Children | Component, attrs?: object) => TentNode
+> = {};
 t.forEach(
   (tag) => (tags[tag] = (children, attrs) => createTag([tag, children, attrs])),
 );

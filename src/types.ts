@@ -21,4 +21,4 @@ export type TentNode = Node &
   };
 
 export type Children = string | number | TentNode | (Node | string | Context)[];
-export type Context = [string, Children, object | undefined];
+export type Context = [string, Children | Component, object | undefined];
