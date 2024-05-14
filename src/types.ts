@@ -1,13 +1,14 @@
-type ComponentContext<S> = {
+type ComponentContext<S, A> = {
   state: S;
   el: HTMLElement | Element;
-  attr: <T = string>(name: string) => T | undefined;
+  attr: <K extends keyof A>(name: K) => A[K] | undefined;
 };
 
-export type Component<S = {}> = {
-  view: (context: ComponentContext<S>) => TentNode;
+export type Attrs = {} | undefined;
+export type Component<S = {}, A extends Attrs = undefined> = {
+  view: (context: ComponentContext<S, A>) => TentNode;
   state?: S;
-  mounted?: (context: ComponentContext<S>) => void;
+  mounted?: (context: ComponentContext<S, A>) => void;
 };
 
 export type TentNode = Node &

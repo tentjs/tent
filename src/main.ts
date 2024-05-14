@@ -3,9 +3,10 @@ import {
   type Context,
   type Component,
   type TentNode,
+  type Attrs,
 } from './types';
 
-function mount<S extends {} = {}>(
+function mount<S extends {} = {}, A extends Attrs = undefined>(
   element: HTMLElement | Element | TentNode | null,
   component: Component<S>,
 ) {
@@ -45,7 +46,7 @@ function mount<S extends {} = {}>(
 
       const s = Reflect.set(obj, prop, value);
 
-      walker(node, view({ state: proxy, el, attr: getAttribute(el) }));
+      walker(node, view({ state: proxy, el, attr: getAttribute<A>(el) }));
 
       return s;
     },
@@ -53,7 +54,7 @@ function mount<S extends {} = {}>(
 
   const proxy = new Proxy<S>({ ...state }, handler);
 
-  node = view({ state: proxy, el, attr: getAttribute(el) });
+  node = view({ state: proxy, el, attr: getAttribute<A>(el) });
   node.$tent = {
     attributes: {},
     isComponent: false,
@@ -61,12 +62,12 @@ function mount<S extends {} = {}>(
 
   el.append(node);
 
-  mounted?.({ state: proxy, el, attr: getAttribute(el) });
+  mounted?.({ state: proxy, el, attr: getAttribute<A>(el) });
 }
 
-function getAttribute(el: HTMLElement | Element) {
-  return <T = string>(name: string) => {
-    const attr = el.attributes.getNamedItem(name);
+function getAttribute<A>(el: HTMLElement | Element) {
+  return <K extends keyof A>(name: K): A[K] | undefined => {
+    const attr = el.attributes.getNamedItem(name as string);
 
     if (!attr) {
       return;
@@ -78,10 +79,10 @@ function getAttribute(el: HTMLElement | Element) {
       // TODO: This might not be the desired behavior.
       // I should find a better way to handle this,
       // what I want to avoid is returning `T | undefined | 'true'`
-      return 'true' as T;
+      return 'true' as A[K];
     }
 
-    return value as T;
+    return value as A[K];
   };
 }
 
