@@ -62,8 +62,6 @@ function mount<S extends {} = {}>(
   el.append(node);
 
   mounted?.({ state: proxy, el, attr: getAttribute(el) });
-
-  return el;
 }
 
 function getAttribute(el: HTMLElement | Element) {
@@ -119,8 +117,6 @@ function createTag(context: Context) {
     children.forEach((c) => {
       elm.append(Array.isArray(c) ? createTag(c) : c);
     });
-  } else if (typeof children === 'object' && 'view' in children) {
-    mount(elm, children);
   } else {
     elm.append(typeof children === 'number' ? children.toString() : children);
   }
@@ -249,10 +245,8 @@ const t = [
   'small',
   'b',
 ];
-const tags: Record<
-  string,
-  (children: Children | Component, attrs?: object) => TentNode
-> = {};
+const tags: Record<string, (children: Children, attrs?: object) => TentNode> =
+  {};
 t.forEach(
   (tag) => (tags[tag] = (children, attrs) => createTag([tag, children, attrs])),
 );
