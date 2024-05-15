@@ -1,24 +1,26 @@
-type ComponentContext<S, A> = {
+type ComponentContext<S, A extends Attrs> = {
   state: S;
-  el: HTMLElement | Element;
+  el: TentNode<A>;
+  // @deprecated Use `el.dataset` instead
   attr: <K extends keyof A>(name: K) => A[K] | undefined;
 };
 
 export type Attrs = {} | undefined;
-export type Component<S = {}, A extends Attrs = undefined> = {
-  view: (context: ComponentContext<S, A>) => TentNode;
+export type Component<S extends {}, A extends Attrs = {}> = {
+  view: (context: ComponentContext<S, A>) => TentNode<A>;
   state?: S;
   mounted?: (context: ComponentContext<S, A>) => void;
 };
 
-export type TentNode = Node &
+export type TentNode<A extends Attrs = undefined> = Node &
   Element &
   HTMLElement & {
     $tent: {
       attributes: object;
       isComponent: boolean;
     };
-    children: TentNode[];
+    dataset: A & DOMStringMap;
+    children: TentNode<A>[];
   };
 
 export type Children = string | number | TentNode | (Node | string | Context)[];
