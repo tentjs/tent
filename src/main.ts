@@ -6,22 +6,18 @@ import {
   type Attrs,
 } from './types';
 
-function mount<S extends {} = {}, A extends Attrs = undefined>(
-  element: HTMLElement | Element | TentNode | null,
-  component: Component<S>,
+function mount<S extends {} = {}, A extends Attrs = {}>(
+  element: HTMLElement | Element | TentNode<A> | null,
+  component: Component<S, A>,
 ) {
   if (element == null) {
-    return tags.div([]);
+    return;
   }
 
   const { state = {} as S, view, mounted } = component;
-  let node: TentNode;
+  let node: TentNode<A>;
 
-  const el = element as TentNode;
-
-  if (el.$tent?.isComponent) {
-    return el;
-  }
+  const el = element as TentNode<A>;
 
   el.$tent = {
     attributes: {},
@@ -88,46 +84,46 @@ function getAttribute<A>(el: HTMLElement | Element) {
 
 function createTag(context: Context) {
   const [tag, children, attributes] = context;
-  const elm = document.createElement(tag) as TentNode;
+  const el = document.createElement(tag) as TentNode;
 
-  elm.$tent = {
+  el.$tent = {
     attributes: {},
     isComponent: false,
   };
 
   for (const key in attributes) {
-    elm.$tent.attributes[key] = attributes[key];
+    el.$tent.attributes[key] = attributes[key];
 
     if (key.startsWith('on') || /[A-Z]/.test(key)) {
-      elm[key] = attributes[key];
+      el[key] = attributes[key];
     } else {
       const val = attributes[key];
       if (typeof val === 'boolean') {
         if (val) {
-          elm.setAttribute(key, '');
+          el.setAttribute(key, '');
         } else {
-          elm.removeAttribute(key);
+          el.removeAttribute(key);
         }
       } else {
-        elm.setAttribute(key, attributes[key]);
+        el.setAttribute(key, attributes[key]);
       }
     }
   }
 
   if (Array.isArray(children)) {
     children.forEach((c) => {
-      elm.append(Array.isArray(c) ? createTag(c) : c);
+      el.append(Array.isArray(c) ? createTag(c) : c);
     });
   } else {
-    elm.append(typeof children === 'number' ? children.toString() : children);
+    el.append(typeof children === 'number' ? children.toString() : children);
   }
 
-  return elm;
+  return el;
 }
 
-function walker(oldNode: TentNode, newNode: TentNode) {
-  const nc = Array.from(newNode.childNodes) as TentNode[];
-  const oc = Array.from(oldNode.childNodes) as TentNode[];
+function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
+  const nc = Array.from(newNode.childNodes) as TentNode<A>[];
+  const oc = Array.from(oldNode.childNodes) as TentNode<A>[];
 
   if (oc.length === 0 && nc.length === 0) {
     return;
@@ -172,7 +168,10 @@ function walker(oldNode: TentNode, newNode: TentNode) {
   });
 }
 
-function syncNodes(oldNode: TentNode, newNode: TentNode) {
+function syncNodes<A extends Attrs>(
+  oldNode: TentNode<A>,
+  newNode: TentNode<A>,
+) {
   if (oldNode.nodeType === Node.TEXT_NODE) {
     if (oldNode.nodeValue !== newNode.nodeValue) {
       oldNode.nodeValue = newNode.nodeValue;
