@@ -122,7 +122,7 @@ function addAttribute<A extends Attrs>(
       if (value) {
         el.setAttribute(key, '');
       } else {
-        el.setAttribute(key, value);
+        el.removeAttribute(key);
       }
     } else {
       el[key] = value;
