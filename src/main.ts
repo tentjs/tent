@@ -115,18 +115,20 @@ function addAttribute<A extends Attrs>(
   key: string,
   value: string,
 ) {
+  if (typeof value === 'boolean') {
+    if (value) {
+      el.setAttribute(key, '');
+    } else {
+      el.removeAttribute(key);
+    }
+
+    return;
+  }
+
   if (el[key] === undefined) {
     el.setAttribute(key, value);
   } else {
-    if (typeof value === 'boolean') {
-      if (value) {
-        el.setAttribute(key, '');
-      } else {
-        el.setAttribute(key, value);
-      }
-    } else {
-      el[key] = value;
-    }
+    el[key] = value;
   }
 }
 
