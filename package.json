@@ -6,9 +6,7 @@
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/main.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/tentjs/tent.git"
@@ -17,7 +15,7 @@
     "src": "src"
   },
   "scripts": {
-    "watch": "parcel watch",
+    "watch": "parcel watch --no-cache",
     "build": "rm -rf dist .parcel-cache && parcel build",
     "lint:fix": "prettier --write src/**/*.ts"
   },
