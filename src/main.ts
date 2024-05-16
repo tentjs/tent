@@ -92,22 +92,11 @@ function createTag(context: Context) {
   };
 
   for (const key in attributes) {
-    el.$tent.attributes[key] = attributes[key];
+    const value = attributes[key];
 
-    if (key.startsWith('on') || /[A-Z]/.test(key)) {
-      el[key] = attributes[key];
-    } else {
-      const val = attributes[key];
-      if (typeof val === 'boolean') {
-        if (val) {
-          el.setAttribute(key, '');
-        } else {
-          el.removeAttribute(key);
-        }
-      } else {
-        el.setAttribute(key, attributes[key]);
-      }
-    }
+    el.$tent.attributes[key] = value;
+
+    addAttribute(el, key, value);
   }
 
   if (Array.isArray(children)) {
@@ -121,17 +110,59 @@ function createTag(context: Context) {
   return el;
 }
 
+function addAttribute<A extends Attrs>(
+  el: TentNode<A>,
+  key: string,
+  value: string,
+) {
+  if (el[key] === undefined) {
+    el.setAttribute(key, value);
+  } else {
+    if (typeof value === 'boolean') {
+      if (value) {
+        el.setAttribute(key, '');
+      } else {
+        el.setAttribute(key, value);
+      }
+    } else {
+      el[key] = value;
+    }
+  }
+}
+
 function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
   const nc = Array.from(newNode.childNodes) as TentNode<A>[];
   const oc = Array.from(oldNode.childNodes) as TentNode<A>[];
 
-  if (oc.length === 0 && nc.length === 0) {
+  if (oldNode.nodeType === Node.TEXT_NODE) {
+    if (oldNode.nodeValue !== newNode.nodeValue) {
+      oldNode.nodeValue = newNode.nodeValue;
+    }
+
     return;
   }
 
-  syncNodes(oldNode, newNode);
+  // Remove attributes that are not present in the new node
+  for (const key in oldNode.$tent.attributes) {
+    if (newNode.$tent.attributes[key] == null) {
+      delete oldNode.$tent.attributes[key];
+      if (oldNode.hasAttribute(key)) {
+        oldNode.removeAttribute(key);
+      }
+    }
+  }
 
-  if (oldNode.nodeType === Node.TEXT_NODE) {
+  // Add attributes that are not present in the old node
+  const attrs = {
+    ...oldNode.$tent.attributes,
+    ...newNode.$tent.attributes,
+  };
+
+  for (const key in attrs) {
+    addAttribute(oldNode, key, attrs[key]);
+  }
+
+  if (oc.length === 0 && nc.length === 0) {
     return;
   }
 
@@ -162,40 +193,8 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
       oChild.replaceWith(nChild);
     }
 
-    syncNodes(oChild, nChild);
-
     walker(oChild, nChild);
   });
-}
-
-function syncNodes<A extends Attrs>(
-  oldNode: TentNode<A>,
-  newNode: TentNode<A>,
-) {
-  if (oldNode.nodeType === Node.TEXT_NODE) {
-    if (oldNode.nodeValue !== newNode.nodeValue) {
-      oldNode.nodeValue = newNode.nodeValue;
-    }
-
-    return;
-  }
-
-  // Add attributes that are not present in the old node
-  if (newNode.attributes?.length) {
-    Array.from(newNode.attributes).forEach((attr) => {
-      if (oldNode.getAttribute(attr.name) !== attr.value) {
-        oldNode.setAttribute(attr.name, attr.value);
-      }
-    });
-  }
-  // Remove attributes that are not present in the new node
-  if (oldNode.attributes?.length) {
-    Array.from(oldNode.attributes).forEach((attr) => {
-      if (!newNode.hasAttribute(attr.name)) {
-        oldNode.removeAttribute(attr.name);
-      }
-    });
-  }
 }
 
 const t = [
