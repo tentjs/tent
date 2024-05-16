@@ -1,12 +1,14 @@
 {
   "name": "@tentjs/tent",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "A jsx-free, super-lightweight and zero-dependency library to add interactivity to the web - without all the nonsense.",
   "source": "src/main.ts",
   "main": "dist/main.js",
   "module": "dist/module.js",
   "types": "dist/main.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/tentjs/tent.git"
