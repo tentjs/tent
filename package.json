@@ -18,7 +18,7 @@
     "watch": "parcel watch --no-cache",
     "build": "rm -rf dist .parcel-cache && parcel build",
     "lint:fix": "prettier --write src/**/*.ts",
-    "publish": "npm run build && npm publish --access public"
+    "release": "npm run build && npm publish --access public"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.10.3",
