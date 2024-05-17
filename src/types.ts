@@ -6,7 +6,7 @@ type ComponentContext<S, A extends Attrs> = {
 };
 
 export type Attrs = {} | undefined;
-export type Component<S extends {}, A extends Attrs = {}> = {
+export type Component<S extends {} = {}, A extends Attrs = {}> = {
   view: (context: ComponentContext<S, A>) => TentNode<A>;
   state?: S;
   mounted?: (context: ComponentContext<S, A>) => void;
