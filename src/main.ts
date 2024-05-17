@@ -133,8 +133,8 @@ function addAttribute<A extends Attrs>(
 }
 
 function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
-  const nc = Array.from(newNode.childNodes) as TentNode<A>[];
-  const oc = Array.from(oldNode.childNodes) as TentNode<A>[];
+  const nc = Array.from(newNode.childNodes, (n) => n as TentNode<A>);
+  const oc = Array.from(oldNode.childNodes, (n) => n as TentNode<A>);
 
   if (oldNode.nodeType === Node.TEXT_NODE) {
     if (oldNode.nodeValue !== newNode.nodeValue) {
