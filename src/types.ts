@@ -25,3 +25,8 @@ export type TentNode<A extends Attrs = undefined> = Node &
 
 export type Children = string | number | TentNode | (Node | string | Context)[];
 export type Context = [string, Children, object | undefined];
+
+export type Tags = Record<
+  string,
+  (children: Children, attrs?: object) => TentNode
+>;
