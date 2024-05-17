@@ -11,3 +11,4 @@ scratch.js
 .vscode/
 .idea/
 coverage/
+.secrets
