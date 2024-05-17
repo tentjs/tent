@@ -10,3 +10,4 @@ project.*
 scratch.js
 .vscode/
 .idea/
+coverage/
