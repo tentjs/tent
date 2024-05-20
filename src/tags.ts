@@ -8,7 +8,6 @@ function createTag(context: Context) {
 
   el.$tent = {
     attributes: {},
-    isComponent: false,
   };
 
   for (const key in attributes) {

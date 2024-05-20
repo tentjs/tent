@@ -17,7 +17,6 @@ export type TentNode<A extends Attrs = undefined> = Node &
   HTMLElement & {
     $tent: {
       attributes: object;
-      isComponent: boolean;
     };
     dataset: A & DOMStringMap;
     children: TentNode<A>[];

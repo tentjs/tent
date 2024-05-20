@@ -23,7 +23,6 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
 
   el.$tent = {
     attributes: {},
-    isComponent: true,
   };
 
   const handler = {
@@ -55,7 +54,6 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
   node = view({ state: proxy, el, attr: getAttribute<A>(el) });
   node.$tent = {
     attributes: {},
-    isComponent: false,
   };
 
   el.append(node);
