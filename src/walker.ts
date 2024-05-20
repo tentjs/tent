@@ -2,6 +2,12 @@ import { addAttribute } from './attributes';
 import { type Attrs, type TentNode } from './types';
 
 function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
+  if (oldNode.tagName !== newNode.tagName) {
+    oldNode.replaceWith(newNode);
+
+    return;
+  }
+
   const nc = Array.from(newNode.childNodes, (n) => n as TentNode<A>);
   const oc = Array.from(oldNode.childNodes, (n) => n as TentNode<A>);
 
