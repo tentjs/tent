@@ -68,31 +68,4 @@ describe('tags.ts', () => {
     expect(el.$tent.attributes['data-bar']).toBe('baz');
     expect(el.$tent.attributes['onClick']).toBe(fn);
   });
-
-  test('warns when using a predefined tag when not in production', () => {
-    const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-    createTag(['div', 'test', {}]);
-
-    expect(spy).toHaveBeenCalledWith(
-      'Tag "div" is a predefined tag, use tags.div instead',
-    );
-
-    spy.mockRestore();
-  });
-
-  test('does not warn when using a predefined tag when in production', () => {
-    const OLD_ENV = process.env.NODE_ENV;
-    const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-    process.env.NODE_ENV = 'production';
-
-    createTag(['div', 'test', {}]);
-
-    expect(spy).not.toHaveBeenCalled();
-
-    spy.mockRestore();
-
-    process.env.NODE_ENV = OLD_ENV;
-  });
 });

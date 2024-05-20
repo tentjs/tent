@@ -4,10 +4,6 @@ import { type Tags, type Context, type TentNode } from './types';
 function createTag(context: Context) {
   const [tag, children, attributes] = context;
 
-  if (tags[tag] && process.env.NODE_ENV !== 'production') {
-    console.warn(`Tag "${tag}" is a predefined tag, use tags.${tag} instead`);
-  }
-
   const el = document.createElement(tag) as TentNode;
 
   el.$tent = {
