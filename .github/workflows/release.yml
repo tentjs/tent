@@ -1,4 +1,4 @@
-name: Build and Release NPM Package
+name: Build and Release
 
 on:
   push:
