@@ -44,7 +44,7 @@ mount(document.body, Counter);
 
 ## 💡 Examples
 
-#### 📖 [Custom Tags](https://github.com/tentjs/tent/#custom-tags)
+#### 📖 [Custom Tags](/#custom-tags)
 
 ```typescript
 import { type Component, type Children, createTag } from '@tentjs/tent';
@@ -71,6 +71,38 @@ const CustomTag: Component = {
     <p>Hello, World!</p>
   </div>
 </my-tag>
+```
+
+#### 📖 [Simple Todo](/#simple-todo)
+
+```typescript
+import { type Component, tags } from '@tentjs/tent';
+
+const { div, input, button, ul, li } = tags;
+
+type State = { todos: string[]; input: string };
+
+const Todo: Component<State> = {
+  state: { todos: [], input: '' },
+  view: ({ state }) =>
+    div([
+      // Since an input can't have children, we use an empty array
+      input([], {
+        value: state.input,
+        onchange: (e) => (state.input = e.target.value),
+      }),
+      button('Add', {
+        onclick: () => {
+          // Use assignment to update the state, and trigger a re-render,
+          // `.push()` would not trigger a re-render
+          state.todos = [...state.todos, state.input];
+          // Clear the input
+          state.input = '';
+        },
+      }),
+      ul(state.todos.map((todo) => li(todo))),
+    ]),
+};
 ```
 
 ## 👍🏻 Contribute
