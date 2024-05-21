@@ -50,3 +50,4 @@ If you want to support the active development of Tent, there are a few ways you 
 2. **Tweet about it** &mdash; share your excitement.
 3. [**Get involved**](https://github.com/tentjs/tent/discussions) &mdash; join the discussions.
 4. [**Contribute**](https://github.com/tentjs/tent/pulls) &mdash; submit a pull request.
+5. [**Buy me a ☕**](https://www.buymeacoffee.com/sebkolind) &mdash; thank you for your support!
