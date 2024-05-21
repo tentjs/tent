@@ -42,6 +42,37 @@ const Counter: Component<State> = {
 mount(document.body, Counter);
 ```
 
+## 💡 Examples
+
+#### 📖 [Custom Tags](https://github.com/tentjs/tent/#custom-tags)
+
+```typescript
+import { type Component, type Children, createTag } from '@tentjs/tent';
+
+// Ideally you would put this in a separate file and export it,
+// which would let you use it anywhere in your project.
+const customTag = (children: Children, attrs?: object) =>
+  createTag([
+    'my-tag',
+    // Wrap the children in a div with a class of 'container'
+    // This is just to demonstrate that you can manipulate the children
+    div(children, { className: 'container' }),
+    attrs,
+  ]);
+
+const CustomTag: Component = {
+  view: () => customTag(p('Hello, World!')),
+};
+```
+
+```html
+<my-tag>
+  <div class="container">
+    <p>Hello, World!</p>
+  </div>
+</my-tag>
+```
+
 ## 👍🏻 Contribute
 
 If you want to support the active development of Tent, there are a few ways you can help:
