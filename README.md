@@ -17,10 +17,10 @@ Getting started with Tent is easy. Here's a simple example component that increm
 ```typescript
 import { type Component, mount, tags } from '@tentjs/tent';
 
-// Tags are functions that create elements
-// A tag takes 2 arguments: the children and the attributes (optional)
-// The attributes will be assigned to the element, and can be
-// onclick, onchange, disabled, classNames, etc..
+// `Tags` are functions that create elements.
+// A tag takes 2 arguments: children and attributes (optional)
+// Attributes are assigned to the element, e.g.:
+// `onclick`, `onchange`, `disabled`, `classNames`, etc..
 const { button } = tags;
 
 type State = { count: number };
@@ -29,13 +29,12 @@ const Counter: Component<State> = {
   // Initial state
   state: { count: 0 },
   // Define the view
-  view: ({ state }) => {
-    return button(
+  view: ({ state }) =>
+    button(
       `You clicked ${state.count} times`,
       // Assign an onclick event to the button
       { onclick: () => state.count++ },
-    );
-  },
+    ),
 };
 
 // Append the component to the body
@@ -44,7 +43,7 @@ mount(document.body, Counter);
 
 ## 💡 Examples
 
-#### 📖 [Custom Tags](/#custom-tags)
+#### 📖 [Custom Tags](#custom-tags)
 
 ```typescript
 import { type Component, type Children, createTag } from '@tentjs/tent';
@@ -73,7 +72,28 @@ const CustomTag: Component = {
 </my-tag>
 ```
 
-#### 📖 [Simple Todo](/#simple-todo)
+#### 📖 [Mounted](#mounted)
+
+```typescript
+import { type Component, tags } from '@tentjs/tent';
+
+const { ul, li } = tags;
+
+type Post = { userId: number; id: number; title: string; body: string };
+type State = { items: Post[] };
+
+const Posts: Component<State> = {
+  view: ({ state }) => ul(state.items.map((item) => li(item))),
+  // Fetch data when the component is mounted
+  mounted: async ({ state }) => {
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+
+    state.items = await res.json();
+  },
+};
+```
+
+#### 📖 [Simple Todo](#simple-todo)
 
 ```typescript
 import { type Component, tags } from '@tentjs/tent';
