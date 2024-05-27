@@ -1,0 +1,32 @@
+import { Component, mount, tags } from '../main';
+
+describe('main', () => {
+  test('`null` element', () => {
+    const el = document.querySelector('.not-defined');
+
+    expect(mount(el, {} as Component)).toBe(undefined);
+  });
+
+  test('setting an unknown state property', () => {
+    const el = document.createElement('div');
+
+    expect(() =>
+      mount(el, {
+        state: { count: 0 },
+        view: ({ state }) =>
+          tags.div('', { mounted: () => state['unknown']++ }),
+      }),
+    ).toThrow();
+  });
+
+  test('setting a state property to the same value', () => {
+    const el = document.createElement('div');
+
+    expect(() =>
+      mount(el, {
+        state: { count: 0 },
+        view: ({ state }) => tags.div('', { mounted: () => (state.count = 0) }),
+      }),
+    ).not.toThrow();
+  });
+});
