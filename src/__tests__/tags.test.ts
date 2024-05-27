@@ -68,4 +68,12 @@ describe('tags.ts', () => {
     expect(el.$tent.attributes['data-bar']).toBe('baz');
     expect(el.$tent.attributes['onclick']).toBe(fn);
   });
+
+  test('mounted', () => {
+    const fn = jest.fn();
+    const el = createTag(['div', 'test', { mounted: fn }]);
+
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(fn).toHaveBeenCalledWith({ el });
+  });
 });
