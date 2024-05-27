@@ -19,6 +19,12 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
     return;
   }
 
+  if (oldNode.$tent == null || newNode.$tent == null) {
+    oldNode.replaceWith(newNode);
+
+    return;
+  }
+
   // Remove attributes that are not present in the new node
   for (const key in oldNode.$tent.attributes) {
     if (newNode.$tent.attributes[key] == null) {

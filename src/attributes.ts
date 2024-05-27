@@ -1,10 +1,14 @@
-import { type TentNode, type Attrs } from './types';
+import { type TentNode, type Attrs, type TagAttrsValues } from './types';
 
 function addAttribute<A extends Attrs>(
   el: TentNode<A> | HTMLElement,
   key: string,
-  value: string | boolean | number,
+  value: TagAttrsValues,
 ) {
+  if (key === 'mounted') {
+    return;
+  }
+
   if (typeof value === 'boolean') {
     if (value) {
       el.setAttribute(key, '');
