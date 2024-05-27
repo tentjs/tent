@@ -26,6 +26,8 @@ function createTag(context: Context) {
     el.append(typeof children === 'number' ? children.toString() : children);
   }
 
+  attributes?.mounted?.({ el });
+
   return el;
 }
 

@@ -23,9 +23,13 @@ export type TentNode<A extends Attrs = undefined> = Node &
   };
 
 export type Children = string | number | TentNode | (Node | string | Context)[];
-export type Context = [string, Children, object | undefined];
+export type Context = [string, Children, TagAttrs | undefined];
 
+export type TagAttrsValues = string | boolean | number | Function;
+type TagAttrs = Record<string, TagAttrsValues> & {
+  mounted?: ({ el }: { el: TentNode }) => void;
+};
 export type Tags = Record<
   string,
-  (children: Children, attrs?: object) => TentNode
+  (children: Children, attrs?: TagAttrs) => TentNode
 >;
