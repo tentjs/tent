@@ -13,8 +13,10 @@ describe('main', () => {
     expect(() =>
       mount(el, {
         state: { count: 0 },
-        view: ({ state }) =>
-          tags.div('', { mounted: () => state['unknown']++ }),
+        view: () => tags.div(''),
+        mounted: ({ state }) => {
+          state['unknown']++;
+        },
       }),
     ).toThrow();
   });
@@ -25,7 +27,10 @@ describe('main', () => {
     expect(() =>
       mount(el, {
         state: { count: 0 },
-        view: ({ state }) => tags.div('', { mounted: () => (state.count = 0) }),
+        view: () => tags.div(''),
+        mounted: ({ state }) => {
+          state.count = 0;
+        },
       }),
     ).not.toThrow();
   });

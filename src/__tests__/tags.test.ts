@@ -61,11 +61,11 @@ describe('tags.ts', () => {
     const el = createTag([
       'button',
       'test',
-      { id: 'foo', 'data-bar': 'baz', onClick: fn },
+      { id: 'foo', 'data-bar': 'baz', onclick: fn },
     ]);
 
     expect(el.$tent.attributes['id']).toBe('foo');
     expect(el.$tent.attributes['data-bar']).toBe('baz');
-    expect(el.$tent.attributes['onClick']).toBe(fn);
+    expect(el.$tent.attributes['onclick']).toBe(fn);
   });
 });
