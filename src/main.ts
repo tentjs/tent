@@ -1,11 +1,4 @@
-import { getAttribute } from './attributes';
-import {
-  type Children,
-  type Context,
-  type Component,
-  type TentNode,
-  type Attrs,
-} from './types';
+import type { Children, Context, Component, TentNode, Attrs } from './types';
 import { createTag, tags } from './tags';
 import { walker } from './walker';
 
@@ -43,7 +36,7 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
 
       const s = Reflect.set(obj, prop, value);
 
-      walker(node, view({ state: proxy, el, attr: getAttribute<A>(el) }));
+      walker(node, view({ state: proxy, el }));
 
       return s;
     },
@@ -51,14 +44,14 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
 
   const proxy = new Proxy<S>({ ...state }, handler);
 
-  node = view({ state: proxy, el, attr: getAttribute<A>(el) });
+  node = view({ state: proxy, el });
   node.$tent = {
     attributes: {},
   };
 
   el.append(node);
 
-  mounted?.({ state: proxy, el, attr: getAttribute<A>(el) });
+  mounted?.({ state: proxy, el });
 }
 
 export {
