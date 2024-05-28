@@ -1,8 +1,6 @@
 type ComponentContext<S, A extends Attrs> = {
   state: S;
   el: TentNode<A>;
-  // @deprecated Use `el.dataset` instead
-  attr: <K extends keyof A>(name: K) => A[K] | undefined;
 };
 
 export type Attrs = {} | undefined;
