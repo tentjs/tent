@@ -19,9 +19,11 @@ function createTag(context: Context) {
   }
 
   if (Array.isArray(children)) {
-    children.forEach((c) => {
+    for (let i = 0; i < children.length; i++) {
+      const c = children[i];
+
       el.append(Array.isArray(c) ? createTag(c) : c);
-    });
+    }
   } else {
     el.append(typeof children === 'number' ? children.toString() : children);
   }
@@ -32,7 +34,7 @@ function createTag(context: Context) {
 }
 
 const tags: Tags = {};
-[
+const tagsArray = [
   'div',
   'p',
   'ul',
@@ -78,8 +80,12 @@ const tags: Tags = {};
   'aside',
   'small',
   'b',
-].forEach(
-  (tag) => (tags[tag] = (children, attrs) => createTag([tag, children, attrs])),
-);
+];
+
+for (let i = 0; i < tagsArray.length; i++) {
+  const tag = tagsArray[i];
+
+  tags[tag] = (children, attrs) => createTag([tag, children, attrs]);
+}
 
 export { tags, createTag };
