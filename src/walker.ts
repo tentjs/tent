@@ -50,26 +50,27 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
   }
 
   if (oc.length < nc.length) {
-    nc.forEach((x, index) => {
-      if (oc[index] == null) {
-        oldNode.append(x);
+    for (let i = 0; i < nc.length; i++) {
+      if (oc[i] == null) {
+        oldNode.append(nc[i]);
       }
-    });
+    }
   }
 
   if (oc.length > nc.length) {
-    oc.forEach((c, i) => {
+    for (let i = 0; i < oc.length; i++) {
       if (nc[i] == null) {
-        c.remove();
+        oc[i].remove();
       }
-    });
+    }
   }
 
-  oc.forEach((oChild, index) => {
-    const nChild = nc[index];
+  for (let i = 0; i < oc.length; i++) {
+    const oChild = oc[i];
+    const nChild = nc[i];
 
     if (nChild == null) {
-      return;
+      continue;
     }
 
     if (oChild.tagName !== nChild.tagName) {
@@ -77,7 +78,7 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
     }
 
     walker(oChild, nChild);
-  });
+  }
 }
 
 export { walker };
