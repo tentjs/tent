@@ -1,6 +1,6 @@
-type ComponentContext<S extends {}, A extends Attrs> = {
-  el: TentNode<A>;
+type ComponentContext<S, A extends Attrs> = {
   state: S;
+  el: TentNode<A>;
 };
 
 export type Attrs = {} | undefined;
