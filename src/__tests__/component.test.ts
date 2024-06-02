@@ -5,6 +5,10 @@ import { getByText, getByTestId, fireEvent } from '@testing-library/dom';
 
 const { div, p, button } = tags;
 
+beforeEach(() => {
+  document.body.innerHTML = '';
+});
+
 const Counter: Component<{ count: number }> = {
   state: { count: 0 },
   view: ({ state }) =>
@@ -46,5 +50,30 @@ describe('components', () => {
     mount(document.body, { ...Counter, mounted });
 
     expect(mounted).toHaveBeenCalledTimes(1);
+  });
+
+  test('with state', () => {
+    const WithState: Component<{ count: number }> = {
+      state: { count: 0 },
+      view: ({ state }) => div(p(`Count: ${state.count}`)),
+    };
+
+    mount(document.body, WithState);
+
+    const el = getByText(document.body, /Count: 0/);
+
+    expect(el).toBeDefined();
+  });
+
+  test('without state', () => {
+    const WithoutState: Component = {
+      view: () => div(p(`No state`)),
+    };
+
+    mount(document.body, WithoutState);
+
+    const el = getByText(document.body, /No state/);
+
+    expect(el).toBeDefined();
   });
 });
