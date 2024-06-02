@@ -37,6 +37,10 @@ const Counter: Component<State> = {
 mount(document.body, Counter);
 ```
 
+## 💡 Examples
+
+You can find examples for building a [simple counter](https://github.com/tentjs/examples/tree/main/counter), [todo list](https://github.com/tentjs/examples/tree/main/todo-list), [a form](https://github.com/tentjs/examples/tree/main/form) and more in the [examples repository](https://github.com/tentjs/examples).
+
 ## 👍🏻 Contribute
 
 If you want to support the active development of Tent, there are a few ways you can help:
