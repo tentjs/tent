@@ -45,9 +45,7 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
     addAttribute(oldNode, key, attrs[key]);
   }
 
-  if (oc.length === 0 && nc.length === 0) {
-    return;
-  }
+  if (oc.length === 0 && nc.length === 0) return;
 
   if (oc.length < nc.length) {
     for (let i = 0; i < nc.length; i++) {
@@ -69,9 +67,7 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
     const oChild = oc[i];
     const nChild = nc[i];
 
-    if (nChild == null) {
-      continue;
-    }
+    if (nChild == null) continue;
 
     if (oChild.tagName !== nChild.tagName) {
       oChild.replaceWith(nChild);

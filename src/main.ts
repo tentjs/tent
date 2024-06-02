@@ -6,17 +6,14 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
   element: HTMLElement | Element | TentNode<A> | null,
   component: Component<S, A>,
 ) {
-  if (element == null) {
-    return;
-  }
+  if (element == null) return;
 
   let node: TentNode<A>;
-  const { state = {} as S, view, mounted } = component;
+  const { view, mounted } = component;
+  const state = 'state' in component ? component.state : ({} as S);
   const el = element as TentNode<A>;
 
-  el.$tent = {
-    attributes: {},
-  };
+  el.$tent = { attributes: {} };
 
   const handler = {
     get(obj: S, key: string) {
@@ -45,9 +42,7 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
   const proxy = new Proxy<S>({ ...state }, handler);
 
   node = view({ state: proxy, el });
-  node.$tent = {
-    attributes: {},
-  };
+  node.$tent = { attributes: {} };
 
   el.append(node);
 
@@ -55,11 +50,11 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
 }
 
 export {
-  mount,
   tags,
+  mount,
   createTag,
-  type Component,
-  type Children,
   type Context,
   type TentNode,
+  type Children,
+  type Component,
 };
