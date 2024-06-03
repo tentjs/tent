@@ -24,7 +24,7 @@ const Counter: Component<State> = {
   // Initial state
   state: { count: 0 },
   // Define the view
-  view: ({ state }) => {
+  view({ state }) {
     return button(
       `You clicked ${state.count} times`,
       // Add attributes to the button
