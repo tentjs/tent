@@ -1,13 +1,21 @@
 import { type TentNode, type Attrs, type TagAttrsValues } from './types';
 
+function addAttributes<A extends Attrs>(el: TentNode<A>, attributes: A) {
+  for (const key in attributes) {
+    const value = attributes[key as string];
+
+    el.$tent.attributes[key as string] = value;
+
+    addAttribute(el, key, value);
+  }
+}
+
 function addAttribute<A extends Attrs>(
   el: TentNode<A> | HTMLElement,
   key: string,
   value: TagAttrsValues,
 ) {
-  if (key === 'mounted') {
-    return;
-  }
+  if (key === 'mounted') return;
 
   if (typeof value === 'boolean') {
     if (value) {
@@ -28,4 +36,4 @@ function addAttribute<A extends Attrs>(
   }
 }
 
-export { addAttribute };
+export { addAttributes, addAttribute };
