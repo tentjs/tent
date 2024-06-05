@@ -4,8 +4,6 @@ function addAttributes<A extends Attrs>(el: TentNode<A>, attributes: A) {
   for (const key in attributes) {
     const value = attributes[key as string];
 
-    el.$tent.attributes[key as string] = value;
-
     addAttribute(el, key, value);
   }
 }
@@ -16,6 +14,10 @@ function addAttribute<A extends Attrs>(
   value: TagAttrsValues,
 ) {
   if (key === 'mounted') return;
+
+  if ('$tent' in el) {
+    el.$tent.attributes[key] = value;
+  }
 
   if (typeof value === 'boolean') {
     if (value) {
