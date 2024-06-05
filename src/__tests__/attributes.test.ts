@@ -1,4 +1,5 @@
-import { addAttribute } from '../attributes';
+import { addAttribute, addAttributes } from '../attributes';
+import { tags } from '../tags';
 
 describe('attributes.ts', () => {
   test('adds a simple attribute', () => {
@@ -41,5 +42,17 @@ describe('attributes.ts', () => {
     addAttribute(el, 'mounted', 'test');
 
     expect(el.hasAttribute('mounted')).toBe(false);
+  });
+
+  test('addAttributes adds all attributes', () => {
+    const el = tags.div([]);
+
+    addAttributes(el, {
+      id: 'test',
+      foo: 'bar',
+    });
+
+    expect(el.getAttribute('id')).toBe('test');
+    expect(el.getAttribute('foo')).toBe('bar');
   });
 });

@@ -1,22 +1,13 @@
-import { addAttribute } from './attributes';
-import { type Tags, type Context, type TentNode } from './types';
+import { addAttributes } from './attributes';
+import type { Tags, Context, TentNode } from './types';
 
 function createTag(context: Context) {
   const [tag, children, attributes] = context;
 
   const el = document.createElement(tag) as TentNode;
 
-  el.$tent = {
-    attributes: {},
-  };
-
-  for (const key in attributes) {
-    const value = attributes[key];
-
-    el.$tent.attributes[key] = value;
-
-    addAttribute(el, key, value);
-  }
+  el.$tent = { attributes: {} };
+  addAttributes(el, attributes);
 
   if (Array.isArray(children)) {
     for (let i = 0; i < children.length; i++) {

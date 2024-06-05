@@ -1,10 +1,12 @@
 import type { Children, Context, Component, TentNode, Attrs } from './types';
 import { createTag, tags } from './tags';
 import { walker } from './walker';
+import { addAttributes } from './attributes';
 
 function mount<S extends {} = {}, A extends Attrs = {}>(
   element: HTMLElement | Element | TentNode<A> | null,
   component: Component<S, A>,
+  attributes?: A,
 ) {
   if (element == null) return;
 
@@ -14,6 +16,7 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
   const el = element as TentNode<A>;
 
   el.$tent = { attributes: {} };
+  addAttributes(el, attributes);
 
   const handler = {
     get(obj: S, key: string) {

@@ -1,15 +1,15 @@
-import { addAttribute } from './attributes';
-import { type Attrs, type TentNode } from './types';
+import { addAttributes } from './attributes';
+import type { Attrs, TentNode } from './types';
 
-function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
+function walker(oldNode: TentNode<Attrs>, newNode: TentNode<Attrs>) {
   if (oldNode.tagName !== newNode.tagName) {
     oldNode.replaceWith(newNode);
 
     return;
   }
 
-  const nc = Array.from(newNode.childNodes, (n) => n as TentNode<A>);
-  const oc = Array.from(oldNode.childNodes, (n) => n as TentNode<A>);
+  const nc = Array.from(newNode.childNodes, (n) => n as TentNode);
+  const oc = Array.from(oldNode.childNodes, (n) => n as TentNode);
 
   if (oldNode.nodeType === Node.TEXT_NODE) {
     if (oldNode.nodeValue !== newNode.nodeValue) {
@@ -36,14 +36,10 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
   }
 
   // Add attributes that are not present in the old node
-  const attrs = {
+  addAttributes(oldNode, {
     ...oldNode.$tent.attributes,
     ...newNode.$tent.attributes,
-  };
-
-  for (const key in attrs) {
-    addAttribute(oldNode, key, attrs[key]);
-  }
+  });
 
   if (oc.length === 0 && nc.length === 0) return;
 
