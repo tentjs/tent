@@ -1,4 +1,4 @@
-import { mount } from '../main';
+import { mount } from '../mount';
 import { tags } from '../tags';
 import { type Component } from '../types';
 import { getByText, getByTestId, fireEvent } from '@testing-library/dom';
