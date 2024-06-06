@@ -1,5 +1,6 @@
 import { fireEvent, getByRole, getByText } from '@testing-library/dom';
-import { Component, mount } from '../main';
+import { Component } from '../main';
+import { mount } from '../mount';
 import { tags } from '../tags';
 
 const { div, p, button, ul, li } = tags;

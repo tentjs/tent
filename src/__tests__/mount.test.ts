@@ -1,6 +1,7 @@
-import { Component, mount, tags } from '../main';
+import { Component, tags } from '../main';
+import { mount } from '../mount';
 
-describe('main', () => {
+describe('mount', () => {
   test('`null` element', () => {
     const el = document.querySelector('.not-defined');
 
