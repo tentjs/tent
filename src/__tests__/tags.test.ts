@@ -1,10 +1,5 @@
 import { tags, createTag } from '../tags';
 
-beforeEach(() => {
-  // Ignore the "predefined tag" warning.
-  jest.spyOn(console, 'warn').mockImplementation(() => {});
-});
-
 describe('tags.ts', () => {
   test('creating a custom tag', () => {
     const el = createTag(['div', 'test', { id: 'test' }]);
