@@ -2,7 +2,8 @@
 
 A **jsx-free**, **super-lightweight** and **zero-dependency** library to add reactivity to the web &mdash; without all the nonsense.
 
-> ⚠️ Tent is currently in early development. It _can_ be used in production, but there might be breaking changes in future versions. If you're interested in contributing, please submit a PR or report an issue. Keep track of the changes in the [CHANGELOG](CHANGELOG.md).
+> [!IMPORTANT]  
+> Tent is currently in early development. It _can_ be used in production, but there might be breaking changes in future versions. If you're interested in contributing, please submit a PR or report an issue. Keep track of the changes in the [CHANGELOG](CHANGELOG.md).
 
 ## ⚙️ Installation
 
