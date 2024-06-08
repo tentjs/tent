@@ -5,7 +5,7 @@ function addAttribute<A extends Attrs>(
   key: string,
   value: TagAttrsValues,
 ) {
-  if (key === 'mounted') {
+  if (key === 'mounted' || key === 'keep') {
     return;
   }
 

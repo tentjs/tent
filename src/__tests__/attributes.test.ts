@@ -42,4 +42,12 @@ describe('attributes.ts', () => {
 
     expect(el.hasAttribute('mounted')).toBe(false);
   });
+
+  test("doesn't add `keep` as an attribute", () => {
+    const el = document.createElement('div');
+
+    addAttribute(el, 'keep', true);
+
+    expect(el.hasAttribute('keep')).toBe(false);
+  });
 });
