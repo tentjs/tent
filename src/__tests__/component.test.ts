@@ -1,7 +1,13 @@
 import { mount } from '../mount';
 import { tags } from '../tags';
 import { type Component } from '../types';
-import { getByText, getByTestId, fireEvent } from '@testing-library/dom';
+import {
+  getByText,
+  getByTestId,
+  fireEvent,
+  getByRole,
+  queryByText,
+} from '@testing-library/dom';
 
 const { div, p, button } = tags;
 
@@ -75,5 +81,35 @@ describe('components', () => {
     const el = getByText(document.body, /No state/);
 
     expect(el).toBeDefined();
+  });
+
+  test('keep', () => {
+    const KeepComponent: Component<{ count: number }> = {
+      state: { count: 0 },
+      view({ state }) {
+        return div(
+          div(
+            [
+              `Don't change me ${state.count}`,
+              button('Increment', {
+                onclick: () => state.count++,
+              }),
+            ],
+            { keep: true },
+          ),
+        );
+      },
+    };
+
+    mount(document.body, KeepComponent);
+
+    const btn = getByRole(document.body, 'button');
+
+    expect(btn).toBeDefined();
+
+    fireEvent.click(btn);
+
+    expect(queryByText(document.body, /Don't change me 0/)).toBeTruthy();
+    expect(queryByText(document.body, /Don't change me 1/)).toBeNull();
   });
 });

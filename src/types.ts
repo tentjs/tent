@@ -14,18 +14,27 @@ export type TentNode<A extends Attrs = undefined> = Node &
   Element &
   HTMLElement & {
     $tent: {
-      attributes: object;
+      attributes: Record<string, TagAttrsValues> & {
+        mounted?: ({ el }: { el: TentNode }) => void;
+        keep?: boolean;
+      };
     };
     dataset: A & DOMStringMap;
     children: TentNode<A>[];
   };
 
-export type Children = string | number | TentNode | (Node | string | Context)[];
+export type Children =
+  | string
+  | number
+  | TentNode
+  | Element
+  | (Node | string | Context)[];
 export type Context = [string, Children, TagAttrs | undefined];
 
 export type TagAttrsValues = string | boolean | number | Function;
 type TagAttrs = Record<string, TagAttrsValues> & {
   mounted?: ({ el }: { el: TentNode }) => void;
+  keep?: boolean;
 };
 export type Tags = Record<
   string,
