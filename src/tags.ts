@@ -1,5 +1,12 @@
 import { addAttribute } from './attributes';
-import { type Tags, type Context, type TentNode } from './types';
+import { mount } from './mount';
+import {
+  type Tags,
+  type Context,
+  type TentNode,
+  Component,
+  Children,
+} from './types';
 
 function createTag(context: Context) {
   const [tag, children, attributes] = context;
@@ -22,15 +29,29 @@ function createTag(context: Context) {
     for (let i = 0; i < children.length; i++) {
       const c = children[i];
 
-      el.append(Array.isArray(c) ? createTag(c) : c);
+      if (Array.isArray(c)) {
+        el.append(createTag(c));
+      } else if (isComponent(c)) {
+        mount(el, c);
+      } else {
+        el.append(c);
+      }
     }
   } else {
-    el.append(typeof children === 'number' ? children.toString() : children);
+    if (isComponent(children)) {
+      mount(el, children);
+    } else {
+      el.append(typeof children === 'number' ? children.toString() : children);
+    }
   }
 
   attributes?.mounted?.({ el });
 
   return el;
+}
+
+function isComponent(children: Children): children is Component<any, any> {
+  return typeof children === 'object' && 'view' in children;
 }
 
 const tags: Tags = {};

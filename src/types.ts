@@ -29,7 +29,10 @@ export type Children =
   | number
   | TentNode
   | Element
-  | (Node | string | Context)[];
+  | Node
+  | (Node | string | Context)[]
+  | Component<any, any>
+  | Component<any, any>[];
 export type Context = [string, Children, TagAttrs | undefined];
 
 export type TagAttrsValues = string | boolean | number | Function;

@@ -122,18 +122,24 @@ describe('walker', () => {
         }),
     };
 
+    const InnerComponent2: Component<State, { test: boolean }> = {
+      state: { count: 0 },
+      view: ({ state }) =>
+        button(`Click me inner #2 ${state.count}`, {
+          onclick: () => state.count++,
+        }),
+    };
+
     const OuterComponent: Component<State> = {
       state: { count: 0 },
       view: ({ state }) =>
         div([
-          div([], { id: 'inner' }),
+          div([InnerComponent]),
+          div(InnerComponent2),
           button(`Click me outer ${state.count}`, {
             onclick: () => state.count++,
           }),
         ]),
-      mounted() {
-        mount(document.getElementById('inner')!, InnerComponent);
-      },
     };
 
     mount(document.body, OuterComponent);
@@ -147,13 +153,19 @@ describe('walker', () => {
     fireEvent.click(outerBtn);
 
     const innerBtn = getByText(document.body, /Click me inner 0/);
+    const inner2Btn = getByText(document.body, /Click me inner #2 0/);
 
     expect(innerBtn).toBeDefined();
+    expect(inner2Btn).toBeDefined();
 
     fireEvent.click(innerBtn);
     fireEvent.click(innerBtn);
+
+    fireEvent.click(inner2Btn);
+    fireEvent.click(inner2Btn);
 
     expect(getByText(document.body, /Click me inner 2/)).toBeDefined();
     expect(getByText(document.body, /Click me outer 3/)).toBeDefined();
+    expect(getByText(document.body, /Click me inner #2 2/)).toBeDefined();
   });
 });
