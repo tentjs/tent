@@ -110,4 +110,50 @@ describe('walker', () => {
     expect(getByText(document.body, /one/)).toBeDefined();
     expect(document.querySelectorAll('li').length).toBe(1);
   });
+
+  test('nested components', () => {
+    type State = { count: number };
+
+    const InnerComponent: Component<State> = {
+      state: { count: 0 },
+      view: ({ state }) =>
+        button(`Click me inner ${state.count}`, {
+          onclick: () => state.count++,
+        }),
+    };
+
+    const OuterComponent: Component<State> = {
+      state: { count: 0 },
+      view: ({ state }) =>
+        div([
+          div([], { id: 'inner' }),
+          button(`Click me outer ${state.count}`, {
+            onclick: () => state.count++,
+          }),
+        ]),
+      mounted() {
+        mount(document.getElementById('inner')!, InnerComponent);
+      },
+    };
+
+    mount(document.body, OuterComponent);
+
+    const outerBtn = getByText(document.body, /Click me outer 0/);
+
+    expect(outerBtn).toBeDefined();
+
+    fireEvent.click(outerBtn);
+    fireEvent.click(outerBtn);
+    fireEvent.click(outerBtn);
+
+    const innerBtn = getByText(document.body, /Click me inner 0/);
+
+    expect(innerBtn).toBeDefined();
+
+    fireEvent.click(innerBtn);
+    fireEvent.click(innerBtn);
+
+    expect(getByText(document.body, /Click me inner 2/)).toBeDefined();
+    expect(getByText(document.body, /Click me outer 3/)).toBeDefined();
+  });
 });
