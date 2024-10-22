@@ -18,6 +18,7 @@ export type TentNode<A extends Attrs = undefined> = Node &
         mounted?: ({ el }: { el: TentNode }) => void;
         keep?: boolean;
       };
+      isComponent?: boolean;
     };
     dataset: A & DOMStringMap;
     children: TentNode<A>[];

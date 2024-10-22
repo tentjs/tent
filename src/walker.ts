@@ -47,6 +47,7 @@ function walker<A extends Attrs>(oldNode: TentNode<A>, newNode: TentNode<A>) {
 
   if (oc.length === 0 && nc.length === 0) return;
   if (oldNode.$tent.attributes.keep) return;
+  if (oldNode.$tent.isComponent) return;
 
   if (oc.length < nc.length) {
     for (let i = 0; i < nc.length; i++) {
