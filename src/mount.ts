@@ -12,7 +12,7 @@ function mount<S extends {} = {}, A extends Attrs = {}>(
   const state = 'state' in component ? component.state : ({} as S);
   const el = element as TentNode<A>;
 
-  el.$tent = { attributes: {} };
+  el.$tent = { attributes: {}, isComponent: true };
 
   const handler = {
     get(obj: S, key: string) {
